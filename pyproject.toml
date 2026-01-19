@@ -3,7 +3,7 @@ name = "cl-forge"
 description = "Simple yet powerful Chilean and other tools written in Rust and Python."
 readme = "README.md"
 license-files = ["LICENSE"]
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = []
 dynamic = ["version"]
 
@@ -27,6 +27,7 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python",

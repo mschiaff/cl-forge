@@ -1,4 +1,14 @@
-[![Python package](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml)
+<div style="text-align: center">
+   <a href="https://pypi.org/project/cl-forge/">
+      <img src="https://img.shields.io/pypi/v/cl-forge.svg" alt="pypi">
+   </a>
+   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml">
+      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main" alt="python package">
+   </a>
+   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/release.yml">
+      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/release.yml/badge.svg" alt="release">
+   </a>
+</div>
 
 # cl-forge 🇨🇱
 
