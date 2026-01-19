@@ -1,0 +1,147 @@
+name: Release Python
+
+on:
+  workflow_dispatch:
+    inputs:
+      # Latest commit to include with the release. If omitted, use the latest commit on the main branch.
+      sha:
+        description: Commit SHA
+        type: string
+
+      dry-run:
+        # Create the sdist and build the wheels, but do not publish to PyPI / GitHub.
+        description: Dry run
+        type: boolean
+        default: false
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: 3.12
+  UV_PUBLISH_USERNAME: __token__
+  UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create-sdist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Create Source Distribution
+        uses: PyO3/maturin-action@v1
+        with:
+          command: 'sdist'
+          args: >
+            --out dist/
+          maturin-version: 1.11.5
+
+      - name: Upload Source Distribution
+        uses: actions/upload-artifact@v6
+        with:
+          path: dist/*.tar.gz
+
+  build-wheels:
+    needs: [create-sdist]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        job_config: [linux-x64, linux-arm64, macos-x64, macos-arm64, win-x64, win-arm64]
+        include:
+          - job_config: linux-x64
+            os: ubuntu-latest
+            architecture: x86-64
+            target: x86_64-unknown-linux-gnu
+
+          - job_config: linux-arm64
+            os: ubuntu-24.04-arm
+            architecture: aarch64
+            target: aarch64-unknown-linux-gnu
+
+          - job_config: macos-x64
+            os: macos-15-intel
+            architecture: x86-64
+            target: x86_64-apple-darwin
+
+          - job_config: macos-arm64
+            os: macos-15
+            architecture: aarch64
+            target: aarch64-apple-darwin
+
+          - job_config: win-x64
+            os: windows-latest
+            architecture: x86-64
+            target: x86_64-pc-windows-msvc
+
+          - job_config: win-arm64
+            os: windows-11-arm
+            architecture: aarch64
+            target: aarch64-pc-windows-msvc
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Build Wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          command: build
+          args: >
+            --release
+            --target ${{ matrix.target }}
+            --out dist/
+          manylinux: auto
+          maturin-version: 1.11.5
+
+      - name: Upload Wheel
+        uses: actions/upload-artifact@v6
+        with:
+          name: wheel-${{ matrix.job_config }}
+          path: dist/*.whl
+
+  publish-pypi:
+    needs: [create-sdist, build-wheels]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Download sdist and wheels
+        uses: actions/download-artifact@v7
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Publish to PyPI
+        run: >
+          uv publish "dist/*.whl" "dist/*.tar.gz"
+          --username ${{ env.UV_PUBLISH_USERNAME }}
+          --password ${{ env.UV_PUBLISH_TOKEN }}
+          --dry-run ${{ inputs.dry-run }}
