@@ -61,6 +61,10 @@ dev = [
     "pytest>=8.0.0",
 ]
 
+build = [
+    "maturin>=1.11.5",
+]
+
 [tool.ruff]
 line-length = 88
 target-version = "py313"
