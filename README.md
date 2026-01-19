@@ -1,3 +1,5 @@
+[![Python package](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main)](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml)
+
 # cl-forge 🇨🇱
 
 Simple yet powerful Chilean and other tools written in Rust and Python.
