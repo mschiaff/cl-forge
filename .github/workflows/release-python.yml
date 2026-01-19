@@ -13,6 +13,11 @@ on:
         description: Dry run
         type: boolean
         default: false
+
+  push:
+    tags:
+      - 'v*'
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -116,7 +121,7 @@ jobs:
       - name: Upload Wheel
         uses: actions/upload-artifact@v6
         with:
-          name: wheel-${{ matrix.job_config }}-python${{ matrix.python[1] }}
+          name: wheel-${{ matrix.job_config }}-${{ matrix.python[1] }}
           path: dist/*.whl
 
   publish-pypi:
