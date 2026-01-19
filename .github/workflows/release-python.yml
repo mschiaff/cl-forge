@@ -18,8 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PYTHON_VERSION: 3.12
-  UV_PUBLISH_USERNAME: __token__
+  PYTHON_VERSION: 3.13
   UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
 
 defaults:
@@ -60,6 +59,7 @@ jobs:
       fail-fast: false
       matrix:
         job_config: [linux-x64, linux-arm64, macos-x64, macos-arm64, win-x64, win-arm64]
+        python: [3.12, 3.13, 3.14]
         include:
           - job_config: linux-x64
             os: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: ${{ matrix.python }}
 
       - name: Build Wheels
         uses: PyO3/maturin-action@v1
@@ -142,6 +142,4 @@ jobs:
       - name: Publish to PyPI
         run: >
           uv publish "dist/*.whl" "dist/*.tar.gz"
-          --username ${{ env.UV_PUBLISH_USERNAME }}
-          --password ${{ env.UV_PUBLISH_TOKEN }}
           --dry-run ${{ inputs.dry-run }}
