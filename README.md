@@ -1,12 +1,12 @@
-<div style="text-align: center">
-   <a href="https://pypi.org/project/cl-forge/">
+<div style="text-align: center;" align="center">
+   <a href="https://pypi.org/project/cl-forge/" style="text-decoration: none;">
       <img src="https://img.shields.io/pypi/v/cl-forge.svg" alt="pypi">
    </a>
-   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml">
+   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml" style="text-decoration: none;">
       <img src="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main" alt="python package">
    </a>
-   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/release.yml">
-      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/release.yml/badge.svg" alt="release">
+   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml" style="text-decoration: none;">
+      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml/badge.svg" alt="python release">
    </a>
 </div>
 
