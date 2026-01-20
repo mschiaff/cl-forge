@@ -160,7 +160,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.sha }}
+          ref: ${{ github.sha }}
 
       - name: Get Version
         id: get_version
