@@ -148,4 +148,38 @@ jobs:
       - name: Publish to PyPI
         run: >
           uv publish "dist/*.whl" "dist/*.tar.gz"
-          --dry-run ${{ inputs.dry-run }}
+          ${{ inputs.dry-run == true && '--dry-run' || '' }}
+
+  publish-github:
+    needs: [publish-pypi]
+    runs-on: ubuntu-latest
+    if: ${{github.ref_type == 'tag' }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Get Version
+        id: get_version
+        run: |
+          VERSION=${{ github.ref_name }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download sdist and wheels
+        uses: actions/download-artifact@v7
+        with:
+          path: dist/
+          merge-multiple: true
+
+      - name: Create Release Draft
+        uses: softprops/action-gh-release@v1
+        if: ${{ inputs.dry-run == false }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: CL Forge ${{ steps.get_version.outputs.version }}
+          draft: true
+          files: dist/*
+          generate_release_notes: true
