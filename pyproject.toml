@@ -4,20 +4,15 @@ description = "Simple yet powerful Chilean and other tools written in Rust and P
 readme = "README.md"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
-dependencies = []
 dynamic = ["version"]
+
+dependencies = [
+    "pydantic>=2.12.5",
+]
 
 [[authors]]
 name = "Schiaffino Tyrer, Matías"
 email = "matias.scht@gmail.com"
-
-keywords = [
-    "chile", "cl",
-    "utils", "tools",
-    "rut", "run",
-    "validators", "api",
-    "python", "rust",
-]
 
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -35,6 +30,14 @@ classifiers = [
     "Typing :: Typed",
     "Topic :: Utilities",
     "Topic :: Software Development :: Libraries",
+]
+
+keywords = [
+    "chile", "cl",
+    "utils", "tools",
+    "rut", "run",
+    "validators", "api",
+    "python", "rust",
 ]
 
 [project.urls]
@@ -68,9 +71,12 @@ build = [
 ]
 
 [tool.ruff]
-line-length = 88
+line-length = 90
 target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "A", "C4", "SIM"]
 ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"src/cl_forge/core/cmf_ipc.py" = ["A002"]
