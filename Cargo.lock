@@ -929,7 +929,7 @@ dependencies = [
 
 [[package]]
 name = "rs_cl_forge"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "pyo3",
  "rs_cmf",
@@ -938,7 +938,7 @@ dependencies = [
 
 [[package]]
 name = "rs_cmf"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "pyo3",
  "reqwest",
@@ -949,7 +949,7 @@ dependencies = [
 
 [[package]]
 name = "rs_verify"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "pyo3",
  "thiserror 2.0.17",
