@@ -1,12 +1,14 @@
 from typing import TYPE_CHECKING
 
+from .core.cmf_ipc import Ipc
+
 if TYPE_CHECKING:
     from .core._rs_cl_forge import _rs_cmf as _cmf # noqa
-
     CmfClient = _cmf.CmfClient
 
 __all__ = (
     "CmfClient",
+    "Ipc",
 )
 
 

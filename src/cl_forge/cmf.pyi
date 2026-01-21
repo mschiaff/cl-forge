@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from dataclasses import dataclass
+    from typing import Literal
+
+    from .core.cmf_ipc import IpcRecord
 
 class CmfClient:
     """
@@ -72,4 +78,68 @@ class CmfClient:
         dict | str
             The response from the CMF API. Returns a dict if format is 'json', 
             and a str if format is 'xml'.
+        """
+
+
+@dataclass(frozen=True)
+class Ipc:
+    """
+    Client for the CMF IPC (Índice de Precios al Consumidor) endpoints.
+    """
+    __slots__ = ("_client",)
+
+    def __init__(self, api_key: str) -> None:
+        """
+        Initializes the IPC client with the provided API key.
+
+        Parameters
+        ----------
+        api_key : str
+            The API key for authenticating with the CMF API.
+        """
+
+    def current(
+            self,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> IpcRecord:
+        """
+        Retrieves the lastest available IPC record.
+
+        Parameters
+        ----------
+        fmt : Literal['json', 'xml']
+            The format of the response. Must be lower case 'json' or 'xml'.
+            Defaults to 'json'.
+
+        Returns
+        -------
+        IpcRecord
+            The latest IPC record.
+        """
+
+    def year(
+            self,
+            year: int | None = None,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> list[IpcRecord]:
+        """
+        Retrieves the IPC records for a specific year.
+
+        Parameters
+        ----------
+        year : int | None
+            The year for which to retrieve IPC records. If None, defaults to
+            the current year.
+        fmt : Literal['xml', 'json']
+            The format of the response. Must be lower case 'json' or 'xml'.
+
+        Returns
+        -------
+        list[IpcRecord]
+            A list of IPC records for the specified year.
+
+        Raises
+        ------
+        BadStatus
+            If there's no data available for the specified year.
         """

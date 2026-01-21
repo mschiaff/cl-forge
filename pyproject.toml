@@ -6,13 +6,13 @@ license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dynamic = ["version"]
 
+authors = [
+    { name = "Matías Schiaffino Tyrer", email = "matias.scht@gmail.com"}
+]
+
 dependencies = [
     "pydantic>=2.12.5",
 ]
-
-[[authors]]
-name = "Schiaffino Tyrer, Matías"
-email = "matias.scht@gmail.com"
 
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -52,7 +52,11 @@ build-backend = "maturin"
 [tool.maturin]
 manifest-path = "rust/rs_cl_forge/Cargo.toml"
 module-name = "cl_forge.core._rs_cl_forge"
-include = ["src/cl_forge/*.pyi", "tests/*.py"]
+include = [
+    "src/cl_forge/*.pyi",
+    "src/cl_forge/py.typed",
+    "tests/*.py",
+]
 python-source = "src"
 bindings = "pyo3"
 
