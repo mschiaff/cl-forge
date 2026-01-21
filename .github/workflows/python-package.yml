@@ -13,15 +13,17 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12", "3.13", "3.14"]
+        python-version: ["3.12",]
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.inputs.sha || github.ref }}
+  
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
