@@ -26,6 +26,8 @@ Simple yet powerful Chilean and other tools written in Rust and Python.
 
 ## Installation
 
+### From PyPI
+
 ```bash
 pip install cl-forge
 ```
@@ -35,6 +37,22 @@ Or using `uv`:
 ```bash
 uv add cl-forge
 ```
+
+### From Source
+
+#### Using `uv` (Recommended)
+
+```bash
+uv pip install git+https://github.com/mschiaff/cl-forge.git
+```
+
+#### Using `pip`
+
+```bash
+pip install git+https://github.com/mschiaff/cl-forge.git
+```
+
+*Note: Building from source requires a Rust toolchain installed on your system.*
 
 ## Usage
 
@@ -51,6 +69,11 @@ print(f"RUT is valid: {is_valid}")
 dv = verify.calculate_verifier("12345678")
 print(f"Verifier digit: {dv}")
 
+# Generate random RUTs
+ruts = verify.generate(n=3, min=1_000_000, max=2_000_000, seed=42)
+print(ruts)
+# [{'correlative': 1133512, 'verifier': '9'}, ...]
+
 # Work with PPUs (License Plates)
 ppu = verify.Ppu("PHZF55")
 print(f"Normalized: {ppu.normalized}")  # PHZF55
@@ -62,6 +85,8 @@ print(f"Complete: {ppu.complete}")      # PHZF55-K
 
 To use the CMF API, you need an API key. You can request one at [CMF Chile](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
 
+#### Generic Client
+
 ```python
 from cl_forge.cmf import CmfClient
 
@@ -70,6 +95,25 @@ client = CmfClient(api_key="your_api_key_here")
 # Get IPC data
 ipc_data = client.get(path="/ipc")
 print(ipc_data) # {'IPCs': [{'Valor': '-0,2', 'Fecha': '2025-12-01'}]}
+```
+
+#### IPC Specialist Client
+
+The `Ipc` class provides a more convenient way to interact with IPC-related endpoints, returning parsed `Pydantic` objects.
+
+```python
+from cl_forge.cmf import Ipc
+
+ipc_client = Ipc(api_key="your_api_key_here")
+
+# Get current IPC
+current_ipc = ipc_client.current()
+print(f"Date: {current_ipc.date}, Value: {current_ipc.value}")
+
+# Get IPC for a specific year
+year_ipc = ipc_client.year(2024)
+for record in year_ipc:
+    print(f"{record.date.strftime('%Y-%m')}: {record.value}")
 ```
 
 See the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html) for details about the available endpoints.
