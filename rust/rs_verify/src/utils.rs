@@ -1,8 +1,58 @@
+use std::collections::HashSet;
+
+use rand::Rng;
+use rand::SeedableRng;
+use rand::rngs::StdRng;
+
 use crate::enums::PpuFormat;
 use crate::errors::PpuError;
 use crate::errors::VerifierError;
+use crate::errors::GenerateError;
 use crate::constants::LETTER_MAP;
 use crate::constants::DIGRAPH_MAP;
+
+
+/// Represents a Chilean RUT (Rol Único Tributario) with its correlative number
+/// and verifier digit.
+///
+/// Examples
+/// ```
+/// use rs_verify::utils::Rut;
+/// 
+/// let rut = Rut { correlative: 12345678, verifier: '5' };
+/// assert_eq!(rut.correlative, 12345678);
+/// assert_eq!(rut.verifier, '5');
+/// ```
+#[derive(Debug, Clone)]
+pub struct Rut {
+    /// The correlative number of the RUT.
+    pub correlative: u32,
+    /// The verifier digit or character of the RUT.
+    pub verifier: char,
+}
+
+/// Implements methods for the [`Rut`] struct.
+impl Rut {
+    /// Creates a new `Rut` instance by calculating the verifier digit
+    /// based on the provided correlative number.
+    //// # Arguments
+    /// * `correlative` - A `u32` representing the correlative number of the RUT.
+    /// # Returns
+    /// * `Ok(Rut)` - A new `Rut` instance with the calculated verifier.
+    /// * `Err(VerifierError)` - If there is an error calculating the verifier.
+    /// # Examples
+    /// ```
+    /// use rs_verify::utils::{Rut, calculate_verifier};
+    /// 
+    /// let rut = Rut::new(12345678).unwrap();
+    /// assert_eq!(rut.correlative, 12345678);
+    /// assert_eq!(rut.verifier, calculate_verifier(&"12345678").unwrap());
+    /// ```
+    pub fn new(correlative: u32) -> Result<Self, VerifierError> {
+        let verifier = calculate_verifier(&correlative.to_string())?;
+        Ok(Rut { correlative, verifier })
+    }
+}
 
 
 /// Detects the format of a Chilean PPU (vehicle license plate).
@@ -36,8 +86,8 @@ use crate::constants::DIGRAPH_MAP;
 ///
 /// # Examples
 /// ```
-/// use crate::utils::get_ppu_format;
-/// use crate::enums::PpuFormat;
+/// use rs_verify::utils::get_ppu_format;
+/// use rs_verify::enums::PpuFormat;
 ///
 /// assert_eq!(get_ppu_format("PHZ55"),  Some(PpuFormat::LLLNN));
 /// assert_eq!(get_ppu_format("PHZ123"), Some(PpuFormat::LLLNNN));
@@ -112,7 +162,7 @@ pub fn get_ppu_format(ppu: &str) -> Option<PpuFormat> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::normalize_ppu;
+/// use rs_verify::utils::normalize_ppu;
 ///
 /// // Example of a valid `LLLNN` format input:
 /// let result = normalize_ppu("abc12").unwrap();
@@ -166,7 +216,7 @@ pub fn normalize_ppu(ppu: &str) -> Result<String, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::get_letter_value;
+/// use rs_verify::utils::get_letter_value;
 ///
 /// // LETTER_MAP contains mapping for "B" to "1".
 /// let result = get_letter_value("B");
@@ -221,14 +271,14 @@ pub fn get_letter_value(letter: &str) -> Result<&str, PpuError> {
 ///
 /// # Example
 /// ```
-/// use crate::utils::get_digraph_value;
+/// use rs_verify::utils::get_digraph_value;
 ///
 /// // DIGRAPH_MAP contains mapping for "AA" to "001".
 /// let result = get_digraph_value("AA");
 /// assert_eq!(result.unwrap(), "001");
 ///
 /// // For unknown letters, the function will return an error.
-/// let result = get_letter_value("MM");
+/// let result = rs_verify::utils::get_letter_value("MM");
 /// assert!(result.is_err());
 /// ```
 pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
@@ -291,16 +341,16 @@ pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::ppu_to_numeric;
+/// use rs_verify::utils::ppu_to_numeric;
 ///
 /// // Digraph-based mapping (LLNNNN)
-/// assert_eq!(map_ppu("BR1234").unwrap(), "0871234");
+/// assert_eq!(ppu_to_numeric("BR1234").unwrap(), "0871234");
 ///
 /// // Letter-by-letter mapping
-/// assert_eq!(map_ppu("PHZF55").unwrap(), "069455");
+/// assert_eq!(ppu_to_numeric("PHZF55").unwrap(), "069455");
 ///
 /// // Invalid format
-/// assert!(map_ppu("INVALID").is_err());
+/// assert!(ppu_to_numeric("INVALID").is_err());
 /// ```
 pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
     let ppu = ppu.trim().to_ascii_uppercase();
@@ -374,15 +424,16 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use your_module::{calculate_verifier, VerifierError};
+/// use rs_verify::utils::calculate_verifier;
+/// use rs_verify::errors::VerifierError;
 ///
 /// // Valid input
 /// let verifier = calculate_verifier("12345678").unwrap();
-/// assert_eq!(verifier, '3');
+/// assert_eq!(verifier, '5');
 ///
 /// // Input with whitespace
 /// let verifier = calculate_verifier(" 54321 ").unwrap();
-/// assert_eq!(verifier, '0');
+/// assert_eq!(verifier, '7');
 ///
 /// // Invalid input (non-digit characters)
 /// let result = calculate_verifier("12A34");
@@ -471,7 +522,7 @@ pub fn calculate_verifier(digits: &str) -> Result<char, VerifierError> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::validate_rut;
+/// use rs_verify::utils::validate_rut;
 ///
 /// // Valid RUT
 /// let result = validate_rut("17702664", "6").unwrap();
@@ -507,4 +558,104 @@ pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError>
         Ok(dv) => Ok(dv.to_string() == verifier),
         Err(msg) => Err(msg),
     }
+}
+
+
+/// Generates a list of valid Chilean RUTs (Rol Único Tributario) within a
+/// specified range.
+/// # Arguments
+/// * `n` - The number of RUTs to generate. Must be a positive integer.
+/// * `min` - The minimum correlative number (inclusive) for RUT generation.
+/// * `max` - The maximum correlative number (inclusive) for RUT generation.
+/// * `seed` - An optional seed for the random number generator to ensure
+///   reproducibility.
+///
+/// # Returns
+/// * `Ok(Vec<Rut>)` - A vector containing the generated RUTs, each with its
+///   correlative number and corresponding verifier digit.
+/// * `Err(GenerateError)`:
+///   - [`GenerateError::InvalidRange`] - If `min` is not less than `max`.
+///   - [`GenerateError::InvalidCount`] - If `n` is zero or negative.
+///   - [`GenerateError::UnexpectedGeneration`] - If an unexpected error occurs
+///     during RUT generation.
+///
+/// # Behavior
+/// The function initializes a random number generator, optionally seeded
+/// for reproducibility. It then generates `n` random correlative numbers
+/// within the specified range, computes their corresponding verifier digits,
+/// and constructs `Rut` instances for each generated RUT.
+///
+/// # Notes
+/// - The function ensures that the generated correlative numbers are unique
+///   within the specified range.
+///
+/// # Examples
+/// ```
+/// use rs_verify::utils::generate;
+/// // Generate 5 RUTs within the range 1000000 to 2000000.
+/// let ruts = generate(5, 1000000, 2000000, Some(42)).unwrap();
+/// assert_eq!(ruts.len(), 5);
+/// for rut in ruts {
+///     println!("RUT: {}-{}", rut.correlative, rut.verifier);
+/// }
+/// ```
+pub fn generate(
+        n: i32,
+        min: i32,
+        max: i32,
+        seed: Option<i64>
+) -> Result<Vec<Rut>, GenerateError> {
+    if n <= 0 {
+        return Err(
+            GenerateError::InvalidInput {
+                msg: format!("`n` must be greater than zero: '{}' was given.", n)
+            }
+        );
+    }
+
+    if min < 0 || max < 0 {
+        return Err(
+            GenerateError::InvalidInput {
+                msg: format!("`min` and `max` must be non-negative: min='{}', max='{}'.", min, max)
+            }
+        );
+    }
+
+    if !seed.is_none() && seed.unwrap() < 0 {
+        return Err(
+            GenerateError::InvalidInput {
+                msg: format!("`seed` must be non-negative: '{}' was given.", seed.unwrap())
+            }
+        );
+    }
+
+    if min >= max {
+        return Err(GenerateError::InvalidRange { min, max });
+    }
+
+    let range_size = (max - min + 1) as i32;
+    if (n as i32) > range_size {
+        return Err(GenerateError::InsufficientRange {
+            n: n as i32,
+            range_size,
+        });
+    }
+
+    let mut rng: Box<dyn rand::RngCore> = match seed {
+        Some(s) => Box::new(StdRng::seed_from_u64(s as u64)),
+        None => Box::new(rand::thread_rng()),
+    };
+
+    let mut rut_list: Vec<Rut> = Vec::with_capacity(n as usize);
+    let mut seen = HashSet::with_capacity(n as usize);
+
+    while rut_list.len() < n as usize {
+        let correlative = rng.gen_range(min..=max);
+        if seen.insert(correlative) {
+            let rut = Rut::new(correlative as u32)?;
+            rut_list.push(rut);
+        }
+    }
+
+    Ok(rut_list)
 }

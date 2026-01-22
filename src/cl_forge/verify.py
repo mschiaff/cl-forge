@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     normalize_ppu = _verify.normalize_ppu
     ppu_to_numeric = _verify.ppu_to_numeric
     validate_rut = _verify.validate_rut
+    generate = _verify.generate
 
 __all__ = (
     "Ppu",
@@ -15,6 +16,7 @@ __all__ = (
     "normalize_ppu",
     "ppu_to_numeric",
     "validate_rut",
+    "generate",
 )
 
 

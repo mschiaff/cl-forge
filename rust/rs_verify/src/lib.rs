@@ -1,14 +1,16 @@
-mod enums;
-mod constants;
-mod utils;
-mod errors;
+pub mod enums;
+pub mod constants;
+pub mod utils;
+pub mod errors;
 
 use pyo3::prelude::*;
 use pyo3::create_exception;
+use pyo3::types::{PyDict, PyList};
 use pyo3::exceptions::PyException;
 
 use crate::errors::PpuError;
 use crate::errors::VerifierError;
+use crate::errors::GenerateError;
 
 
 create_exception!(_rs_verify, PpuException, PyException);
@@ -25,6 +27,12 @@ create_exception!(_rs_verify, EmptyVerifier, VerifierException);
 create_exception!(_rs_verify, InvalidDigits, VerifierException);
 create_exception!(_rs_verify, InvalidVerifier, VerifierException);
 create_exception!(_rs_verify, UnexpectedComputation, VerifierException);
+
+create_exception!(_rs_verify, GenerateException, PyException);
+create_exception!(_rs_verify, InvalidRange, GenerateException);
+create_exception!(_rs_verify, InvalidInput, GenerateException);
+create_exception!(_rs_verify, InsufficientRange, GenerateException);
+create_exception!(_rs_verify, UnexpectedGeneration, GenerateException);
 
 impl From<PpuError> for PyErr {
     fn from(err: PpuError) -> PyErr {
@@ -47,6 +55,17 @@ impl From<VerifierError> for PyErr {
             VerifierError::InvalidDigits { .. } => InvalidDigits::new_err(err.to_string()),
             VerifierError::InvalidVerifier { .. } => InvalidVerifier::new_err(err.to_string()),
             VerifierError::UnexpectedComputation => UnexpectedComputation::new_err(err.to_string()),
+        }
+    }
+}
+
+impl From<GenerateError> for PyErr {
+    fn from(err: GenerateError) -> PyErr {
+        match err {
+            GenerateError::InvalidRange { .. } => InvalidRange::new_err(err.to_string()),
+            GenerateError::InvalidInput { .. } => InvalidInput::new_err(err.to_string()),
+            GenerateError::InsufficientRange { .. } => InsufficientRange::new_err(err.to_string()),
+            GenerateError::UnexpectedGeneration(_) => UnexpectedGeneration::new_err(err.to_string()),
         }
     }
 }
@@ -143,12 +162,38 @@ fn validate_rut(digits: &str, verifier: &str) -> PyResult<bool> {
 }
 
 
+#[pyfunction]
+#[pyo3(signature = (n, min, max, seed=None))]
+fn generate(
+        py: Python<'_>,
+        n: i32,
+        min: i32,
+        max: i32,
+        seed: Option<i64>
+) -> PyResult<Py<PyAny>> {
+    match utils::generate(n, min, max, seed) {
+        Ok(ruts) => {
+            let list = PyList::empty(py);
+            for r in ruts {
+                let dict = PyDict::new(py);
+                dict.set_item("correlative", r.correlative)?;
+                dict.set_item("verifier", r.verifier)?;
+                list.append(dict)?;
+            }
+            Ok(list.into())
+        }
+        Err(msg) => Err(msg.into()),
+    }
+}
+
+
 #[pymodule]
 pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_verifier, m)?)?;
     m.add_function(wrap_pyfunction!(ppu_to_numeric, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_ppu, m)?)?;
     m.add_function(wrap_pyfunction!(validate_rut, m)?)?;
+    m.add_function(wrap_pyfunction!(generate, m)?)?;
     m.add_class::<Ppu>()?;
 
     m.add("PpuException", m.py().get_type::<PpuException>())?;
@@ -165,6 +210,12 @@ pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("InvalidDigits", m.py().get_type::<InvalidDigits>())?;
     m.add("InvalidVerifier", m.py().get_type::<InvalidVerifier>())?;
     m.add("UnexpectedComputation", m.py().get_type::<UnexpectedComputation>())?;
+
+    m.add("GenerateException", m.py().get_type::<GenerateException>())?;
+    m.add("InvalidRange", m.py().get_type::<InvalidRange>())?;
+    m.add("InvalidInput", m.py().get_type::<InvalidInput>())?;
+    m.add("InsufficientRange", m.py().get_type::<InsufficientRange>())?;
+    m.add("UnexpectedGeneration", m.py().get_type::<UnexpectedGeneration>())?;
 
     Ok(())
 }

@@ -40,3 +40,19 @@ pub enum VerifierError {
     #[error("Unexpected verifier computation.")]
     UnexpectedComputation,
 }
+
+
+#[derive(Debug, Error, Clone, PartialEq, Eq)]
+pub enum GenerateError{
+    #[error("Invalid range: `min` '{min}' must be less than `max` '{max}'.")]
+    InvalidRange { min: i32, max: i32 },
+
+    #[error("{msg}")]
+    InvalidInput { msg: String },
+
+    #[error("Range too small to generate '{n}' unique RUTs: only '{range_size}' available.")]
+    InsufficientRange { n: i32, range_size: i32 },
+
+    #[error("Unexpected error during RUT generation: {0}")]
+    UnexpectedGeneration(#[from] VerifierError),
+}
