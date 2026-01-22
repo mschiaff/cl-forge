@@ -44,7 +44,7 @@ pub enum VerifierError {
 
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
 pub enum GenerateError{
-    #[error("Invalid range: min '{min}' must be less than max '{max}'.")]
+    #[error("Invalid range: `min` '{min}' must be less than `max` '{max}'.")]
     InvalidRange { min: i32, max: i32 },
 
     #[error("{msg}")]

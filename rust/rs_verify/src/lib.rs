@@ -7,7 +7,6 @@ use pyo3::prelude::*;
 use pyo3::create_exception;
 use pyo3::types::{PyDict, PyList};
 use pyo3::exceptions::PyException;
-use pyo3::exceptions::PyValueError;
 
 use crate::errors::PpuError;
 use crate::errors::VerifierError;
@@ -183,9 +182,7 @@ fn generate(
             }
             Ok(list.into())
         }
-        Err(msg) => Err(
-            PyValueError::new_err(msg.to_string())
-        ),
+        Err(msg) => Err(msg.into()),
     }
 }
 

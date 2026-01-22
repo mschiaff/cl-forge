@@ -170,10 +170,13 @@ def generate(
     
     Raises
     ------
-    OverflowError
-        - If `n`, `min` and/or `max` are less than 0.
-    ValueError
-        - If `n == 0`.
-        - If the range defined by `min` and `max` is insufficient to generate
-        the requested number of unique RUTs.
+    InvalidInput
+        - If `n` is less than or equal to 0.
+        - If `min` and/or `max` are negative.
+        - If `seed` is given and is negative.
+    InvalidRange
+        If `min` is greater than or equal to `max`.
+    InsufficientRange
+        If the range between `min` and `max` is too small to generate `n`
+        unique RUT/RUNs.
     """
