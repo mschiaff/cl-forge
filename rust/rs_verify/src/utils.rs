@@ -600,17 +600,37 @@ pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError>
 /// }
 /// ```
 pub fn generate(
-        n: usize,
-        min: u32,
-        max: u32,
-        seed: Option<u64>
+        n: i32,
+        min: i32,
+        max: i32,
+        seed: Option<i64>
 ) -> Result<Vec<Rut>, GenerateError> {
+    if n <= 0 {
+        return Err(
+            GenerateError::InvalidInput {
+                msg: format!("`n` must be greater than zero: '{}' was given.", n)
+            }
+        );
+    }
+
+    if min < 0 || max < 0 {
+        return Err(
+            GenerateError::InvalidInput {
+                msg: format!("`min` and `max` must be non-negative: min='{}', max='{}'.", min, max)
+            }
+        );
+    }
+
+    if !seed.is_none() && seed.unwrap() < 0 {
+        return Err(
+            GenerateError::InvalidInput {
+                msg: format!("`seed` must be non-negative: '{}' was given.", seed.unwrap())
+            }
+        );
+    }
+
     if min >= max {
         return Err(GenerateError::InvalidRange { min, max });
-    }
-    
-    if n == 0 {
-        return Err(GenerateError::InvalidCount { n: n as i32 });
     }
 
     let range_size = (max - min + 1) as i32;
@@ -622,17 +642,17 @@ pub fn generate(
     }
 
     let mut rng: Box<dyn rand::RngCore> = match seed {
-        Some(s) => Box::new(StdRng::seed_from_u64(s)),
+        Some(s) => Box::new(StdRng::seed_from_u64(s as u64)),
         None => Box::new(rand::thread_rng()),
     };
 
-    let mut rut_list: Vec<Rut> = Vec::with_capacity(n);
-    let mut seen = HashSet::with_capacity(n);
+    let mut rut_list: Vec<Rut> = Vec::with_capacity(n as usize);
+    let mut seen = HashSet::with_capacity(n as usize);
 
-    while rut_list.len() < n {
+    while rut_list.len() < n as usize {
         let correlative = rng.gen_range(min..=max);
         if seen.insert(correlative) {
-            let rut = Rut::new(correlative)?;
+            let rut = Rut::new(correlative as u32)?;
             rut_list.push(rut);
         }
     }

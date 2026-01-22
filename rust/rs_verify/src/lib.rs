@@ -31,7 +31,7 @@ create_exception!(_rs_verify, UnexpectedComputation, VerifierException);
 
 create_exception!(_rs_verify, GenerateException, PyException);
 create_exception!(_rs_verify, InvalidRange, GenerateException);
-create_exception!(_rs_verify, InvalidCount, GenerateException);
+create_exception!(_rs_verify, InvalidInput, GenerateException);
 create_exception!(_rs_verify, InsufficientRange, GenerateException);
 create_exception!(_rs_verify, UnexpectedGeneration, GenerateException);
 
@@ -64,7 +64,7 @@ impl From<GenerateError> for PyErr {
     fn from(err: GenerateError) -> PyErr {
         match err {
             GenerateError::InvalidRange { .. } => InvalidRange::new_err(err.to_string()),
-            GenerateError::InvalidCount { .. } => InvalidCount::new_err(err.to_string()),
+            GenerateError::InvalidInput { .. } => InvalidInput::new_err(err.to_string()),
             GenerateError::InsufficientRange { .. } => InsufficientRange::new_err(err.to_string()),
             GenerateError::UnexpectedGeneration(_) => UnexpectedGeneration::new_err(err.to_string()),
         }
@@ -167,10 +167,10 @@ fn validate_rut(digits: &str, verifier: &str) -> PyResult<bool> {
 #[pyo3(signature = (n, min, max, seed=None))]
 fn generate(
         py: Python<'_>,
-        n: usize,
-        min: u32,
-        max: u32,
-        seed: Option<u64>
+        n: i32,
+        min: i32,
+        max: i32,
+        seed: Option<i64>
 ) -> PyResult<Py<PyAny>> {
     match utils::generate(n, min, max, seed) {
         Ok(ruts) => {
@@ -216,7 +216,7 @@ pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     m.add("GenerateException", m.py().get_type::<GenerateException>())?;
     m.add("InvalidRange", m.py().get_type::<InvalidRange>())?;
-    m.add("InvalidCount", m.py().get_type::<InvalidCount>())?;
+    m.add("InvalidInput", m.py().get_type::<InvalidInput>())?;
     m.add("InsufficientRange", m.py().get_type::<InsufficientRange>())?;
     m.add("UnexpectedGeneration", m.py().get_type::<UnexpectedGeneration>())?;
 

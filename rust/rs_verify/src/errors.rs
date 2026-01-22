@@ -45,10 +45,10 @@ pub enum VerifierError {
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
 pub enum GenerateError{
     #[error("Invalid range: min '{min}' must be less than max '{max}'.")]
-    InvalidRange { min: u32, max: u32 },
+    InvalidRange { min: i32, max: i32 },
 
-    #[error("Cannot generate zero or negative RUTs: '{n}' was given.")]
-    InvalidCount { n: i32 },
+    #[error("{msg}")]
+    InvalidInput { msg: String },
 
     #[error("Range too small to generate '{n}' unique RUTs: only '{range_size}' available.")]
     InsufficientRange { n: i32, range_size: i32 },
