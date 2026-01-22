@@ -12,13 +12,42 @@ use crate::constants::LETTER_MAP;
 use crate::constants::DIGRAPH_MAP;
 
 
+/// Represents a Chilean RUT (Rol Único Tributario) with its correlative number
+/// and verifier digit.
+///
+/// Examples
+/// ```
+/// use rs_verify::utils::Rut;
+/// 
+/// let rut = Rut { correlative: 12345678, verifier: '5' };
+/// assert_eq!(rut.correlative, 12345678);
+/// assert_eq!(rut.verifier, '5');
+/// ```
 #[derive(Debug, Clone)]
 pub struct Rut {
+    /// The correlative number of the RUT.
     pub correlative: u32,
+    /// The verifier digit or character of the RUT.
     pub verifier: char,
 }
 
+/// Implements methods for the [`Rut`] struct.
 impl Rut {
+    /// Creates a new `Rut` instance by calculating the verifier digit
+    /// based on the provided correlative number.
+    //// # Arguments
+    /// * `correlative` - A `u32` representing the correlative number of the RUT.
+    /// # Returns
+    /// * `Ok(Rut)` - A new `Rut` instance with the calculated verifier.
+    /// * `Err(VerifierError)` - If there is an error calculating the verifier.
+    /// # Examples
+    /// ```
+    /// use rs_verify::utils::{Rut, calculate_verifier};
+    /// 
+    /// let rut = Rut::new(12345678).unwrap();
+    /// assert_eq!(rut.correlative, 12345678);
+    /// assert_eq!(rut.verifier, calculate_verifier(&"12345678").unwrap());
+    /// ```
     pub fn new(correlative: u32) -> Result<Self, VerifierError> {
         let verifier = calculate_verifier(&correlative.to_string())?;
         Ok(Rut { correlative, verifier })
@@ -559,8 +588,6 @@ pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError>
 /// # Notes
 /// - The function ensures that the generated correlative numbers are unique
 ///   within the specified range.
-/// - The function may return fewer than `n` RUTs if the range is too small
-///   to accommodate the requested count of unique RUTs.
 ///
 /// # Examples
 /// ```
