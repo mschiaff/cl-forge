@@ -11,6 +11,7 @@ use pyo3::exceptions::PyValueError;
 
 use crate::errors::PpuError;
 use crate::errors::VerifierError;
+use crate::errors::GenerateError;
 
 
 create_exception!(_rs_verify, PpuException, PyException);
@@ -27,6 +28,12 @@ create_exception!(_rs_verify, EmptyVerifier, VerifierException);
 create_exception!(_rs_verify, InvalidDigits, VerifierException);
 create_exception!(_rs_verify, InvalidVerifier, VerifierException);
 create_exception!(_rs_verify, UnexpectedComputation, VerifierException);
+
+create_exception!(_rs_verify, GenerateException, PyException);
+create_exception!(_rs_verify, InvalidRange, GenerateException);
+create_exception!(_rs_verify, InvalidCount, GenerateException);
+create_exception!(_rs_verify, InsufficientRange, GenerateException);
+create_exception!(_rs_verify, UnexpectedGeneration, GenerateException);
 
 impl From<PpuError> for PyErr {
     fn from(err: PpuError) -> PyErr {
@@ -49,6 +56,17 @@ impl From<VerifierError> for PyErr {
             VerifierError::InvalidDigits { .. } => InvalidDigits::new_err(err.to_string()),
             VerifierError::InvalidVerifier { .. } => InvalidVerifier::new_err(err.to_string()),
             VerifierError::UnexpectedComputation => UnexpectedComputation::new_err(err.to_string()),
+        }
+    }
+}
+
+impl From<GenerateError> for PyErr {
+    fn from(err: GenerateError) -> PyErr {
+        match err {
+            GenerateError::InvalidRange { .. } => InvalidRange::new_err(err.to_string()),
+            GenerateError::InvalidCount { .. } => InvalidCount::new_err(err.to_string()),
+            GenerateError::InsufficientRange { .. } => InsufficientRange::new_err(err.to_string()),
+            GenerateError::UnexpectedGeneration(_) => UnexpectedGeneration::new_err(err.to_string()),
         }
     }
 }
@@ -195,6 +213,12 @@ pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("InvalidDigits", m.py().get_type::<InvalidDigits>())?;
     m.add("InvalidVerifier", m.py().get_type::<InvalidVerifier>())?;
     m.add("UnexpectedComputation", m.py().get_type::<UnexpectedComputation>())?;
+
+    m.add("GenerateException", m.py().get_type::<GenerateException>())?;
+    m.add("InvalidRange", m.py().get_type::<InvalidRange>())?;
+    m.add("InvalidCount", m.py().get_type::<InvalidCount>())?;
+    m.add("InsufficientRange", m.py().get_type::<InsufficientRange>())?;
+    m.add("UnexpectedGeneration", m.py().get_type::<UnexpectedGeneration>())?;
 
     Ok(())
 }
