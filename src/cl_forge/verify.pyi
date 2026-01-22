@@ -145,7 +145,7 @@ def generate(
         min: int,
         max: int,
         seed: int | None = None
-) -> list[dict[int, str]]:
+) -> list[dict[str, int | str]]:
     """
     Generates a list of unique Chilean RUT/RUN numbers with their verifier
     digits.
@@ -164,7 +164,7 @@ def generate(
 
     Returns
     -------
-    list[dict[str, str]]
+    list[dict[str, int | str]]
         A list of dictionaries, each containing 'correlative' and 'verifier'
         keys representing the generated RUT/RUN numbers.
     
