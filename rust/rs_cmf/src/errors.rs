@@ -13,7 +13,7 @@ pub enum CmfClientError {
     InvalidPath,
     
     #[error("Error connecting to CMF API: {0}")]
-    ConnectionError(#[from] reqwest::Error),
+    ConnectError(#[from] reqwest::Error),
     
     #[error("Unexpected status {status}: {body}")]
     BadStatus {status: u16, body: String}
