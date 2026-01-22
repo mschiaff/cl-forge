@@ -1,13 +1,13 @@
-mod enums;
-mod constants;
-mod utils;
-mod errors;
+pub mod enums;
+pub mod constants;
+pub mod utils;
+pub mod errors;
 
-use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use pyo3::create_exception;
 use pyo3::types::{PyDict, PyList};
 use pyo3::exceptions::PyException;
+use pyo3::exceptions::PyValueError;
 
 use crate::errors::PpuError;
 use crate::errors::VerifierError;

@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use rand::Rng;
 use rand::SeedableRng;
 use rand::rngs::StdRng;
@@ -55,8 +57,8 @@ impl Rut {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::get_ppu_format;
-/// use crate::enums::PpuFormat;
+/// use rs_verify::utils::get_ppu_format;
+/// use rs_verify::enums::PpuFormat;
 ///
 /// assert_eq!(get_ppu_format("PHZ55"),  Some(PpuFormat::LLLNN));
 /// assert_eq!(get_ppu_format("PHZ123"), Some(PpuFormat::LLLNNN));
@@ -131,7 +133,7 @@ pub fn get_ppu_format(ppu: &str) -> Option<PpuFormat> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::normalize_ppu;
+/// use rs_verify::utils::normalize_ppu;
 ///
 /// // Example of a valid `LLLNN` format input:
 /// let result = normalize_ppu("abc12").unwrap();
@@ -185,7 +187,7 @@ pub fn normalize_ppu(ppu: &str) -> Result<String, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::get_letter_value;
+/// use rs_verify::utils::get_letter_value;
 ///
 /// // LETTER_MAP contains mapping for "B" to "1".
 /// let result = get_letter_value("B");
@@ -240,14 +242,14 @@ pub fn get_letter_value(letter: &str) -> Result<&str, PpuError> {
 ///
 /// # Example
 /// ```
-/// use crate::utils::get_digraph_value;
+/// use rs_verify::utils::get_digraph_value;
 ///
 /// // DIGRAPH_MAP contains mapping for "AA" to "001".
 /// let result = get_digraph_value("AA");
 /// assert_eq!(result.unwrap(), "001");
 ///
 /// // For unknown letters, the function will return an error.
-/// let result = get_letter_value("MM");
+/// let result = rs_verify::utils::get_letter_value("MM");
 /// assert!(result.is_err());
 /// ```
 pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
@@ -310,16 +312,16 @@ pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::ppu_to_numeric;
+/// use rs_verify::utils::ppu_to_numeric;
 ///
 /// // Digraph-based mapping (LLNNNN)
-/// assert_eq!(map_ppu("BR1234").unwrap(), "0871234");
+/// assert_eq!(ppu_to_numeric("BR1234").unwrap(), "0871234");
 ///
 /// // Letter-by-letter mapping
-/// assert_eq!(map_ppu("PHZF55").unwrap(), "069455");
+/// assert_eq!(ppu_to_numeric("PHZF55").unwrap(), "069455");
 ///
 /// // Invalid format
-/// assert!(map_ppu("INVALID").is_err());
+/// assert!(ppu_to_numeric("INVALID").is_err());
 /// ```
 pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
     let ppu = ppu.trim().to_ascii_uppercase();
@@ -393,15 +395,16 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use your_module::{calculate_verifier, VerifierError};
+/// use rs_verify::utils::calculate_verifier;
+/// use rs_verify::errors::VerifierError;
 ///
 /// // Valid input
 /// let verifier = calculate_verifier("12345678").unwrap();
-/// assert_eq!(verifier, '3');
+/// assert_eq!(verifier, '5');
 ///
 /// // Input with whitespace
 /// let verifier = calculate_verifier(" 54321 ").unwrap();
-/// assert_eq!(verifier, '0');
+/// assert_eq!(verifier, '7');
 ///
 /// // Invalid input (non-digit characters)
 /// let result = calculate_verifier("12A34");
@@ -490,7 +493,7 @@ pub fn calculate_verifier(digits: &str) -> Result<char, VerifierError> {
 ///
 /// # Examples
 /// ```
-/// use crate::utils::validate_rut;
+/// use rs_verify::utils::validate_rut;
 ///
 /// // Valid RUT
 /// let result = validate_rut("17702664", "6").unwrap();
@@ -561,7 +564,7 @@ pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError>
 ///
 /// # Examples
 /// ```
-/// use crate::utils::generate;
+/// use rs_verify::utils::generate;
 /// // Generate 5 RUTs within the range 1000000 to 2000000.
 /// let ruts = generate(5, 1000000, 2000000, Some(42)).unwrap();
 /// assert_eq!(ruts.len(), 5);
@@ -579,7 +582,7 @@ pub fn generate(
         return Err(GenerateError::InvalidRange { min, max });
     }
     
-    if n <= 0 {
+    if n == 0 {
         return Err(GenerateError::InvalidCount { n: n as i32 });
     }
 
@@ -597,11 +600,14 @@ pub fn generate(
     };
 
     let mut rut_list: Vec<Rut> = Vec::with_capacity(n);
+    let mut seen = HashSet::with_capacity(n);
 
-    for _ in 0..n {
+    while rut_list.len() < n {
         let correlative = rng.gen_range(min..=max);
-        let rut = Rut::new(correlative)?;
-        rut_list.push(rut);
+        if seen.insert(correlative) {
+            let rut = Rut::new(correlative)?;
+            rut_list.push(rut);
+        }
     }
 
     Ok(rut_list)
