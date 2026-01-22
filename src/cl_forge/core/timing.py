@@ -46,6 +46,14 @@ class Timing:
         def my_function():
             # code to time
         my_function() # prints 'Function 'my_function' took 0.123456s'
+
+    Direct call::
+
+        def my_function(x):
+            # code to time
+        timer = Timing(my_function)
+        result = timer(10) # prints 'Function 'my_function' took 0.123456s'
+        # timer attributes are still available: timer.seconds
     
     Manually::
 
