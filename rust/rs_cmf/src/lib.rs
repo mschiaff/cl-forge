@@ -19,7 +19,7 @@ create_exception!(_rs_cmf, EmptyPath, CmfClientException);
 create_exception!(_rs_cmf, BadStatus, CmfClientException);
 create_exception!(_rs_cmf, EmptyApiKey, CmfClientException);
 create_exception!(_rs_cmf, InvalidPath, CmfClientException);    
-create_exception!(_rs_cmf, ConnectionError, CmfClientException);
+create_exception!(_rs_cmf, ConnectError, CmfClientException);
 
 impl From<CmfClientError> for PyErr {
     fn from(err: CmfClientError) -> PyErr {
@@ -32,8 +32,8 @@ impl From<CmfClientError> for PyErr {
                 EmptyApiKey::new_err(err.to_string()),
             CmfClientError::InvalidPath =>
                 InvalidPath::new_err(err.to_string()),
-            CmfClientError::ConnectionError(_) =>
-                ConnectionError::new_err(err.to_string()),
+            CmfClientError::ConnectError(_) =>
+                ConnectError::new_err(err.to_string()),
         }
     }
 }
@@ -193,6 +193,6 @@ pub fn _rs_cmf(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("BadStatus", m.py().get_type::<BadStatus>())?;
     m.add("EmptyApiKey", m.py().get_type::<EmptyApiKey>())?;
     m.add("InvalidPath", m.py().get_type::<InvalidPath>())?;
-    m.add("ConnectionError", m.py().get_type::<ConnectionError>())?;
+    m.add("ConnectError", m.py().get_type::<ConnectError>())?;
     Ok(())
 }
