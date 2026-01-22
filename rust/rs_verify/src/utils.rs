@@ -1,8 +1,27 @@
+use rand::Rng;
+use rand::SeedableRng;
+use rand::rngs::StdRng;
+
 use crate::enums::PpuFormat;
 use crate::errors::PpuError;
 use crate::errors::VerifierError;
+use crate::errors::GenerateError;
 use crate::constants::LETTER_MAP;
 use crate::constants::DIGRAPH_MAP;
+
+
+#[derive(Debug, Clone)]
+pub struct Rut {
+    pub correlative: u32,
+    pub verifier: char,
+}
+
+impl Rut {
+    pub fn new(correlative: u32) -> Result<Self, VerifierError> {
+        let verifier = calculate_verifier(&correlative.to_string())?;
+        Ok(Rut { correlative, verifier })
+    }
+}
 
 
 /// Detects the format of a Chilean PPU (vehicle license plate).
@@ -507,4 +526,83 @@ pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError>
         Ok(dv) => Ok(dv.to_string() == verifier),
         Err(msg) => Err(msg),
     }
+}
+
+
+/// Generates a list of valid Chilean RUTs (Rol Único Tributario) within a
+/// specified range.
+/// # Arguments
+/// * `n` - The number of RUTs to generate. Must be a positive integer.
+/// * `min` - The minimum correlative number (inclusive) for RUT generation.
+/// * `max` - The maximum correlative number (inclusive) for RUT generation.
+/// * `seed` - An optional seed for the random number generator to ensure
+///   reproducibility.
+///
+/// # Returns
+/// * `Ok(Vec<Rut>)` - A vector containing the generated RUTs, each with its
+///   correlative number and corresponding verifier digit.
+/// * `Err(GenerateError)`:
+///   - [`GenerateError::InvalidRange`] - If `min` is not less than `max`.
+///   - [`GenerateError::InvalidCount`] - If `n` is zero or negative.
+///   - [`GenerateError::UnexpectedGeneration`] - If an unexpected error occurs
+///     during RUT generation.
+///
+/// # Behavior
+/// The function initializes a random number generator, optionally seeded
+/// for reproducibility. It then generates `n` random correlative numbers
+/// within the specified range, computes their corresponding verifier digits,
+/// and constructs `Rut` instances for each generated RUT.
+///
+/// # Notes
+/// - The function ensures that the generated correlative numbers are unique
+///   within the specified range.
+/// - The function may return fewer than `n` RUTs if the range is too small
+///   to accommodate the requested count of unique RUTs.
+///
+/// # Examples
+/// ```
+/// use crate::utils::generate;
+/// // Generate 5 RUTs within the range 1000000 to 2000000.
+/// let ruts = generate(5, 1000000, 2000000, Some(42)).unwrap();
+/// assert_eq!(ruts.len(), 5);
+/// for rut in ruts {
+///     println!("RUT: {}-{}", rut.correlative, rut.verifier);
+/// }
+/// ```
+pub fn generate(
+        n: usize,
+        min: u32,
+        max: u32,
+        seed: Option<u64>
+) -> Result<Vec<Rut>, GenerateError> {
+    if min >= max {
+        return Err(GenerateError::InvalidRange { min, max });
+    }
+    
+    if n <= 0 {
+        return Err(GenerateError::InvalidCount { n: n as i32 });
+    }
+
+    let range_size = (max - min + 1) as i32;
+    if (n as i32) > range_size {
+        return Err(GenerateError::InsufficientRange {
+            n: n as i32,
+            range_size,
+        });
+    }
+
+    let mut rng: Box<dyn rand::RngCore> = match seed {
+        Some(s) => Box::new(StdRng::seed_from_u64(s)),
+        None => Box::new(rand::thread_rng()),
+    };
+
+    let mut rut_list: Vec<Rut> = Vec::with_capacity(n);
+
+    for _ in 0..n {
+        let correlative = rng.gen_range(min..=max);
+        let rut = Rut::new(correlative)?;
+        rut_list.push(rut);
+    }
+
+    Ok(rut_list)
 }

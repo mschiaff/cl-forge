@@ -138,3 +138,42 @@ def validate_rut(digits: str, verifier: str, /) -> bool:
         `True` if the verifier is valid for the given correlative,
         `False` otherwise.
     """
+
+
+def generate(
+        n: int,
+        min: int,
+        max: int,
+        seed: int | None = None
+) -> list[dict[int, str]]:
+    """
+    Generates a list of unique Chilean RUT/RUN numbers with their verifier
+    digits.
+
+    Parameters
+    ----------
+    n : int
+        The number of RUT/RUNs to generate.
+    min : int
+        The minimum value for the numeric part of the RUT/RUN.
+    max : int
+        The maximum value for the numeric part of the RUT/RUN.
+    seed : int | None
+        An optional seed for the random number generator to ensure
+        reproducibility. If `None`, a random seed is used.
+
+    Returns
+    -------
+    list[dict[str, str]]
+        A list of dictionaries, each containing 'correlative' and 'verifier'
+        keys representing the generated RUT/RUN numbers.
+    
+    Raises
+    ------
+    OverflowError
+        - If `n`, `min` and/or `max` are less than 0.
+    ValueError
+        - If `n == 0`.
+        - If the range defined by `min` and `max` is insufficient to generate
+        the requested number of unique RUTs.
+    """

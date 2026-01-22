@@ -31,3 +31,6 @@ version = "2.0.17"
 
 [workspace.dependencies.serde_json]
 version = "1.0.149"
+
+[workspace.dependencies.rand]
+version = "0.8.5"

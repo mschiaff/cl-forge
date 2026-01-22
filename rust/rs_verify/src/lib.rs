@@ -3,8 +3,10 @@ mod constants;
 mod utils;
 mod errors;
 
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use pyo3::create_exception;
+use pyo3::types::{PyDict, PyList};
 use pyo3::exceptions::PyException;
 
 use crate::errors::PpuError;
@@ -143,12 +145,40 @@ fn validate_rut(digits: &str, verifier: &str) -> PyResult<bool> {
 }
 
 
+#[pyfunction]
+#[pyo3(signature = (n, min, max, seed=None))]
+fn generate(
+        py: Python<'_>,
+        n: usize,
+        min: u32,
+        max: u32,
+        seed: Option<u64>
+) -> PyResult<Py<PyAny>> {
+    match utils::generate(n, min, max, seed) {
+        Ok(ruts) => {
+            let list = PyList::empty(py);
+            for r in ruts {
+                let dict = PyDict::new(py);
+                dict.set_item("correlative", r.correlative)?;
+                dict.set_item("verifier", r.verifier)?;
+                list.append(dict)?;
+            }
+            Ok(list.into())
+        }
+        Err(msg) => Err(
+            PyValueError::new_err(msg.to_string())
+        ),
+    }
+}
+
+
 #[pymodule]
 pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_verifier, m)?)?;
     m.add_function(wrap_pyfunction!(ppu_to_numeric, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_ppu, m)?)?;
     m.add_function(wrap_pyfunction!(validate_rut, m)?)?;
+    m.add_function(wrap_pyfunction!(generate, m)?)?;
     m.add_class::<Ppu>()?;
 
     m.add("PpuException", m.py().get_type::<PpuException>())?;

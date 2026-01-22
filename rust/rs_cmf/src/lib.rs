@@ -18,7 +18,7 @@ create_exception!(_rs_cmf, CmfClientException, PyException);
 create_exception!(_rs_cmf, EmptyPath, CmfClientException);
 create_exception!(_rs_cmf, BadStatus, CmfClientException);
 create_exception!(_rs_cmf, EmptyApiKey, CmfClientException);
-create_exception!(_rs_cmf, InvalidPath, CmfClientException);
+create_exception!(_rs_cmf, InvalidPath, CmfClientException);    
 create_exception!(_rs_cmf, ConnectionError, CmfClientException);
 
 impl From<CmfClientError> for PyErr {
