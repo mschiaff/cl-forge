@@ -51,7 +51,7 @@ build-backend = "maturin"
 
 [tool.maturin]
 manifest-path = "rust/rs_cl_forge/Cargo.toml"
-module-name = "cl_forge.core._rs_cl_forge"
+module-name = "cl_forge.core.impl._rs_cl_forge"
 include = [
     "src/cl_forge/*.pyi",
     "src/cl_forge/py.typed",

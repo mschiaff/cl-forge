@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from dataclasses import dataclass
     from typing import Literal
 
-    from .core.schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
+    from cl_forge.core.schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
 
 class CmfClient:
     """
