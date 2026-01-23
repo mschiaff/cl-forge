@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from dataclasses import dataclass
     from typing import Literal
 
-    from .core.cmf_ipc import IpcRecord
+    from .core.schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
 
 class CmfClient:
     """
@@ -143,3 +143,85 @@ class Ipc:
         BadStatus
             If there's no data available for the specified year.
         """
+
+@dataclass(frozen=True)
+class Usd:
+    """
+    Client for the CMF USD (Dólar Observado) endpoints.
+    """
+    __slots__ = ("_client",)
+
+    def __init__(self, api_key: str) -> None: ...
+
+    def current(
+            self,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> UsdRecord: ...
+
+    def year(
+            self,
+            year: int | None = None,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> list[UsdRecord]: ...
+
+
+@dataclass(frozen=True)
+class Eur:
+    """
+    Client for the CMF EUR (Euro) endpoints.
+    """
+    __slots__ = ("_client",)
+
+    def __init__(self, api_key: str) -> None: ...
+
+    def current(
+            self,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> EurRecord: ...
+
+    def year(
+            self,
+            year: int | None = None,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> list[EurRecord]: ...
+
+@dataclass(frozen=True)
+class Uf:
+    """
+    Client for the CMF UF (Unidad de Fomento) endpoints.
+    """
+    __slots__ = ("_client",)
+
+    def __init__(self, api_key: str) -> None: ...
+
+    def current(
+            self,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> UFRecord: ...
+
+    def year(
+            self,
+            year: int | None = None,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> list[UFRecord]: ...
+
+
+@dataclass(frozen=True)
+class Utm:
+    """
+    Client for the CMF UTM (Unidad Tributaria Mensual) endpoints.
+    """
+    __slots__ = ("_client",)
+
+    def __init__(self, api_key: str) -> None: ...
+
+    def current(
+            self,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> UTMRecord: ...
+
+    def year(
+            self,
+            year: int | None = None,
+            fmt: Literal['xml', 'json'] = 'json'
+    ) -> list[UTMRecord]: ...

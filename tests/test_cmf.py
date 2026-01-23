@@ -13,7 +13,3 @@ def test_cmf_client_invalid_path():
     # but InvalidPath is mentioned in docstring
     with pytest.raises(Exception): # noqa: B017
         client.get(path="invalid")
-
-# Note: More comprehensive tests would require mocking the CMF API response.
-# Since we don't have a mocking library like responses/httpretty in dependencies yet,
-# we focus on basic initialization and path validation if possible.
