@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from .core.cmf_ipc import Ipc
+from .core.endpoints import Eur, Ipc, Uf, Usd, Utm
 
 if TYPE_CHECKING:
     from .core._rs_cl_forge import _rs_cmf as _cmf # noqa
@@ -9,6 +9,10 @@ if TYPE_CHECKING:
 __all__ = (
     "CmfClient",
     "Ipc",
+    "Usd",
+    "Eur",
+    "Uf",
+    "Utm",
 )
 
 
