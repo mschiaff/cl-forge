@@ -61,7 +61,7 @@ def mock_get(path, format='json'):  # noqa: A002
 
 @pytest.fixture
 def mock_cmf_client():
-    with patch("cl_forge.core.endpoints._cmf.CmfClient") as mock:
+    with patch("cl_forge.core.endpoints.CmfClient") as mock:
         client_instance = mock.return_value
         client_instance.get.side_effect = mock_get
         yield client_instance
@@ -128,21 +128,21 @@ def test_endpoint_init():
 
     ipc = Ipc(api_key)
     assert ipc._client.api_key == "test_..."
-    assert ipc._path == "/ipc"
-    assert ipc._root_key == "IPCs"
+    assert ipc._path == "/ipc" # type: ignore
+    assert ipc._root_key == "IPCs" # type: ignore
 
     usd = Usd(api_key)
-    assert usd._path == "/dolar"
-    assert usd._root_key == "Dolares"
+    assert usd._path == "/dolar" # type: ignore
+    assert usd._root_key == "Dolares" # type: ignore
 
     eur = Eur(api_key)
-    assert eur._path == "/euro"
-    assert eur._root_key == "Euros"
+    assert eur._path == "/euro" # type: ignore
+    assert eur._root_key == "Euros" # type: ignore
 
     uf = Uf(api_key)
-    assert uf._path == "/uf"
-    assert uf._root_key == "UFs"
+    assert uf._path == "/uf" # type: ignore
+    assert uf._root_key == "UFs" # type: ignore
 
     utm = Utm(api_key)
-    assert utm._path == "/utm"
-    assert utm._root_key == "UTMs"
+    assert utm._path == "/utm" # type: ignore
+    assert utm._root_key == "UTMs" # type: ignore

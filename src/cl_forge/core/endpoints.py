@@ -3,15 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from functools import lru_cache
-from typing import TYPE_CHECKING, Literal, TypeVar
+from typing import Literal, TypeVar
 
 from pydantic import BaseModel
 
-from ._rs_cl_forge import _rs_cmf as _cmf
-from .schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
-
-if TYPE_CHECKING:
-    from ._rs_cl_forge._rs_cmf import CmfClient
+from cl_forge.core.impl.rs_cmf import CmfClient
+from cl_forge.core.schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -28,7 +25,7 @@ class CmfEndpoint[T: BaseModel]:
         record_class: type[T], 
         root_key: str
     ) -> None:
-        client = _cmf.CmfClient(api_key=api_key)
+        client = CmfClient(api_key=api_key)
         object.__setattr__(self, "_client", client)
         object.__setattr__(self, "_path", path)
         object.__setattr__(self, "_record_class", record_class)
@@ -63,7 +60,7 @@ class CmfEndpoint[T: BaseModel]:
     @staticmethod
     @lru_cache
     def _fetch_current(
-        client: CmfClient, 
+        client: CmfClient, # type: ignore
         path: str, 
         record_class: type[T], 
         root_key: str, 
@@ -75,7 +72,7 @@ class CmfEndpoint[T: BaseModel]:
     @staticmethod
     @lru_cache
     def _fetch_year(
-        client: CmfClient,
+        client: CmfClient, # type: ignore
         path: str,
         record_class: type[T],
         root_key: str,

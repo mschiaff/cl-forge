@@ -50,8 +50,8 @@ def test_generate_success():
     for item in results:
         correlative = item['correlative']
         verifier = item['verifier']
-        assert min_val <= correlative < max_val
-        assert verify.validate_rut(str(correlative), verifier) is True
+        assert min_val <= correlative < max_val # type: ignore
+        assert verify.validate_rut(str(correlative), verifier) is True # type: ignore
         correlatives.add(correlative)
     
     assert len(correlatives) == n

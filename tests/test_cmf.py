@@ -5,7 +5,7 @@ from cl_forge.cmf import CmfClient
 
 def test_cmf_client_init():
     client = CmfClient(api_key="test_key")
-    assert client.api_key == "test_..."
+    assert client.api_key == "test_..." # type: ignore
 
 def test_cmf_client_invalid_path():
     client = CmfClient(api_key="test_key")
