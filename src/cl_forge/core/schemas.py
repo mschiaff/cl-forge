@@ -12,7 +12,7 @@ class BaseCmfRecord(BaseModel):
     @field_validator('value', mode='before')
     @classmethod
     def convert_value(cls, v):
-        return float(v.replace(',', '.'))
+        return float(v.replace('.', '').replace(',', '.'))
 
     @field_validator('date', mode='before')
     @classmethod
@@ -24,7 +24,7 @@ class IpcRecord(BaseCmfRecord):
     @field_validator('value', mode='before')
     @classmethod
     def convert_value(cls, v):
-        return round(float(v.replace(',', '.')) / 100, 5)
+        return round(float(v.replace('.', '').replace(',', '.')) / 100, 5)
 
 
 class UsdRecord(BaseCmfRecord): ...
