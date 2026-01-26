@@ -4,7 +4,7 @@ import importlib.metadata
 
 from cl_forge import cmf, exceptions, utils, verify
 
-__all__ = ("cmf", "exceptions", "utils", "verify")
+__all__ = ("cmf", "exceptions", "utils", "verify",)
 
 try:
     __version__ = importlib.metadata.version("cl-forge")
