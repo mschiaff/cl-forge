@@ -4,6 +4,8 @@ members = [
     "rust/rs_cl_forge",
     "rust/rs_verify",
     "rust/rs_cmf",
+    "rust/market",
+    "rust/base"
 ]
 
 [workspace.package]

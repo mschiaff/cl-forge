@@ -10,6 +10,8 @@ crate-type = ["cdylib"]
 [dependencies]
 rs_cmf = { path = "../rs_cmf" }
 rs_verify = { path = "../rs_verify" }
+market = { path = "../market" }
+base = { path = "../base" }
 
 [dependencies.pyo3]
 workspace = true

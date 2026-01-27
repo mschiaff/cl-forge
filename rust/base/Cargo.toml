@@ -1,0 +1,17 @@
+[package]
+name = "base"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "base"
+crate-type = ["rlib"]
+
+[dependencies.reqwest]
+workspace = true
+
+[dependencies.thiserror]
+workspace = true
+
+[dependencies.pyo3]
+workspace = true
