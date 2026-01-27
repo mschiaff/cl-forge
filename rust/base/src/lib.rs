@@ -72,7 +72,7 @@ pub fn json_to_dict<'py>(
 }
 
 #[pymodule]
-pub fn base(m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn rs_base(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ClientException", m.py().get_type::<ClientException>())?;
     m.add("EmptyApiKey", m.py().get_type::<EmptyApiKey>())?;
     m.add("EmptyPath", m.py().get_type::<EmptyPath>())?;
