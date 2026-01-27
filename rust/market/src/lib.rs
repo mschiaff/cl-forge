@@ -3,6 +3,7 @@ mod constants;
 
 use pyo3::prelude::*;
 
+use base::errors::ClientError;
 
 #[pyclass]
 pub struct MarketClient {
@@ -28,7 +29,7 @@ impl MarketClient {
     }
     
     fn get<'py>(&self, py: Python<'py>, path: &str) -> PyResult<Bound<'py, PyAny>> {
-        let value = self.client.get(path).map_err(PyErr::from);
+        let value = self.client.get(path).map_err(ClientError::from);
         let orjson = py.import("orjson")?;
         let dict = orjson.call_method1("loads", (value?,))?;
         Ok(dict)
