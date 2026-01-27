@@ -16,7 +16,7 @@ create_exception!(base, BadStatus, ClientException);
 impl From<errors::ClientError> for PyErr {
     fn from(err: errors::ClientError) -> PyErr {
         match err {
-            errors::ClientError::EmptyApiKey => 
+            errors::ClientError::EmptyApiKey =>
                 EmptyApiKey::new_err(err.to_string()),
             errors::ClientError::InvalidPath(p) =>
                 InvalidPath::new_err(p),
@@ -26,4 +26,14 @@ impl From<errors::ClientError> for PyErr {
                 BadStatus::new_err(format!("{}: {}", status, body))
         }
     }
+}
+
+#[pymodule]
+pub fn base(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add("ClientException", m.py().get_type::<ClientException>())?;
+    m.add("EmptyApiKey", m.py().get_type::<EmptyApiKey>())?;
+    m.add("InvalidPath", m.py().get_type::<InvalidPath>())?;
+    m.add("HttpError", m.py().get_type::<HttpError>())?;
+    m.add("BadStatus", m.py().get_type::<BadStatus>())?;
+    Ok(())
 }

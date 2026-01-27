@@ -15,5 +15,9 @@ fn _rs_cl_forge(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     market::market(&market)?;
     m.add_submodule(&market)?;
 
+    let base = PyModule::new(py, "base")?;
+    base::base(&base)?;
+    m.add_submodule(&base)?;
+
     Ok(())
 }
