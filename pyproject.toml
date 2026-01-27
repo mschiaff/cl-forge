@@ -11,6 +11,7 @@ authors = [
 ]
 
 dependencies = [
+    "orjson>=3.11.5",
     "pydantic>=2.12.5",
 ]
 

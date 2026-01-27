@@ -11,5 +11,9 @@ fn _rs_cl_forge(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     rs_verify::_rs_verify(&verify)?;
     m.add_submodule(&verify)?;
 
+    let market = PyModule::new(py, "market")?;
+    market::market(&market)?;
+    m.add_submodule(&market)?;
+
     Ok(())
 }

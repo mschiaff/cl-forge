@@ -31,6 +31,6 @@ impl MarketClient {
             });
         }
 
-        Ok(response.json()?)
+        Ok(response.text()?)
     }
 }

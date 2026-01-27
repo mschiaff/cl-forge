@@ -27,8 +27,11 @@ impl MarketClient {
         self.client.base.api_key.clone()
     }
     
-    fn get(&self, path: &str) -> PyResult<String> {
-        self.client.get(path).map_err(PyErr::from)
+    fn get<'py>(&self, py: Python<'py>, path: &str) -> PyResult<Bound<'py, PyAny>> {
+        let value = self.client.get(path).map_err(PyErr::from);
+        let orjson = py.import("orjson")?;
+        let dict = orjson.call_method1("loads", (value?,))?;
+        Ok(dict)
     }
 
     fn __repr__(&self) -> String {
@@ -38,4 +41,11 @@ impl MarketClient {
             self.base_url(),
         )
     }
+}
+
+
+#[pymodule]
+pub fn market(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<MarketClient>()?;
+    Ok(())
 }
