@@ -12,6 +12,7 @@ create_exception!(base, EmptyPath, ClientException);
 create_exception!(base, InvalidPath, ClientException);
 create_exception!(base, HttpError, ClientException);
 create_exception!(base, BadStatus, ClientException);
+create_exception!(base, UnsupportedFormat, ClientException);
 
 
 impl From<errors::ClientError> for PyErr {
@@ -26,7 +27,9 @@ impl From<errors::ClientError> for PyErr {
             errors::ClientError::HttpError(e) =>
                 HttpError::new_err(e.to_string()),
             errors::ClientError::BadStatus { status, body } =>
-                BadStatus::new_err(format!("{}: {}", status, body))
+                BadStatus::new_err((status, body)),
+            errors::ClientError::UnsupportedFormat { expected, actual } =>
+                UnsupportedFormat::new_err((expected, actual)),
         }
     }
 }
@@ -76,5 +79,6 @@ pub fn base(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("InvalidPath", m.py().get_type::<InvalidPath>())?;
     m.add("HttpError", m.py().get_type::<HttpError>())?;
     m.add("BadStatus", m.py().get_type::<BadStatus>())?;
+    m.add("UnsupportedFormat", m.py().get_type::<UnsupportedFormat>())?;
     Ok(())
 }

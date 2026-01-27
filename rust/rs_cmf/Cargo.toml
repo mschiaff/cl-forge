@@ -7,6 +7,9 @@ edition.workspace = true
 name = "rs_cmf"
 crate-type = ["rlib"]
 
+[dependencies]
+base = { path = "../base" }
+
 [dependencies.pyo3]
 workspace = true
 

@@ -15,5 +15,8 @@ pub enum ClientError {
     HttpError(#[from] reqwest::Error),
     
     #[error("Unexpected status {status}: {body}")]
-    BadStatus {status: u16, body: String}
+    BadStatus {status: u16, body: String},
+    
+    #[error("Unsupported format. Expected {expected}, but '{actual}' was given.")]
+    UnsupportedFormat {expected: String, actual: String}
 }

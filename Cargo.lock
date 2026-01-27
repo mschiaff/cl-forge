@@ -989,6 +989,7 @@ dependencies = [
 name = "rs_cmf"
 version = "0.5.1"
 dependencies = [
+ "base",
  "pyo3",
  "reqwest",
  "secrecy",

@@ -1,15 +1,15 @@
 use crate::constants;
+use crate::enums::CmfResponseFormat;
 
 use base::native::BaseClient;
 use base::errors::ClientError;
 
-
-pub struct MarketClient {
+pub struct CmfClient {
     pub base: BaseClient,
 }
 
 
-impl MarketClient {
+impl CmfClient {
     //noinspection DuplicatedCode
     pub fn new(api_key: &str) -> Result<Self, ClientError> {
         let base = BaseClient::new(
@@ -21,9 +21,17 @@ impl MarketClient {
         Ok(Self { base })
     }
 
-    pub fn get(&self, path: &str) -> Result<String, ClientError> {
+    pub fn get(
+            &self,
+            path: &str,
+            fmt: Option<&str>
+    ) -> Result<String, ClientError> {
+        let fmt = CmfResponseFormat::try_from(fmt)
+            .map_err(ClientError::from)?;
+        
         let query = [
-            ("ticket", self.base.api_key.as_str())
+            ("apikey", self.base.api_key.as_str()),
+            ("formato", fmt.as_str())
         ];
         let response = self.base
             .get(path, &query)

@@ -1,5 +1,7 @@
 mod errors;
 mod constants;
+mod native;
+mod enums;
 
 use std::time::Duration;
 
@@ -11,6 +13,7 @@ use reqwest::blocking::Client;
 use secrecy::{ExposeSecret, SecretString};
 
 use crate::errors::CmfClientError;
+use crate::enums::CmfResponseFormat;
 
 
 create_exception!(_rs_cmf, CmfClientException, PyException);
@@ -18,7 +21,7 @@ create_exception!(_rs_cmf, CmfClientException, PyException);
 create_exception!(_rs_cmf, EmptyPath, CmfClientException);
 create_exception!(_rs_cmf, BadStatus, CmfClientException);
 create_exception!(_rs_cmf, EmptyApiKey, CmfClientException);
-create_exception!(_rs_cmf, InvalidPath, CmfClientException);    
+create_exception!(_rs_cmf, InvalidPath, CmfClientException);
 create_exception!(_rs_cmf, ConnectError, CmfClientException);
 
 impl From<CmfClientError> for PyErr {
@@ -34,15 +37,9 @@ impl From<CmfClientError> for PyErr {
                 InvalidPath::new_err(err.to_string()),
             CmfClientError::ConnectError(_) =>
                 ConnectError::new_err(err.to_string()),
+            CmfClientError::BaseError(e) => e.into(),
         }
     }
-}
-
-
-#[derive(Clone, Copy, PartialEq, Eq)]
-enum ResponseFormat {
-    Json,
-    Xml,
 }
 
 
@@ -116,26 +113,13 @@ impl CmfClient {
             return Err(CmfClientError::InvalidPath.into())
         }
 
-        let format_enum = match format {
-            Some(f) => match f.to_lowercase().as_str() {
-                "json" => ResponseFormat::Json,
-                "xml" => ResponseFormat::Xml,
-                _ => return Err(
-                    PyValueError::new_err("format must be 'json' or 'xml'")
-                ),
-            },
-            None => ResponseFormat::Json,
-        };
-
-        let format_str = match format_enum {
-            ResponseFormat::Json => "json",
-            ResponseFormat::Xml => "xml",
-        };
+        let format_enum = CmfResponseFormat::try_from(format)
+            .map_err(CmfClientError::from)?;
 
         let url = format!("{}{}", self.base_url, path);
         let mut qparams: Vec<(String, String)> = vec![
             ("apikey".into(), self.api_key.expose_secret().into()),
-            ("formato".into(), format_str.to_string())
+            ("formato".into(), format_enum.as_str().to_string())
         ];
 
         if let Some(p) = params {
@@ -165,7 +149,7 @@ impl CmfClient {
         let body = response.text().map_err(CmfClientError::from)?;
         
         match format_enum {
-            ResponseFormat::Json => {
+            CmfResponseFormat::Json => {
                 let _json: serde_json::Value = serde_json::from_str(&body)
                     .map_err(
                         |e| PyValueError::new_err(
@@ -177,7 +161,7 @@ impl CmfClient {
                 let dict = json_module.call_method1("loads", (body,))?;
                 Ok(dict)
             }
-            ResponseFormat::Xml => {
+            CmfResponseFormat::Xml => {
                 Ok(PyString::new(py, &body).into_any())
             }
         }
