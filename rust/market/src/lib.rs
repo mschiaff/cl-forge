@@ -14,7 +14,9 @@ pub struct MarketClient {
 impl MarketClient {
     #[new]
     fn new(ticket: &str) -> PyResult<Self> {
-        let client = native::MarketClient::new(ticket)?;
+        let client = native::MarketClient::new(ticket)
+            .map_err(ClientError::from)?;
+        
         Ok(Self { client })
     }
     

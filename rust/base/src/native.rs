@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use reqwest::blocking::{Client, Response};
+use reqwest::blocking::Client;
 
 use crate::errors::ClientError;
 
@@ -41,7 +41,7 @@ impl BaseClient {
         &self,
         path: &str,
         query: &[(&str, &str)]
-    ) -> Result<Response, ClientError> {
+    ) -> Result<String, ClientError> {
         let path = path.trim();
         let url = format!("{}{}", self.base_url, path);
         
@@ -65,6 +65,10 @@ impl BaseClient {
             });
         }
 
-        Ok(response)
+        Ok(
+            response
+                .text()
+                .map_err(ClientError::from)?
+        )
     }
 }

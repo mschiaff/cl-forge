@@ -15,7 +15,7 @@ impl MarketClient {
             api_key,
             constants::BASE_URL,
             constants::USER_AGENT,
-        )?;
+        ).map_err(ClientError::from)?;
 
         Ok(Self { base })
     }
@@ -28,10 +28,6 @@ impl MarketClient {
             .get(path, &query)
             .map_err(ClientError::from)?;
 
-        Ok(
-            response
-                .text()
-                .map_err(ClientError::from)?
-        )
+        Ok(response)
     }
 }
