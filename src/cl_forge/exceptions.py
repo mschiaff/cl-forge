@@ -1,19 +1,13 @@
 from cl_forge.core.impl.rs_exceptions import (
-    BadStatus,
-    CmfClientException,
-    ConnectError,
-    EmptyApiKey,
     EmptyDigits,
     EmptyDigraph,
     EmptyLetter,
-    EmptyPath,
     EmptyVerifier,
     GenerateException,
     InsufficientRange,
     InvalidDigits,
     InvalidInput,
     InvalidLength,
-    InvalidPath,
     InvalidRange,
     InvalidVerifier,
     PpuException,
@@ -26,12 +20,6 @@ from cl_forge.core.impl.rs_exceptions import (
 )
 
 __all__ = (
-    "CmfClientException",
-    "EmptyPath",
-    "BadStatus",
-    "EmptyApiKey",
-    "InvalidPath",
-    "ConnectError",
     "PpuException",
     "UnknownFormat",
     "InvalidLength",
