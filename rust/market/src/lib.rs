@@ -7,7 +7,7 @@ use base::errors::ClientError;
 
 
 #[pyclass]
-pub struct MarketClient {
+struct MarketClient {
     client: native::MarketClient,
 }
 
@@ -16,7 +16,8 @@ impl MarketClient {
     #[new]
     fn new(ticket: &str) -> PyResult<Self> {
         let client = native::MarketClient::new(ticket)
-            .map_err(ClientError::from)?.into();
+            .map_err(ClientError::from)?
+            .into();
         
         Ok(Self { client })
     }
@@ -36,17 +37,18 @@ impl MarketClient {
             py: Python<'py>,
             path: &str
     ) -> PyResult<Bound<'py, PyAny>> {
-        let body: String = self.client.get(path)
+        let body: String = self.client
+            .get(path)
             .map_err(ClientError::from)?;
         let dict = base::json_to_dict(py, &body)?
             .into();
-        
+
         Ok(dict)
     }
 
     fn __repr__(&self) -> String {
         format!(
-            "MarketClient(api_key='{}', base_url='{}')",
+            "MarketClient(ticket='{}', base_url='{}')",
             self.ticket(),
             self.base_url(),
         )

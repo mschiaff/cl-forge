@@ -8,7 +8,6 @@ pub struct MarketClient {
     pub base: BaseClient,
 }
 
-
 impl MarketClient {
     //noinspection DuplicatedCode
     pub fn new(api_key: &str) -> Result<Self, ClientError> {

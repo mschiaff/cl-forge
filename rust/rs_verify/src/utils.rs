@@ -643,14 +643,14 @@ pub fn generate(
 
     let mut rng: Box<dyn rand::RngCore> = match seed {
         Some(s) => Box::new(StdRng::seed_from_u64(s as u64)),
-        None => Box::new(rand::thread_rng()),
+        None => Box::new(rand::rng()),
     };
 
     let mut rut_list: Vec<Rut> = Vec::with_capacity(n as usize);
     let mut seen = HashSet::with_capacity(n as usize);
 
     while rut_list.len() < n as usize {
-        let correlative = rng.gen_range(min..=max);
+        let correlative = rng.random_range(min..=max);
         if seen.insert(correlative) {
             let rut = Rut::new(correlative as u32)?;
             rut_list.push(rut);

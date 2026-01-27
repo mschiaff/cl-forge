@@ -8,7 +8,6 @@ pub struct CmfClient {
     pub base: BaseClient,
 }
 
-
 impl CmfClient {
     //noinspection DuplicatedCode
     pub fn new(api_key: &str) -> Result<Self, ClientError> {

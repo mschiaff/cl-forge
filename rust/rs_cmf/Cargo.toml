@@ -12,15 +12,3 @@ base = { path = "../base" }
 
 [dependencies.pyo3]
 workspace = true
-
-[dependencies.reqwest]
-workspace = true
-
-[dependencies.secrecy]
-workspace = true
-
-[dependencies.thiserror]
-workspace = true
-
-[dependencies.serde_json]
-workspace = true
