@@ -2,9 +2,9 @@ mod native;
 mod constants;
 
 use pyo3::prelude::*;
-use pyo3::exceptions::{PyValueError, PyImportError};
 
 use base::errors::ClientError;
+
 
 #[pyclass]
 pub struct MarketClient {
@@ -32,28 +32,15 @@ impl MarketClient {
     }
     
     fn get<'py>(
-        &self,
-        py: Python<'py>,
-        path: &str
+            &self,
+            py: Python<'py>,
+            path: &str
     ) -> PyResult<Bound<'py, PyAny>> {
-        let body: String = self.client
-            .get(path)
+        let body: String = self.client.get(path)
             .map_err(ClientError::from)?;
-
-        let orjson = py.import("orjson")
-            .map_err(
-                |e| PyImportError::new_err(
-                    format!("Failed to import 'orjson': {}", e)
-                )
-            )?;
-
-        let dict = orjson.call_method1("loads", (body,))
-            .map_err(
-                |e| PyValueError::new_err(
-                    format!("Failed to parse JSON: {}", e)
-                )
-            )?;
-
+        let dict = base::json_to_dict(py, &body)?
+            .into();
+        
         Ok(dict)
     }
 
