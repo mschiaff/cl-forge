@@ -42,13 +42,28 @@ impl BaseClient {
         path: &str,
         query: &[(&str, &str)]
     ) -> Result<Response, ClientError> {
+        let path = path.trim();
         let url = format!("{}{}", self.base_url, path);
+        
+        if path.is_empty() {
+            return Err(ClientError::EmptyPath);
+        }
+        if !path.starts_with('/') {
+            return Err(ClientError::InvalidPath);
+        }
 
         let response = self.client
             .get(url)
             .query(query)
             .send()
             .map_err(ClientError::from)?;
+        
+        if !response.status().is_success() {
+            return Err(ClientError::BadStatus {
+                status: response.status().as_u16(),
+                body: response.text().unwrap_or_default()
+            });
+        }
 
         Ok(response)
     }

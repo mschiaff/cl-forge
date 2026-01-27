@@ -21,16 +21,17 @@ impl MarketClient {
     }
 
     pub fn get(&self, path: &str) -> Result<String, ClientError> {
-        let query = [("ticket", self.base.api_key.as_str())];
-        let response = self.base.get(path, &query).map_err(ClientError::from)?;
+        let query = [
+            ("ticket", self.base.api_key.as_str())
+        ];
+        let response = self.base
+            .get(path, &query)
+            .map_err(ClientError::from)?;
 
-        if !response.status().is_success() {
-            return Err(ClientError::BadStatus {
-                status: response.status().as_u16(),
-                body: response.text().unwrap_or_default()
-            });
-        }
-
-        Ok(response.text().map_err(ClientError::from)?)
+        Ok(
+            response
+                .text()
+                .map_err(ClientError::from)?
+        )
     }
 }

@@ -8,6 +8,7 @@ use pyo3::exceptions::PyException;
 
 create_exception!(base, ClientException, PyException);
 create_exception!(base, EmptyApiKey, ClientException);
+create_exception!(base, EmptyPath, ClientException);
 create_exception!(base, InvalidPath, ClientException);
 create_exception!(base, HttpError, ClientException);
 create_exception!(base, BadStatus, ClientException);
@@ -18,8 +19,10 @@ impl From<errors::ClientError> for PyErr {
         match err {
             errors::ClientError::EmptyApiKey =>
                 EmptyApiKey::new_err(err.to_string()),
-            errors::ClientError::InvalidPath(p) =>
-                InvalidPath::new_err(p),
+            errors::ClientError::EmptyPath =>
+                EmptyApiKey::new_err(err.to_string()),
+            errors::ClientError::InvalidPath =>
+                InvalidPath::new_err(err.to_string()),
             errors::ClientError::HttpError(e) =>
                 HttpError::new_err(e.to_string()),
             errors::ClientError::BadStatus { status, body } =>
@@ -32,6 +35,7 @@ impl From<errors::ClientError> for PyErr {
 pub fn base(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ClientException", m.py().get_type::<ClientException>())?;
     m.add("EmptyApiKey", m.py().get_type::<EmptyApiKey>())?;
+    m.add("EmptyPath", m.py().get_type::<EmptyPath>())?;
     m.add("InvalidPath", m.py().get_type::<InvalidPath>())?;
     m.add("HttpError", m.py().get_type::<HttpError>())?;
     m.add("BadStatus", m.py().get_type::<BadStatus>())?;
