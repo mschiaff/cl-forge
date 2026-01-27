@@ -47,7 +47,8 @@ impl BaseClient {
         let response = self.client
             .get(url)
             .query(query)
-            .send()?;
+            .send()
+            .map_err(ClientError::from)?;
 
         Ok(response)
     }
