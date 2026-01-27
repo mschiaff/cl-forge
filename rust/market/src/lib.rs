@@ -2,6 +2,7 @@ mod native;
 mod constants;
 
 use pyo3::prelude::*;
+use pyo3::exceptions::{PyValueError, PyImportError};
 
 use base::errors::ClientError;
 
@@ -15,7 +16,7 @@ impl MarketClient {
     #[new]
     fn new(ticket: &str) -> PyResult<Self> {
         let client = native::MarketClient::new(ticket)
-            .map_err(ClientError::from)?;
+            .map_err(ClientError::from)?.into();
         
         Ok(Self { client })
     }
@@ -35,10 +36,24 @@ impl MarketClient {
         py: Python<'py>,
         path: &str
     ) -> PyResult<Bound<'py, PyAny>> {
-        let body = self.client.get(path).map_err(ClientError::from)?;
+        let body: String = self.client
+            .get(path)
+            .map_err(ClientError::from)?;
 
-        let orjson = py.import("orjson")?;
-        let dict = orjson.call_method1("loads",(body,))?;
+        let orjson = py.import("orjson")
+            .map_err(
+                |e| PyImportError::new_err(
+                    format!("Failed to import 'orjson': {}", e)
+                )
+            )?;
+
+        let dict = orjson.call_method1("loads", (body,))
+            .map_err(
+                |e| PyValueError::new_err(
+                    format!("Failed to parse JSON: {}", e)
+                )
+            )?;
+
         Ok(dict)
     }
 
