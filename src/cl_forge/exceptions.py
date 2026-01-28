@@ -1,3 +1,12 @@
+from cl_forge.core.impl.rs_cl_forge.rs_base import (
+    BadStatus,
+    ClientException,
+    EmptyApiKey,
+    EmptyPath,
+    HttpError,
+    InvalidPath,
+    UnsupportedFormat,
+)
 from cl_forge.core.impl.rs_cl_forge.rs_verify import (
     EmptyDigits,
     EmptyDigraph,
@@ -20,6 +29,13 @@ from cl_forge.core.impl.rs_cl_forge.rs_verify import (
 )
 
 __all__ = (
+    "BadStatus",
+    "ClientException",
+    "EmptyApiKey",
+    "EmptyPath",
+    "HttpError",
+    "InvalidPath",
+    "UnsupportedFormat",
     "PpuException",
     "UnknownFormat",
     "InvalidLength",

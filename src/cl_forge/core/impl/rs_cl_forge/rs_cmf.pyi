@@ -1,7 +1,9 @@
-from typing import TYPE_CHECKING, Literal
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Literal
 
 class CmfClient:
     """
@@ -20,6 +22,7 @@ class CmfClient:
     base_url : str
         The base URL of the CMF API endpoint.
     """
+
     def __init__(self, api_key: str) -> None:
         """
         Initializes the CMF client with the provided API key.
@@ -29,6 +32,8 @@ class CmfClient:
         api_key: str
             The API key for authenticating with the CMF API.
         """
+
+    def __repr__(self) -> str: ...
 
     @property
     def api_key(self) -> str:
@@ -76,5 +81,3 @@ class CmfClient:
             The response from the CMF API. Returns a dict if format is
             ``json`` or ``None``, and a str if format is ``xml``.
         """
-
-    def __repr__(self) -> str: ...

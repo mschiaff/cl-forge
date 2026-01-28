@@ -83,6 +83,8 @@ class Ppu:
             Chilean PPU (vehicle license plate).
         """
 
+    def __repr__(self) -> str: ...
+
     @property
     def raw(self) -> str:
         """The input PPU."""

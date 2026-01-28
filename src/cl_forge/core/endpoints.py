@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from functools import lru_cache
-from typing import Literal, TypeVar
+from typing import Any, Literal, TypeVar
 
 from pydantic import BaseModel
 
@@ -60,19 +60,19 @@ class CmfEndpoint[T: BaseModel]:
     @staticmethod
     @lru_cache
     def _fetch_current(
-        client: CmfClient, # type: ignore
-        path: str, 
-        record_class: type[T], 
+        client: CmfClient,
+        path: str,
+        record_class: type[T],
         root_key: str, 
         fmt: Literal['xml', 'json']
     ) -> T:
-        raw = client.get(path=path, format=fmt)
+        raw: dict[str, Any] = client.get(path=path, fmt=fmt)
         return record_class(**raw[root_key][0])
 
     @staticmethod
     @lru_cache
     def _fetch_year(
-        client: CmfClient, # type: ignore
+        client: CmfClient,
         path: str,
         record_class: type[T],
         root_key: str,
@@ -80,7 +80,7 @@ class CmfEndpoint[T: BaseModel]:
         fmt: Literal['xml', 'json']
     ) -> list[T]:
         year = year or datetime.now().year
-        raw = client.get(path=f"{path}/{year}", format=fmt)
+        raw = client.get(path=f"{path}/{year}", fmt=fmt)
         return [record_class(**item) for item in raw[root_key]]
 
 
