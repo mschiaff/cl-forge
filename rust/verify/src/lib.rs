@@ -13,26 +13,72 @@ use crate::errors::VerifierError;
 use crate::errors::GenerateError;
 
 
-create_exception!(rs_verify, PpuException, PyException);
-create_exception!(rs_verify, UnknownFormat, PpuException);
-create_exception!(rs_verify, InvalidLength, PpuException);
-create_exception!(rs_verify, UnknownLetter, PpuException);
-create_exception!(rs_verify, EmptyLetter, PpuException);
-create_exception!(rs_verify, UnknownDigraph, PpuException);
-create_exception!(rs_verify, EmptyDigraph, PpuException);
+create_exception!(
+    rs_verify, PpuException, PyException,
+    "Base class for all exceptions raised by the PPU."
+);
+create_exception!(
+    rs_verify, UnknownFormat, PpuException,
+    "Raised when the given PPU does not match any known format."
+);
+create_exception!(
+    rs_verify, InvalidLength, PpuException,
+    "Raised when PPU letters or digraphs are of invalid length."
+);
+create_exception!(
+    rs_verify, UnknownLetter, PpuException,
+    "Raised when the given PPU has letters out of the mapping."
+);
+create_exception!(
+    rs_verify, EmptyLetter, PpuException,
+    "Raised when internal mapping functions encounter an empty letter."
+);
+create_exception!(
+    rs_verify, UnknownDigraph, PpuException,
+    "Raised when the given PPU has digraphs out of the mapping."
+);
+create_exception!(
+    rs_verify, EmptyDigraph, PpuException,
+    "Raised when internal mapping functions encounter an empty digraph."
+);
 
-create_exception!(rs_verify, VerifierException, PyException);
-create_exception!(rs_verify, EmptyDigits, VerifierException);
-create_exception!(rs_verify, EmptyVerifier, VerifierException);
-create_exception!(rs_verify, InvalidDigits, VerifierException);
-create_exception!(rs_verify, InvalidVerifier, VerifierException);
-create_exception!(rs_verify, UnexpectedComputation, VerifierException);
+create_exception!(
+    rs_verify, VerifierException, PyException,
+    "Base class for all exceptions raised by the verifier."
+);
+create_exception!(
+    rs_verify, EmptyVerifier, VerifierException,
+    "Raised when the given verifier is empty on RUT validation."
+);
+create_exception!(
+    rs_verify, InvalidVerifier, VerifierException,
+    "Raised when the given verifier is invalid on RUT validation."
+);
+create_exception!(
+    rs_verify, UnexpectedComputation, VerifierException,
+    "Raised when the verifier computation fails."
+);
 
-create_exception!(rs_verify, GenerateException, PyException);
-create_exception!(rs_verify, InvalidRange, GenerateException);
-create_exception!(rs_verify, InvalidInput, GenerateException);
-create_exception!(rs_verify, InsufficientRange, GenerateException);
-create_exception!(rs_verify, UnexpectedGeneration, GenerateException);
+create_exception!(
+    rs_verify, GenerateException, PyException,
+    "Base class for all exceptions raised by the RUT generator."
+);
+create_exception!(
+    rs_verify, InvalidRange, GenerateException,
+    "Raised when the generator given lower bound is greater than upper bound."
+);
+create_exception!(
+    rs_verify, InvalidInput, GenerateException,
+    "Raised when generator's given parameters are invalid."
+);
+create_exception!(
+    rs_verify, InsufficientRange, GenerateException,
+    "Raised when the requested amount of RUTs is greater than the available range."
+);
+create_exception!(
+    rs_verify, UnexpectedGeneration, GenerateException,
+    "Raised to support unidentified errors during RUT generation."
+);
 
 impl From<PpuError> for PyErr {
     fn from(err: PpuError) -> PyErr {
@@ -50,9 +96,7 @@ impl From<PpuError> for PyErr {
 impl From<VerifierError> for PyErr {
     fn from(err: VerifierError) -> PyErr {
         match err {
-            VerifierError::EmptyDigits => EmptyDigits::new_err(err.to_string()),
             VerifierError::EmptyVerifier => EmptyVerifier::new_err(err.to_string()),
-            VerifierError::InvalidDigits { .. } => InvalidDigits::new_err(err.to_string()),
             VerifierError::InvalidVerifier { .. } => InvalidVerifier::new_err(err.to_string()),
             VerifierError::UnexpectedComputation => UnexpectedComputation::new_err(err.to_string()),
         }
@@ -205,9 +249,7 @@ pub fn rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("EmptyDigraph", m.py().get_type::<EmptyDigraph>())?;
 
     m.add("VerifierException", m.py().get_type::<VerifierException>())?;
-    m.add("EmptyDigits", m.py().get_type::<EmptyDigits>())?;
     m.add("EmptyVerifier", m.py().get_type::<EmptyVerifier>())?;
-    m.add("InvalidDigits", m.py().get_type::<InvalidDigits>())?;
     m.add("InvalidVerifier", m.py().get_type::<InvalidVerifier>())?;
     m.add("UnexpectedComputation", m.py().get_type::<UnexpectedComputation>())?;
 
