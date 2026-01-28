@@ -1,1 +1,3 @@
-# TODO rs_verify stubs
+class PpuException(Exception): ...  # noqa: N818
+
+class UnknownFormat(PpuException): ...

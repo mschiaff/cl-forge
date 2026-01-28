@@ -17,7 +17,7 @@ use crate::constants::DIGRAPH_MAP;
 ///
 /// Examples
 /// ```
-/// use rs_verify::utils::Rut;
+/// use verify::utils::Rut;
 /// 
 /// let rut = Rut { correlative: 12345678, verifier: '5' };
 /// assert_eq!(rut.correlative, 12345678);
@@ -27,7 +27,7 @@ use crate::constants::DIGRAPH_MAP;
 pub struct Rut {
     /// The correlative number of the RUT.
     pub correlative: u32,
-    /// The verifier digit or character of the RUT.
+    /// The verifier digit (character) the RUT.
     pub verifier: char,
 }
 
@@ -35,21 +35,24 @@ pub struct Rut {
 impl Rut {
     /// Creates a new `Rut` instance by calculating the verifier digit
     /// based on the provided correlative number.
-    //// # Arguments
-    /// * `correlative` - A `u32` representing the correlative number of the RUT.
+    ///
+    /// # Arguments
+    /// * `correlative` - A `u32` representing the digits of the RUT.
+    ///
     /// # Returns
     /// * `Ok(Rut)` - A new `Rut` instance with the calculated verifier.
     /// * `Err(VerifierError)` - If there is an error calculating the verifier.
+    ///
     /// # Examples
     /// ```
-    /// use rs_verify::utils::{Rut, calculate_verifier};
+    /// use verify::utils::{Rut, calculate_verifier};
     /// 
     /// let rut = Rut::new(12345678).unwrap();
     /// assert_eq!(rut.correlative, 12345678);
-    /// assert_eq!(rut.verifier, calculate_verifier(&"12345678").unwrap());
+    /// assert_eq!(rut.verifier, calculate_verifier(12345678).unwrap());
     /// ```
     pub fn new(correlative: u32) -> Result<Self, VerifierError> {
-        let verifier = calculate_verifier(&correlative.to_string())?;
+        let verifier = calculate_verifier(correlative)?;
         Ok(Rut { correlative, verifier })
     }
 }
@@ -86,8 +89,8 @@ impl Rut {
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::get_ppu_format;
-/// use rs_verify::enums::PpuFormat;
+/// use verify::utils::get_ppu_format;
+/// use verify::enums::PpuFormat;
 ///
 /// assert_eq!(get_ppu_format("PHZ55"),  Some(PpuFormat::LLLNN));
 /// assert_eq!(get_ppu_format("PHZ123"), Some(PpuFormat::LLLNNN));
@@ -162,7 +165,7 @@ pub fn get_ppu_format(ppu: &str) -> Option<PpuFormat> {
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::normalize_ppu;
+/// use verify::utils::normalize_ppu;
 ///
 /// // Example of a valid `LLLNN` format input:
 /// let result = normalize_ppu("abc12").unwrap();
@@ -216,7 +219,7 @@ pub fn normalize_ppu(ppu: &str) -> Result<String, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::get_letter_value;
+/// use verify::utils::get_letter_value;
 ///
 /// // LETTER_MAP contains mapping for "B" to "1".
 /// let result = get_letter_value("B");
@@ -271,14 +274,14 @@ pub fn get_letter_value(letter: &str) -> Result<&str, PpuError> {
 ///
 /// # Example
 /// ```
-/// use rs_verify::utils::get_digraph_value;
+/// use verify::utils::get_digraph_value;
 ///
 /// // DIGRAPH_MAP contains mapping for "AA" to "001".
 /// let result = get_digraph_value("AA");
 /// assert_eq!(result.unwrap(), "001");
 ///
 /// // For unknown letters, the function will return an error.
-/// let result = rs_verify::utils::get_letter_value("MM");
+/// let result = verify::utils::get_letter_value("MM");
 /// assert!(result.is_err());
 /// ```
 pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
@@ -341,18 +344,18 @@ pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::ppu_to_numeric;
+/// use verify::utils::ppu_to_numeric;
 ///
 /// // Digraph-based mapping (LLNNNN)
-/// assert_eq!(ppu_to_numeric("BR1234").unwrap(), "0871234");
+/// assert_eq!(ppu_to_numeric("BR1234").unwrap(), 871234);
 ///
 /// // Letter-by-letter mapping
-/// assert_eq!(ppu_to_numeric("PHZF55").unwrap(), "069455");
+/// assert_eq!(ppu_to_numeric("PHZF55").unwrap(), 69455);
 ///
 /// // Invalid format
 /// assert!(ppu_to_numeric("INVALID").is_err());
 /// ```
-pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
+pub fn ppu_to_numeric(ppu: &str) -> Result<u32, PpuError> {
     let ppu = ppu.trim().to_ascii_uppercase();
 
     let fmt = get_ppu_format(&ppu)
@@ -368,7 +371,10 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
 
         output.push_str(mapped);
         output.push_str(digits);
-        return Ok(output)
+
+        return Ok(
+            output.to_string().parse::<u32>().ok().unwrap()
+        );
     }
 
     let mut output = String::with_capacity(ppu.len());
@@ -381,7 +387,9 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
             output.push_str(v);
         }
     }
-    Ok(output)
+    Ok(
+        output.to_string().parse::<u32>().ok().unwrap()
+    )
 }
 
 
@@ -389,29 +397,14 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
 /// using Module 11 algorithm.
 ///
 /// # Parameters
-/// * `digits`: A string slice containing the numeric digits used for the
-///   computation. Leading and trailing whitespaces are automatically trimmed
-///   before processing.
+/// * `digits`: The numeric digits used for the computation.
 ///
 /// # Returns
 /// * `Ok(char)`: The computed verifier digit. This may be a numeric character
 ///    (`'0'` to `'9'`) or the character `'K'`.
 /// * `Err(VerifierError)`:
-///   - [`VerifierError::EmptyDigits`]: The input string is empty after
-///     trimming whitespace.
-///   - [`VerifierError::InvalidDigits`]: The input contains non-digit
-///     characters.
 ///   - [`VerifierError::UnexpectedComputation`]: An unexpected branch in
 ///     computation logic (should not occur under normal conditions).
-///
-/// # Note
-/// Ensure that the expected input strictly contains ASCII digits and does not exceed the
-/// size limit imposed by `u32` arithmetic, as very long strings may result in overflow errors.
-///
-/// # Panic Safety
-/// This function assumes the internal digit parsing (`char.to_digit(10)`) will succeed
-/// for valid inputs. Providing invalid input (e.g., non-digit characters) will trigger an
-/// error rather than a panic.
 ///
 /// # Algorithm
 /// 1. Reverse traverses the digits and compute the weighted sum, where
@@ -424,44 +417,27 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<String, PpuError> {
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::calculate_verifier;
-/// use rs_verify::errors::VerifierError;
+/// use verify::utils::calculate_verifier;
+/// use verify::errors::VerifierError;
 ///
-/// // Valid input
-/// let verifier = calculate_verifier("12345678").unwrap();
+/// let verifier = calculate_verifier(12345678).unwrap();
 /// assert_eq!(verifier, '5');
-///
-/// // Input with whitespace
-/// let verifier = calculate_verifier(" 54321 ").unwrap();
-/// assert_eq!(verifier, '7');
-///
-/// // Invalid input (non-digit characters)
-/// let result = calculate_verifier("12A34");
-/// assert!(matches!(result, Err(VerifierError::InvalidDigits { .. })));
-///
-/// // Empty input
-/// let result = calculate_verifier("");
-/// assert!(matches!(result, Err(VerifierError::EmptyDigits)));
 /// ```
-pub fn calculate_verifier(digits: &str) -> Result<char, VerifierError> {
-    let digits = digits.trim();
-
-    if digits.is_empty() {
-        return Err(VerifierError::EmptyDigits);
-    }
-
-    if !digits.chars().all(|c| c.is_ascii_digit()) {
-        return Err(
-            VerifierError::InvalidDigits { input: digits.to_string() }
-        );
-    }
-
+pub fn calculate_verifier(digits: u32) -> Result<char, VerifierError> {
     let mut sum: u32 = 0;
     let mut factor: u32 = 2;
+    let mut digits: u32 = digits;
 
-    for char in digits.chars().rev() {
-        let digit =char.to_digit(10).expect("digit");
-        sum += digit * factor;
+    while digits > 0 {
+        // Extract the last digit into 'number'
+        // (e.g., 12345 % 10 = 5)
+        let number = digits % 10;
+
+        // Removes the last digit from 'digits'
+        // (e.g., 12345 / 10 = 1234)
+        digits /= 10;
+
+        sum += number * factor;
         factor += 1;
         if factor > 7 {
             factor = 2;
@@ -488,8 +464,7 @@ pub fn calculate_verifier(digits: &str) -> Result<char, VerifierError> {
 /// Module 11 algorithm.
 ///
 /// # Arguments
-/// * `digits` - A string slice containing the numeric part of the RUT
-///   (without dots or verifier digit).
+/// * `digits` - The numeric part of the RUT.
 /// * `verifier` - A string slice containing the verifier character.
 ///   This must be a single ASCII digit (`'0'`–`'9'`) or the letter `'K'`
 ///   (case-insensitive).
@@ -514,33 +489,29 @@ pub fn calculate_verifier(digits: &str) -> Result<char, VerifierError> {
 /// provided one.
 ///
 /// # Notes
-/// - This function does not perform formatting or normalization of the numeric
-///   RUT (e.g., removal of dots or separators).
 /// - The verifier comparison is case-insensitive.
-/// - This function does not panic for invalid input; all validation errors are
-///   returned as [`VerifierError`].
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::validate_rut;
+/// use verify::utils::validate_rut;
 ///
 /// // Valid RUT
-/// let result = validate_rut("17702664", "6").unwrap();
+/// let result = validate_rut(8750720, "3").unwrap();
 /// assert!(result);
 ///
 /// // Invalid verifier
-/// let result = validate_rut("17702664", "5").unwrap();
+/// let result = validate_rut(8750720, "6").unwrap();
 /// assert!(!result);
 ///
 /// // Verifier 'K' is allowed
-/// let result = validate_rut("12345678", "K");
-/// // Result depends on the computed verifier
+/// let result = validate_rut(12345678, "K");
+/// // The result depends on the computed verifier
 ///
 /// // Invalid verifier format
-/// let result = validate_rut("17702664", "KK");
+/// let result = validate_rut(17702664, "KK");
 /// assert!(result.is_err());
 /// ```
-pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError> {
+pub fn validate_rut(digits: u32, verifier: &str) -> Result<bool, VerifierError> {
     let verifier = verifier.trim().to_ascii_uppercase();
 
     if verifier.is_empty() {
@@ -591,7 +562,7 @@ pub fn validate_rut(digits: &str, verifier: &str) -> Result<bool, VerifierError>
 ///
 /// # Examples
 /// ```
-/// use rs_verify::utils::generate;
+/// use verify::utils::generate;
 /// // Generate 5 RUTs within the range 1000000 to 2000000.
 /// let ruts = generate(5, 1000000, 2000000, Some(42)).unwrap();
 /// assert_eq!(ruts.len(), 5);
@@ -633,10 +604,10 @@ pub fn generate(
         return Err(GenerateError::InvalidRange { min, max });
     }
 
-    let range_size = (max - min + 1) as i32;
-    if (n as i32) > range_size {
+    let range_size = max - min + 1;
+    if n > range_size {
         return Err(GenerateError::InsufficientRange {
-            n: n as i32,
+            n,
             range_size,
         });
     }

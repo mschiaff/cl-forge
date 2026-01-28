@@ -76,7 +76,7 @@ struct Ppu {
     #[pyo3(get)]
     raw: String,
     #[pyo3(get)]
-    numeric: String,
+    numeric: u32,
     #[pyo3(get)]
     normalized: String,
     #[pyo3(get)]
@@ -93,7 +93,7 @@ impl Ppu {
         let normalized = utils::normalize_ppu(&raw)?;
         let format = utils::get_ppu_format(&raw).unwrap();
         let numeric = utils::ppu_to_numeric(&normalized)?;
-        let verifier = utils::calculate_verifier(&numeric)?;
+        let verifier = utils::calculate_verifier(numeric)?;
         Ok(Self { raw: ppu.to_string(), numeric, normalized, verifier, format })
     }
 
@@ -104,7 +104,7 @@ impl Ppu {
 
     #[getter]
     fn complete(&self) -> String {
-        format!("{}-{}", &self.normalized, &self.verifier)
+        format!("{}-{}", self.normalized, self.verifier)
     }
 
     fn __repr__(&self) -> String {
@@ -116,12 +116,12 @@ impl Ppu {
                 verifier='{}', \
                 complete='{}', \
                 format='{}')",
-            &self.raw,
-            &self.normalized,
-            &self.numeric,
-            &self.verifier,
-            &self.complete(),
-            &self.format()
+            self.raw,
+            self.normalized,
+            self.numeric,
+            self.verifier,
+            self.complete(),
+            self.format()
         )
     }
 }
@@ -137,7 +137,7 @@ fn normalize_ppu(ppu: &str) -> PyResult<String> {
 
 
 #[pyfunction]
-fn ppu_to_numeric(ppu: &str) -> PyResult<String> {
+fn ppu_to_numeric(ppu: &str) -> PyResult<u32> {
     match utils::ppu_to_numeric(ppu) {
         Ok(numeric) => Ok(numeric),
         Err(msg) => Err(msg.into()),
@@ -145,7 +145,7 @@ fn ppu_to_numeric(ppu: &str) -> PyResult<String> {
 }
 
 #[pyfunction]
-fn calculate_verifier(digits: &str) -> PyResult<String> {
+fn calculate_verifier(digits: u32) -> PyResult<String> {
     match utils::calculate_verifier(digits) {
         Ok(verifier) => Ok(verifier.to_string()),
         Err(msg) => Err(msg.into()),
@@ -154,7 +154,7 @@ fn calculate_verifier(digits: &str) -> PyResult<String> {
 
 
 #[pyfunction]
-fn validate_rut(digits: &str, verifier: &str) -> PyResult<bool> {
+fn validate_rut(digits: u32, verifier: &str) -> PyResult<bool> {
     match utils::validate_rut(digits, verifier) {
         Ok(result) => Ok(result),
         Err(msg) => Err(msg.into()),
