@@ -8,13 +8,11 @@ from cl_forge.core.impl.rs_cl_forge.rs_base import (
     UnsupportedFormat,
 )
 from cl_forge.core.impl.rs_cl_forge.rs_verify import (
-    EmptyDigits,
     EmptyDigraph,
     EmptyLetter,
     EmptyVerifier,
     GenerateException,
     InsufficientRange,
-    InvalidDigits,
     InvalidInput,
     InvalidLength,
     InvalidRange,
@@ -44,9 +42,7 @@ __all__ = (
     "UnknownDigraph",
     "EmptyDigraph",
     "VerifierException",
-    "EmptyDigits",
     "EmptyVerifier",
-    "InvalidDigits",
     "InvalidVerifier",
     "UnexpectedComputation",
     "GenerateException",
