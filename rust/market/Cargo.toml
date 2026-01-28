@@ -1,0 +1,14 @@
+[package]
+name = "market"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "market"
+crate-type = ["rlib"]
+
+[dependencies]
+base = { path = "../base" }
+
+[dependencies.pyo3]
+workspace = true

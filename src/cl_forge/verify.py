@@ -1,4 +1,4 @@
-from cl_forge.core.impl.rs_verify import (
+from cl_forge.core.impl.rs_cl_forge.rs_verify import (
     Ppu,
     calculate_verifier,
     generate,

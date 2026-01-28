@@ -1,0 +1,17 @@
+[package]
+name = "cl_forge"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "cl_forge"
+crate-type = ["cdylib"]
+
+[dependencies]
+cmf = { path = "../cmf" }
+verify = { path = "../verify" }
+market = { path = "../market" }
+base = { path = "../base" }
+
+[dependencies.pyo3]
+workspace = true

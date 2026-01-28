@@ -54,7 +54,7 @@ MOCK_RESPONSES = {
     }
 }
 
-def mock_get(path, format='json'):  # noqa: A002
+def mock_get(path, fmt='json'):  # noqa: A002
     if path in MOCK_RESPONSES:
         return MOCK_RESPONSES[path]
     raise ValueError(f"Path {path} not mocked")
@@ -127,7 +127,7 @@ def test_endpoint_init():
     api_key = "test_key"
 
     ipc = Ipc(api_key)
-    assert ipc._client.api_key == "test_..."
+    assert ipc._client.api_key == "test_key"
     assert ipc._path == "/ipc" # type: ignore
     assert ipc._root_key == "IPCs" # type: ignore
 
