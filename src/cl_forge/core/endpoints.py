@@ -7,7 +7,7 @@ from typing import Literal, TypeVar
 
 from pydantic import BaseModel
 
-from cl_forge.core.impl.rs_cmf import CmfClient
+from cl_forge.core.impl.rs_cl_forge.rs_cmf import CmfClient
 from cl_forge.core.schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
 
 T = TypeVar("T", bound=BaseModel)
