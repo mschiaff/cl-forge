@@ -1,10 +1,10 @@
 [package]
-name = "rs_verify"
+name = "verify"
 version.workspace = true
 edition.workspace = true
 
 [lib]
-name = "rs_verify"
+name = "verify"
 crate-type = ["rlib"]
 
 [dependencies.pyo3]

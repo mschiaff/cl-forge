@@ -51,8 +51,8 @@ requires = ["maturin>=1.11.5"]
 build-backend = "maturin"
 
 [tool.maturin]
-manifest-path = "rust/rs_cl_forge/Cargo.toml"
-module-name = "cl_forge.core.impl._rs_cl_forge"
+manifest-path = "rust/cl_forge/Cargo.toml"
+module-name = "cl_forge.core.impl.rs_cl_forge"
 include = [
     "src/cl_forge/*.pyi",
     "src/cl_forge/py.typed",
@@ -66,8 +66,8 @@ dev = [
     "ipykernel>=7.1.0",
     "ipywidgets>=8.1.8",
     "maturin>=1.11.5",
-    "notebook>=7.5.2",
-    "ruff>=0.14.13",
+    "notebook>=7.5.3",
+    "ruff>=0.14.14",
     "pytest>=8.0.0",
 ]
 

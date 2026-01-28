@@ -70,7 +70,7 @@ impl CmfClient {
 
 
 #[pymodule]
-pub fn _rs_cmf(m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn rs_cmf(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<CmfClient>()?;
     Ok(())
 }

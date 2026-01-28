@@ -1,10 +1,10 @@
 [package]
-name = "rs_cmf"
+name = "cmf"
 version.workspace = true
 edition.workspace = true
 
 [lib]
-name = "rs_cmf"
+name = "cmf"
 crate-type = ["rlib"]
 
 [dependencies]

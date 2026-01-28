@@ -57,7 +57,7 @@ impl MarketClient {
 
 
 #[pymodule]
-pub fn market(m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn rs_market(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<MarketClient>()?;
     Ok(())
 }

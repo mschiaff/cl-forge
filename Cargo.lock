@@ -100,12 +100,31 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "613afe47fcd5fac7ccf1db93babcb082c5994d996f20b8b159f2ad1658eb5724"
 
 [[package]]
+name = "cl_forge"
+version = "0.5.1"
+dependencies = [
+ "base",
+ "cmf",
+ "market",
+ "pyo3",
+ "verify",
+]
+
+[[package]]
 name = "cmake"
 version = "0.1.57"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75443c44cd6b379beb8c5b45d85d0773baf31cce901fe7bb252f4eff3008ef7d"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "cmf"
+version = "0.5.1"
+dependencies = [
+ "base",
+ "pyo3",
 ]
 
 [[package]]
@@ -945,34 +964,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rs_cl_forge"
-version = "0.5.1"
-dependencies = [
- "base",
- "market",
- "pyo3",
- "rs_cmf",
- "rs_verify",
-]
-
-[[package]]
-name = "rs_cmf"
-version = "0.5.1"
-dependencies = [
- "base",
- "pyo3",
-]
-
-[[package]]
-name = "rs_verify"
-version = "0.5.1"
-dependencies = [
- "pyo3",
- "rand",
- "thiserror 2.0.17",
-]
-
-[[package]]
 name = "rustc-hash"
 version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1466,6 +1457,15 @@ name = "utf8_iter"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be"
+
+[[package]]
+name = "verify"
+version = "0.5.1"
+dependencies = [
+ "pyo3",
+ "rand",
+ "thiserror 2.0.17",
+]
 
 [[package]]
 name = "walkdir"

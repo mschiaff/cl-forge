@@ -188,7 +188,7 @@ fn generate(
 
 
 #[pymodule]
-pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_verifier, m)?)?;
     m.add_function(wrap_pyfunction!(ppu_to_numeric, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_ppu, m)?)?;

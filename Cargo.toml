@@ -1,9 +1,9 @@
 [workspace]
 resolver = "3"
 members = [
-    "rust/rs_cl_forge",
-    "rust/rs_verify",
-    "rust/rs_cmf",
+    "rust/cl_forge",
+    "rust/verify",
+    "rust/cmf",
     "rust/market",
     "rust/base"
 ]
