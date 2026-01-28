@@ -13,26 +13,26 @@ use crate::errors::VerifierError;
 use crate::errors::GenerateError;
 
 
-create_exception!(_rs_verify, PpuException, PyException);
-create_exception!(_rs_verify, UnknownFormat, PpuException);
-create_exception!(_rs_verify, InvalidLength, PpuException);
-create_exception!(_rs_verify, UnknownLetter, PpuException);
-create_exception!(_rs_verify, EmptyLetter, PpuException);
-create_exception!(_rs_verify, UnknownDigraph, PpuException);
-create_exception!(_rs_verify, EmptyDigraph, PpuException);
+create_exception!(rs_verify, PpuException, PyException);
+create_exception!(rs_verify, UnknownFormat, PpuException);
+create_exception!(rs_verify, InvalidLength, PpuException);
+create_exception!(rs_verify, UnknownLetter, PpuException);
+create_exception!(rs_verify, EmptyLetter, PpuException);
+create_exception!(rs_verify, UnknownDigraph, PpuException);
+create_exception!(rs_verify, EmptyDigraph, PpuException);
 
-create_exception!(_rs_verify, VerifierException, PyException);
-create_exception!(_rs_verify, EmptyDigits, VerifierException);
-create_exception!(_rs_verify, EmptyVerifier, VerifierException);
-create_exception!(_rs_verify, InvalidDigits, VerifierException);
-create_exception!(_rs_verify, InvalidVerifier, VerifierException);
-create_exception!(_rs_verify, UnexpectedComputation, VerifierException);
+create_exception!(rs_verify, VerifierException, PyException);
+create_exception!(rs_verify, EmptyDigits, VerifierException);
+create_exception!(rs_verify, EmptyVerifier, VerifierException);
+create_exception!(rs_verify, InvalidDigits, VerifierException);
+create_exception!(rs_verify, InvalidVerifier, VerifierException);
+create_exception!(rs_verify, UnexpectedComputation, VerifierException);
 
-create_exception!(_rs_verify, GenerateException, PyException);
-create_exception!(_rs_verify, InvalidRange, GenerateException);
-create_exception!(_rs_verify, InvalidInput, GenerateException);
-create_exception!(_rs_verify, InsufficientRange, GenerateException);
-create_exception!(_rs_verify, UnexpectedGeneration, GenerateException);
+create_exception!(rs_verify, GenerateException, PyException);
+create_exception!(rs_verify, InvalidRange, GenerateException);
+create_exception!(rs_verify, InvalidInput, GenerateException);
+create_exception!(rs_verify, InsufficientRange, GenerateException);
+create_exception!(rs_verify, UnexpectedGeneration, GenerateException);
 
 impl From<PpuError> for PyErr {
     fn from(err: PpuError) -> PyErr {

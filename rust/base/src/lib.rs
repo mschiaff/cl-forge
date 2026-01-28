@@ -5,31 +5,48 @@ use pyo3::prelude::*;
 use pyo3::create_exception;
 use pyo3::exceptions::{PyException, PyImportError, PyValueError};
 
-
-create_exception!(base, ClientException, PyException);
-create_exception!(base, EmptyApiKey, ClientException);
-create_exception!(base, EmptyPath, ClientException);
-create_exception!(base, InvalidPath, ClientException);
-create_exception!(base, HttpError, ClientException);
-create_exception!(base, BadStatus, ClientException);
-create_exception!(base, UnsupportedFormat, ClientException);
+use crate::errors::ClientError;
 
 
-impl From<errors::ClientError> for PyErr {
-    fn from(err: errors::ClientError) -> PyErr {
+create_exception!(
+    rs_base, ClientException, PyException,
+    "Base class for all exceptions raised by API clients."
+);
+create_exception!(
+    rs_base, EmptyApiKey, ClientException,
+    "Raised when an API key is not provided."
+);
+create_exception!(
+    rs_base, EmptyPath, ClientException,
+    "Raised when a path is not provided."
+);
+create_exception!(
+    rs_base, InvalidPath, ClientException,
+    "Raised when API path is invalid."
+);
+create_exception!(
+    rs_base, HttpError, ClientException,
+    "Raised when an HTTP error occurs."
+);
+create_exception!(
+    rs_base, BadStatus, ClientException,
+    "Raised when an HTTP status code is not 200 (success)."
+);
+create_exception!(
+    rs_base, UnsupportedFormat, ClientException,
+    "Raised when an unsupported format is requested."
+);
+
+
+impl From<ClientError> for PyErr {
+    fn from(err: ClientError) -> PyErr {
         match err {
-            errors::ClientError::EmptyApiKey =>
-                EmptyApiKey::new_err(err.to_string()),
-            errors::ClientError::EmptyPath =>
-                EmptyApiKey::new_err(err.to_string()),
-            errors::ClientError::InvalidPath =>
-                InvalidPath::new_err(err.to_string()),
-            errors::ClientError::HttpError(e) =>
-                HttpError::new_err(e.to_string()),
-            errors::ClientError::BadStatus { status, body } =>
-                BadStatus::new_err((status, body)),
-            errors::ClientError::UnsupportedFormat { expected, actual } =>
-                UnsupportedFormat::new_err((expected, actual)),
+            ClientError::EmptyApiKey => EmptyApiKey::new_err(err.to_string()),
+            ClientError::EmptyPath => EmptyApiKey::new_err(err.to_string()),
+            ClientError::InvalidPath => InvalidPath::new_err(err.to_string()),
+            ClientError::HttpError(_) => HttpError::new_err(err.to_string()),
+            ClientError::BadStatus { .. } => BadStatus::new_err(err.to_string()),
+            ClientError::UnsupportedFormat { .. } => UnsupportedFormat::new_err(err.to_string()),
         }
     }
 }
