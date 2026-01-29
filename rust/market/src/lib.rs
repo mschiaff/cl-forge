@@ -15,9 +15,7 @@ struct MarketClient {
 impl MarketClient {
     #[new]
     fn new(ticket: &str) -> PyResult<Self> {
-        let client = native::MarketClient::new(ticket)
-            .map_err(ClientError::from)?
-            .into();
+        let client = native::MarketClient::new(ticket)?;
         
         Ok(Self { client })
     }
@@ -38,8 +36,7 @@ impl MarketClient {
             path: &str
     ) -> PyResult<Bound<'py, PyAny>> {
         let body: String = self.client
-            .get(path)
-            .map_err(ClientError::from)?;
+            .get(path)?;
         let dict = base::json_to_dict(py, &body)?
             .into();
 

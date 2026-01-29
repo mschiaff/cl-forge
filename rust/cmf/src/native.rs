@@ -15,7 +15,7 @@ impl CmfClient {
             api_key,
             constants::BASE_URL,
             constants::USER_AGENT,
-        ).map_err(ClientError::from)?;
+        )?;
 
         Ok(Self { base })
     }
@@ -32,9 +32,7 @@ impl CmfClient {
             ("apikey", self.base.api_key.as_str()),
             ("formato", fmt.as_str())
         ];
-        let response = self.base
-            .get(path, &query)
-            .map_err(ClientError::from)?;
+        let response = self.base.get(path, &query)?;
 
         Ok(response)
     }

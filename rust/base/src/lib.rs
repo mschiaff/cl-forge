@@ -66,10 +66,16 @@ impl From<ClientError> for PyErr {
 /// # Examples
 /// ```
 /// use base::json_to_dict;
+/// use pyo3::Python;
 ///
 /// let json = r#"{"key": "value"}"#;
-/// let dict = to_dict(json).unwrap();
-/// assert_eq!(dict["key"].as_str().unwrap(), "value");
+/// Python::with_gil(|py| {
+///     let dict = json_to_dict(py, json).unwrap();
+///     assert_eq!(
+///         dict.get_item("key").unwrap().extract::<&str>().unwrap(),
+///         "value"
+///     );
+/// });
 /// ```
 #[pyfunction]
 pub fn json_to_dict<'py>(

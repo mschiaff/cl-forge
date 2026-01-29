@@ -25,9 +25,9 @@ impl MarketClient {
             ("ticket", self.base.api_key.as_str())
         ];
         let response = self.base
-            .get(path, &query)
-            .map_err(ClientError::from)?;
+            .get(path, &query)?;
 
         Ok(response)
     }
+}
 }

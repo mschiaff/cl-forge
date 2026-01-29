@@ -43,8 +43,7 @@ impl CmfClient {
     ) -> PyResult<Bound<'py, PyAny>> {
         let body: String = self.client
             .get(path, fmt)
-            .map_err(ClientError::from)?
-            .into();
+            .map_err(ClientError::from)?;
         
         let fmt = CmfResponseFormat::try_from(fmt)
             .map_err(ClientError::from)?;
