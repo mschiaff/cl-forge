@@ -41,6 +41,10 @@ create_exception!(
     rs_verify, EmptyDigraph, PpuException,
     "Raised when internal mapping functions encounter an empty digraph."
 );
+create_exception!(
+    rs_verify, ParsingError, PpuException,
+    "Raised when failed to create the numeric representation of the given PPU."
+);
 
 create_exception!(
     rs_verify, VerifierException, PyException,
@@ -89,6 +93,7 @@ impl From<PpuError> for PyErr {
             PpuError::EmptyLetter => EmptyLetter::new_err(err.to_string()),
             PpuError::UnknownDigraph { .. } => UnknownDigraph::new_err(err.to_string()),
             PpuError::EmptyDigraph => EmptyDigraph::new_err(err.to_string()),
+            PpuError::ParsingError(_) => ParsingError::new_err(err.to_string()),
         }
     }
 }
@@ -247,6 +252,7 @@ pub fn rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("EmptyLetter", m.py().get_type::<EmptyLetter>())?;
     m.add("UnknownDigraph", m.py().get_type::<UnknownDigraph>())?;
     m.add("EmptyDigraph", m.py().get_type::<EmptyDigraph>())?;
+    m.add("ParsingError", m.py().get_type::<ParsingError>())?;
 
     m.add("VerifierException", m.py().get_type::<VerifierException>())?;
     m.add("EmptyVerifier", m.py().get_type::<EmptyVerifier>())?;

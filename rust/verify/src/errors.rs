@@ -20,6 +20,9 @@ pub enum PpuError {
 
     #[error("Digraph cannot be empty.")]
     EmptyDigraph,
+
+    #[error("Unexpected parsing error: {0}")]
+    ParsingError(#[from] std::num::ParseIntError),
 }
 
 

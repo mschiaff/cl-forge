@@ -27,7 +27,7 @@ use crate::constants::DIGRAPH_MAP;
 pub struct Rut {
     /// The correlative number of the RUT.
     pub correlative: u32,
-    /// The verifier digit (character) the RUT.
+    /// The verifier digit (character) of the RUT.
     pub verifier: char,
 }
 
@@ -318,6 +318,7 @@ pub fn get_digraph_value(letters: &str) -> Result<&str, PpuError> {
 ///   is valid and supported.
 /// * `Err(PpuError)`:
 ///   - [`PpuError::UnknownFormat`] - The PPU does not match any known format.
+///   - [`PpuError::ParsingError`] - If for some reason the parsing fails.
 ///
 /// # Behavior
 /// The input PPU is first normalized by trimming whitespace and converting it
@@ -373,7 +374,7 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<u32, PpuError> {
         output.push_str(digits);
 
         return Ok(
-            output.to_string().parse::<u32>().ok().unwrap()
+            output.parse::<u32>()?
         );
     }
 
@@ -388,7 +389,7 @@ pub fn ppu_to_numeric(ppu: &str) -> Result<u32, PpuError> {
         }
     }
     Ok(
-        output.to_string().parse::<u32>().ok().unwrap()
+        output.parse::<u32>()?
     )
 }
 

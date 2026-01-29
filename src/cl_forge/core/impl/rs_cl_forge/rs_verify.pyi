@@ -19,6 +19,9 @@ class UnknownDigraph(PpuException):
 class EmptyDigraph(PpuException):
     """Raised when internal mapping functions encounter an empty digraph."""
 
+class ParsingError(PpuException):
+    """Raised when failed to create the numeric representation of the given PPU."""
+
 
 class VerifierException(Exception): # noqa: N818
     """Base class for all exceptions raised by the verifier."""

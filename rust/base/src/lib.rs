@@ -42,7 +42,7 @@ impl From<ClientError> for PyErr {
     fn from(err: ClientError) -> PyErr {
         match err {
             ClientError::EmptyApiKey => EmptyApiKey::new_err(err.to_string()),
-            ClientError::EmptyPath => EmptyApiKey::new_err(err.to_string()),
+            ClientError::EmptyPath => EmptyPath::new_err(err.to_string()),
             ClientError::InvalidPath => InvalidPath::new_err(err.to_string()),
             ClientError::HttpError(_) => HttpError::new_err(err.to_string()),
             ClientError::BadStatus { .. } => BadStatus::new_err(err.to_string()),
