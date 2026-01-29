@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any
+    from typing import Any, Literal, overload
 
 class MarketClient:
     """
@@ -54,7 +54,25 @@ class MarketClient:
             The base URL of the market API.
         """
 
-    def get(self, path: str) -> dict[str, Any]:
+    @overload
+    def get(
+            self,
+            path: str,
+            fmt: Literal["json"] = ...
+    ) -> dict[str, Any]: ...
+
+    @overload
+    def get(
+            self,
+            path: str,
+            fmt: Literal["xml"]
+    ) -> str: ...
+
+    def get(
+            self,
+            path: str,
+            fmt: Literal["json", "xml"] = "json",
+    ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified path of the market API. See the
         `API Docs`_ for all the available endpoints.
@@ -65,11 +83,16 @@ class MarketClient:
         ----------
         path : str
             The API path to send the GET request to.
+        fmt : Literal["json", "xml"]
+            The format of the response. Defaults to "json".
+            When set to "xml", the response will be returned as
+            a string, otherwise it will be parsed as a dictionary.
 
         Returns
         -------
-        dict[str, Any]
-            The JSON response from the API as a dictionary.
+        dict[str, Any] | str
+            The JSON response from the API as a dictionary or
+            the XML response as a string.
         """
 
     def __repr__(self) -> str: ...
