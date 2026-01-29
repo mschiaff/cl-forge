@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any, Literal, overload
+    from typing import Literal, overload
 
 class CmfClient:
     """
