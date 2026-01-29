@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 from functools import lru_cache
-from typing import Any, Literal, TypeVar
+from typing import TypeVar
 
 from pydantic import BaseModel
 
@@ -31,30 +31,21 @@ class CmfEndpoint[T: BaseModel]:
         object.__setattr__(self, "_record_class", record_class)
         object.__setattr__(self, "_root_key", root_key)
 
-    def current(
-        self,
-        fmt: Literal['xml', 'json'] = 'json'
-    ) -> T:
+    def current(self) -> T:
         return self._fetch_current(
             self._client,
             self._path,
             self._record_class,
-            self._root_key,
-            fmt
+            self._root_key
         )
 
-    def year(
-        self,
-        year: int | None = None,
-        fmt: Literal['xml', 'json'] = 'json'
-    ) -> list[T]:
+    def year(self, year: int | None = None) -> list[T]:
         return self._fetch_year(
             self._client,
             self._path,
             self._record_class,
             self._root_key,
-            year,
-            fmt
+            year
         )
 
     @staticmethod
@@ -63,10 +54,9 @@ class CmfEndpoint[T: BaseModel]:
         client: CmfClient,
         path: str,
         record_class: type[T],
-        root_key: str,
-        fmt: Literal['xml', 'json']
+        root_key: str
     ) -> T:
-        raw: dict[str, Any] = client.get(path=path, fmt=fmt)
+        raw = client.get(path=path, fmt='json')
         return record_class(**raw[root_key][0])
 
     @staticmethod
@@ -76,11 +66,10 @@ class CmfEndpoint[T: BaseModel]:
         path: str,
         record_class: type[T],
         root_key: str,
-        year: int | None,
-        fmt: Literal['xml', 'json']
+        year: int | None
     ) -> list[T]:
         year = year or datetime.now().year
-        raw = client.get(path=f"{path}/{year}", fmt=fmt)
+        raw = client.get(path=f"{path}/{year}", fmt='json')
         return [record_class(**item) for item in raw[root_key]]
 
 

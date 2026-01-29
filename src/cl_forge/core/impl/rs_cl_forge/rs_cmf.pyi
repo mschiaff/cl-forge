@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any, Literal
+    from typing import Any, Literal, overload
 
 class CmfClient:
     """
@@ -57,10 +57,25 @@ class CmfClient:
             The base URL of the CMF API.
         """
 
+    @overload
     def get(
-            self, path: str,
+            self,
+            path: str,
+            fmt: Literal["json"] = ...
+    ) -> dict[str, list[dict[str, str]]]: ...
+
+    @overload
+    def get(
+            self,
+            path: str,
+            fmt: Literal["xml"]
+    ) -> str: ...
+
+    def get(
+            self,
+            path: str,
             fmt: Literal["json", "xml"] = "json"
-    ) -> dict[str, Any] | str:
+    ) -> dict[str, list[dict[str, str]]] | str:
         """
         Sends a GET request to the specified CMF API endpoint. See the
         `API Docs`_ for all the available endpoints.
@@ -77,7 +92,7 @@ class CmfClient:
 
         Returns
         -------
-        dict[str, Any] | str
+        dict[str, list[dict[str, str]]] | str
             The response from the CMF API. Returns a dict if format is
             ``json`` and a str if format is ``xml``.
         """
