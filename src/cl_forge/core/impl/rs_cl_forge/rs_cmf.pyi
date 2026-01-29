@@ -59,7 +59,7 @@ class CmfClient:
 
     def get(
             self, path: str,
-            fmt: Literal['json', 'xml'] | None = None
+            fmt: Literal["json", "xml"] = "json"
     ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified CMF API endpoint. See the
@@ -71,13 +71,13 @@ class CmfClient:
         ----------
         path : str
             The API endpoint path. Must start with '/'.
-        fmt : Literal['json', 'xml'] | None
-            The format of the response. Can be ``json``, ``xml`` or ``None``.
-            When ``None`` (default), internally defaults to ``json``.
+        fmt : Literal['json', 'xml']
+            The format of the response. Can be ``json``, ``xml``.
+            Default is ``json``.
 
         Returns
         -------
         dict[str, Any] | str
             The response from the CMF API. Returns a dict if format is
-            ``json`` or ``None``, and a str if format is ``xml``.
+            ``json`` and a str if format is ``xml``.
         """

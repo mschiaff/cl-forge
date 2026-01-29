@@ -19,10 +19,10 @@ class CmfEndpoint[T: BaseModel]:
     __slots__ = ("_client", "_path", "_record_class", "_root_key")
 
     def __init__(
-        self, 
-        api_key: str, 
-        path: str, 
-        record_class: type[T], 
+        self,
+        api_key: str,
+        path: str,
+        record_class: type[T],
         root_key: str
     ) -> None:
         client = CmfClient(api_key=api_key)
@@ -63,7 +63,7 @@ class CmfEndpoint[T: BaseModel]:
         client: CmfClient,
         path: str,
         record_class: type[T],
-        root_key: str, 
+        root_key: str,
         fmt: Literal['xml', 'json']
     ) -> T:
         raw: dict[str, Any] = client.get(path=path, fmt=fmt)

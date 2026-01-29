@@ -60,7 +60,10 @@ impl TryFrom<Option<&str>> for CmfResponseFormat {
     fn try_from(opt: Option<&str>) -> Result<Self, Self::Error> {
         match opt {
             Some(s) => Self::try_from(s),
-            None => Ok(CmfResponseFormat::default()),
+            None => Err(ClientError::UnsupportedFormat {
+                expected: Self::values(),
+                actual: "None".to_string()
+            })
         }
     }
 }
