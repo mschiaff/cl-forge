@@ -23,16 +23,15 @@ impl CmfClient {
     pub fn get(
             &self,
             path: &str,
-            fmt: Option<&str>
+            fmt: CmfResponseFormat
     ) -> Result<String, ClientError> {
-        let fmt = CmfResponseFormat::try_from(fmt)
-            .map_err(ClientError::from)?;
-        
         let query = [
             ("apikey", self.base.api_key.as_str()),
             ("formato", fmt.as_str())
         ];
-        let response = self.base.get(path, &query)?;
+        
+        let response = self.base
+            .get(path, &query)?;
 
         Ok(response)
     }

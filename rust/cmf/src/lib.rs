@@ -5,7 +5,6 @@ mod enums;
 use pyo3::prelude::*;
 use pyo3::types::{PyString, PyAny};
 
-use base::errors::ClientError;
 use crate::enums::CmfResponseFormat;
 
 
@@ -18,8 +17,7 @@ struct CmfClient {
 impl CmfClient {
     #[new]
     fn new(api_key: &str) -> PyResult<Self> {
-        let client = native::CmfClient::new(api_key)
-            .map_err(ClientError::from)?.into();
+        let client = native::CmfClient::new(api_key)?;
         
         Ok(Self { client })
     }
@@ -34,23 +32,19 @@ impl CmfClient {
         self.client.base.api_key.clone()
     }
 
-    #[pyo3(signature = (path, fmt=None))]
+    #[pyo3(signature = (path, fmt="json"))]
     fn get<'py>(
             &self,
             py: Python<'py>,
             path: &str,
             fmt: Option<&str>
     ) -> PyResult<Bound<'py, PyAny>> {
-        let body: String = self.client
-            .get(path, fmt)
-            .map_err(ClientError::from)?;
-        
-        let fmt = CmfResponseFormat::try_from(fmt)
-            .map_err(ClientError::from)?;
+        let fmt = CmfResponseFormat::try_from(fmt)?;
+        let body: String = self.client.get(path, fmt)?;
 
         match fmt {
             CmfResponseFormat::Json => {
-                Ok(base::json_to_dict(py, &body)?.into())
+                Ok(base::json_to_dict(py, &body)?)
             }
             CmfResponseFormat::Xml => {
                 Ok(PyString::new(py, &body).into_any())

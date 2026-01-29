@@ -27,8 +27,7 @@ impl BaseClient {
         let client = Client::builder()
             .timeout(Duration::from_secs(10))
             .user_agent(user_agent)
-            .build()
-            .map_err(ClientError::from)?;
+            .build()?;
 
         Ok(Self {
             client,
@@ -55,8 +54,7 @@ impl BaseClient {
         let response = self.client
             .get(url)
             .query(query)
-            .send()
-            .map_err(ClientError::from)?;
+            .send()?;
         
         if !response.status().is_success() {
             return Err(ClientError::BadStatus {
@@ -65,10 +63,6 @@ impl BaseClient {
             });
         }
 
-        Ok(
-            response
-                .text()
-                .map_err(ClientError::from)?
-        )
+        Ok(response.text()?)
     }
 }
