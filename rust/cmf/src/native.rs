@@ -1,8 +1,8 @@
 use crate::constants;
-use crate::enums::CmfResponseFormat;
 
 use base::native::BaseClient;
 use base::errors::ClientError;
+use::base::enums::ResponseFormat;
 
 pub struct CmfClient {
     pub base: BaseClient,
@@ -23,15 +23,14 @@ impl CmfClient {
     pub fn get(
             &self,
             path: &str,
-            fmt: CmfResponseFormat
+            fmt: ResponseFormat
     ) -> Result<String, ClientError> {
         let query = [
             ("apikey", self.base.api_key.as_str()),
             ("formato", fmt.as_str())
         ];
         
-        let response = self.base
-            .get(path, &query)?;
+        let response = self.base.get(path, &query)?;
 
         Ok(response)
     }
