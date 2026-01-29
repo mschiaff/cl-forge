@@ -1,17 +1,17 @@
 [package]
-name = "rs_verify"
+name = "base"
 version.workspace = true
 edition.workspace = true
 
 [lib]
-name = "rs_verify"
+name = "base"
 crate-type = ["rlib"]
 
-[dependencies.pyo3]
+[dependencies.reqwest]
 workspace = true
 
 [dependencies.thiserror]
 workspace = true
 
-[dependencies.rand]
+[dependencies.pyo3]
 workspace = true

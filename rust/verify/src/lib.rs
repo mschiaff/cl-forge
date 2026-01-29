@@ -13,26 +13,76 @@ use crate::errors::VerifierError;
 use crate::errors::GenerateError;
 
 
-create_exception!(_rs_verify, PpuException, PyException);
-create_exception!(_rs_verify, UnknownFormat, PpuException);
-create_exception!(_rs_verify, InvalidLength, PpuException);
-create_exception!(_rs_verify, UnknownLetter, PpuException);
-create_exception!(_rs_verify, EmptyLetter, PpuException);
-create_exception!(_rs_verify, UnknownDigraph, PpuException);
-create_exception!(_rs_verify, EmptyDigraph, PpuException);
+create_exception!(
+    rs_verify, PpuException, PyException,
+    "Base class for all exceptions raised by the PPU."
+);
+create_exception!(
+    rs_verify, UnknownFormat, PpuException,
+    "Raised when the given PPU does not match any known format."
+);
+create_exception!(
+    rs_verify, InvalidLength, PpuException,
+    "Raised when PPU letters or digraphs are of invalid length."
+);
+create_exception!(
+    rs_verify, UnknownLetter, PpuException,
+    "Raised when the given PPU has letters out of the mapping."
+);
+create_exception!(
+    rs_verify, EmptyLetter, PpuException,
+    "Raised when internal mapping functions encounter an empty letter."
+);
+create_exception!(
+    rs_verify, UnknownDigraph, PpuException,
+    "Raised when the given PPU has digraphs out of the mapping."
+);
+create_exception!(
+    rs_verify, EmptyDigraph, PpuException,
+    "Raised when internal mapping functions encounter an empty digraph."
+);
+create_exception!(
+    rs_verify, ParsingError, PpuException,
+    "Raised when failed to create the numeric representation of the given PPU."
+);
 
-create_exception!(_rs_verify, VerifierException, PyException);
-create_exception!(_rs_verify, EmptyDigits, VerifierException);
-create_exception!(_rs_verify, EmptyVerifier, VerifierException);
-create_exception!(_rs_verify, InvalidDigits, VerifierException);
-create_exception!(_rs_verify, InvalidVerifier, VerifierException);
-create_exception!(_rs_verify, UnexpectedComputation, VerifierException);
+create_exception!(
+    rs_verify, VerifierException, PyException,
+    "Base class for all exceptions raised by the verifier."
+);
+create_exception!(
+    rs_verify, EmptyVerifier, VerifierException,
+    "Raised when the given verifier is empty on RUT validation."
+);
+create_exception!(
+    rs_verify, InvalidVerifier, VerifierException,
+    "Raised when the given verifier is invalid on RUT validation."
+);
+create_exception!(
+    rs_verify, UnexpectedComputation, VerifierException,
+    "Raised when the verifier computation fails."
+);
 
-create_exception!(_rs_verify, GenerateException, PyException);
-create_exception!(_rs_verify, InvalidRange, GenerateException);
-create_exception!(_rs_verify, InvalidInput, GenerateException);
-create_exception!(_rs_verify, InsufficientRange, GenerateException);
-create_exception!(_rs_verify, UnexpectedGeneration, GenerateException);
+create_exception!(
+    rs_verify, GenerateException, PyException,
+    "Base class for all exceptions raised by the RUT generator."
+);
+create_exception!(
+    rs_verify, InvalidRange, GenerateException,
+    "Raised when the generator given lower bound is greater than upper bound."
+);
+create_exception!(
+    rs_verify, InvalidInput, GenerateException,
+    "Raised when generator's given parameters are invalid."
+);
+create_exception!(
+    rs_verify, InsufficientRange, GenerateException,
+    "Raised when the requested amount of RUTs is greater than the available range."
+);
+create_exception!(
+    rs_verify, UnexpectedGeneration, GenerateException,
+    "Raised to support unidentified errors during RUT generation."
+);
 
 impl From<PpuError> for PyErr {
     fn from(err: PpuError) -> PyErr {
@@ -43,6 +93,7 @@ impl From<PpuError> for PyErr {
             PpuError::EmptyLetter => EmptyLetter::new_err(err.to_string()),
             PpuError::UnknownDigraph { .. } => UnknownDigraph::new_err(err.to_string()),
             PpuError::EmptyDigraph => EmptyDigraph::new_err(err.to_string()),
+            PpuError::ParsingError(_) => ParsingError::new_err(err.to_string()),
         }
     }
 }
@@ -50,9 +101,7 @@ impl From<PpuError> for PyErr {
 impl From<VerifierError> for PyErr {
     fn from(err: VerifierError) -> PyErr {
         match err {
-            VerifierError::EmptyDigits => EmptyDigits::new_err(err.to_string()),
             VerifierError::EmptyVerifier => EmptyVerifier::new_err(err.to_string()),
-            VerifierError::InvalidDigits { .. } => InvalidDigits::new_err(err.to_string()),
             VerifierError::InvalidVerifier { .. } => InvalidVerifier::new_err(err.to_string()),
             VerifierError::UnexpectedComputation => UnexpectedComputation::new_err(err.to_string()),
         }
@@ -76,7 +125,7 @@ struct Ppu {
     #[pyo3(get)]
     raw: String,
     #[pyo3(get)]
-    numeric: String,
+    numeric: u32,
     #[pyo3(get)]
     normalized: String,
     #[pyo3(get)]
@@ -93,7 +142,7 @@ impl Ppu {
         let normalized = utils::normalize_ppu(&raw)?;
         let format = utils::get_ppu_format(&raw).unwrap();
         let numeric = utils::ppu_to_numeric(&normalized)?;
-        let verifier = utils::calculate_verifier(&numeric)?;
+        let verifier = utils::calculate_verifier(numeric)?;
         Ok(Self { raw: ppu.to_string(), numeric, normalized, verifier, format })
     }
 
@@ -104,7 +153,7 @@ impl Ppu {
 
     #[getter]
     fn complete(&self) -> String {
-        format!("{}-{}", &self.normalized, &self.verifier)
+        format!("{}-{}", self.normalized, self.verifier)
     }
 
     fn __repr__(&self) -> String {
@@ -116,12 +165,12 @@ impl Ppu {
                 verifier='{}', \
                 complete='{}', \
                 format='{}')",
-            &self.raw,
-            &self.normalized,
-            &self.numeric,
-            &self.verifier,
-            &self.complete(),
-            &self.format()
+            self.raw,
+            self.normalized,
+            self.numeric,
+            self.verifier,
+            self.complete(),
+            self.format()
         )
     }
 }
@@ -137,7 +186,7 @@ fn normalize_ppu(ppu: &str) -> PyResult<String> {
 
 
 #[pyfunction]
-fn ppu_to_numeric(ppu: &str) -> PyResult<String> {
+fn ppu_to_numeric(ppu: &str) -> PyResult<u32> {
     match utils::ppu_to_numeric(ppu) {
         Ok(numeric) => Ok(numeric),
         Err(msg) => Err(msg.into()),
@@ -145,7 +194,7 @@ fn ppu_to_numeric(ppu: &str) -> PyResult<String> {
 }
 
 #[pyfunction]
-fn calculate_verifier(digits: &str) -> PyResult<String> {
+fn calculate_verifier(digits: u32) -> PyResult<String> {
     match utils::calculate_verifier(digits) {
         Ok(verifier) => Ok(verifier.to_string()),
         Err(msg) => Err(msg.into()),
@@ -154,7 +203,7 @@ fn calculate_verifier(digits: &str) -> PyResult<String> {
 
 
 #[pyfunction]
-fn validate_rut(digits: &str, verifier: &str) -> PyResult<bool> {
+fn validate_rut(digits: u32, verifier: &str) -> PyResult<bool> {
     match utils::validate_rut(digits, verifier) {
         Ok(result) => Ok(result),
         Err(msg) => Err(msg.into()),
@@ -188,7 +237,7 @@ fn generate(
 
 
 #[pymodule]
-pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
+pub fn rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_verifier, m)?)?;
     m.add_function(wrap_pyfunction!(ppu_to_numeric, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_ppu, m)?)?;
@@ -203,11 +252,10 @@ pub fn _rs_verify(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("EmptyLetter", m.py().get_type::<EmptyLetter>())?;
     m.add("UnknownDigraph", m.py().get_type::<UnknownDigraph>())?;
     m.add("EmptyDigraph", m.py().get_type::<EmptyDigraph>())?;
+    m.add("ParsingError", m.py().get_type::<ParsingError>())?;
 
     m.add("VerifierException", m.py().get_type::<VerifierException>())?;
-    m.add("EmptyDigits", m.py().get_type::<EmptyDigits>())?;
     m.add("EmptyVerifier", m.py().get_type::<EmptyVerifier>())?;
-    m.add("InvalidDigits", m.py().get_type::<InvalidDigits>())?;
     m.add("InvalidVerifier", m.py().get_type::<InvalidVerifier>())?;
     m.add("UnexpectedComputation", m.py().get_type::<UnexpectedComputation>())?;
 

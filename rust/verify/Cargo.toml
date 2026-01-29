@@ -1,23 +1,17 @@
 [package]
-name = "rs_cmf"
+name = "verify"
 version.workspace = true
 edition.workspace = true
 
 [lib]
-name = "rs_cmf"
+name = "verify"
 crate-type = ["rlib"]
 
 [dependencies.pyo3]
 workspace = true
 
-[dependencies.reqwest]
-workspace = true
-
-[dependencies.secrecy]
-workspace = true
-
 [dependencies.thiserror]
 workspace = true
 
-[dependencies.serde_json]
+[dependencies.rand]
 workspace = true

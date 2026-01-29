@@ -1,9 +1,11 @@
 [workspace]
 resolver = "3"
 members = [
-    "rust/rs_cl_forge",
-    "rust/rs_verify",
-    "rust/rs_cmf",
+    "rust/cl_forge",
+    "rust/verify",
+    "rust/cmf",
+    "rust/market",
+    "rust/base"
 ]
 
 [workspace.package]
@@ -23,14 +25,8 @@ features = [
     "json",
 ]
 
-[workspace.dependencies.secrecy]
-version = "0.10.3"
-
 [workspace.dependencies.thiserror]
 version = "2.0.17"
 
-[workspace.dependencies.serde_json]
-version = "1.0.149"
-
 [workspace.dependencies.rand]
-version = "0.8.5"
+version = "0.9.2"

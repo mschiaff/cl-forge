@@ -20,19 +20,16 @@ pub enum PpuError {
 
     #[error("Digraph cannot be empty.")]
     EmptyDigraph,
+
+    #[error("Unexpected parsing error: {0}")]
+    ParsingError(#[from] std::num::ParseIntError),
 }
 
 
 #[derive(Debug, Error, Clone, PartialEq, Eq)]
 pub enum VerifierError {
-    #[error("Digits cannot be empty.")]
-    EmptyDigits,
-
     #[error("Verifier cannot be empty.")]
     EmptyVerifier,
-
-    #[error("Input must be only digits, but '{input}' was given.")]
-    InvalidDigits { input: String },
 
     #[error("Verifier must be single '0'..'9' or 'K', but '{verifier}' was given.")]
     InvalidVerifier { verifier: String },
