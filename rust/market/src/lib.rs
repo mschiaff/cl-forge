@@ -1,6 +1,5 @@
 mod native;
 mod constants;
-mod enums;
 
 use pyo3::prelude::*;
 
