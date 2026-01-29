@@ -3,8 +3,6 @@ mod constants;
 
 use pyo3::prelude::*;
 
-use base::errors::ClientError;
-
 
 #[pyclass]
 struct MarketClient {
