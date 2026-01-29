@@ -31,6 +31,7 @@ impl CmfClient {
         self.client.base.api_key.clone()
     }
 
+    //noinspection DuplicatedCode
     #[pyo3(signature = (path, fmt="json"))]
     fn get<'py>(
             &self,
@@ -40,7 +41,7 @@ impl CmfClient {
     ) -> PyResult<Bound<'py, PyAny>> {
         let fmt = ResponseFormat::try_from(fmt)?;
         let body: String = self.client.get(path, fmt)?;
-
+        
         match fmt {
             ResponseFormat::Json => {
                 Ok(base::json_to_dict(py, &body)?)

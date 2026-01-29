@@ -2,6 +2,9 @@ mod native;
 mod constants;
 
 use pyo3::prelude::*;
+use pyo3::types::{PyString, PyAny};
+
+use base::enums::ResponseFormat;
 
 
 #[pyclass]
@@ -27,18 +30,26 @@ impl MarketClient {
     fn ticket(&self) -> String {
         self.client.base.api_key.clone()
     }
-    
+
+    //noinspection DuplicatedCode
+    #[pyo3(signature = (path, fmt="json"))]
     fn get<'py>(
             &self,
             py: Python<'py>,
-            path: &str
+            path: &str,
+            fmt: Option<&str>
     ) -> PyResult<Bound<'py, PyAny>> {
-        let body: String = self.client
-            .get(path)?;
-        let dict = base::json_to_dict(py, &body)?
-            .into();
+        let fmt = ResponseFormat::try_from(fmt)?;
+        let body: String = self.client.get(path, fmt)?;
 
-        Ok(dict)
+        match fmt {
+            ResponseFormat::Json => {
+                Ok(base::json_to_dict(py, &body)?)
+            }
+            ResponseFormat::Xml => {
+                Ok(PyString::new(py, &body).into_any())
+            }
+        }
     }
 
     fn __repr__(&self) -> String {
