@@ -28,6 +28,12 @@ class Token:
 
     Tokens are loaded from environment variables or a .env file.
     System environment variables take precedence over .env file values.
+
+    Notes
+    -----
+    - Enviornment variables used:
+        - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
+        - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
     """
 
     def __init__(self, dotenv_path: str | None = None) -> None:
@@ -62,6 +68,16 @@ class Token:
 class Config:
     """
     Configuration container for library settings.
+
+    Notes
+    -----
+    - Tokens are loaded from environment variables or a .env file. System
+      environment variables take precedence over .env file values.
+    - If ``dotenv_path`` is provided, it loads the .env file from that path.
+      Otherwise, it looks for a .env file in the current or parent directories.
+    - Enviornment variables used:
+        - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
+        - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
     """
 
     def __init__(self, dotenv_path: str | None = None) -> None:
@@ -75,13 +91,6 @@ class Config:
         ----------
         dotenv_path : str | None
             Optional path to a .env file for loading tokens.
-
-        Notes
-        -----
-        - Tokens are loaded from environment variables or a .env file. System
-          environment variables take precedence over .env file values.
-        - If ``dotenv_path`` is provided, it loads the .env file from that path.
-          Otherwise, it looks for a .env file in the current or parent directories.
         """
 
     @property
