@@ -72,6 +72,7 @@ class MarketClient:
             self,
             path: str,
             fmt: Literal["json", "xml"] = "json",
+            params: dict[str, Any] | None = None
     ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified path of the market API. See the
@@ -87,12 +88,19 @@ class MarketClient:
             The format of the response. Defaults to "json".
             When set to "xml", the response will be returned as
             a string, otherwise it will be parsed as a dictionary.
+        params : dict[str, Any] | None
+            Optional query parameters to include in the request.
 
         Returns
         -------
         dict[str, Any] | str
             The JSON response from the API as a dictionary or
             the XML response as a string.
+
+        Raises
+        ------
+        ValueError
+            If the ticket (API key) is included in `params`.
         """
 
     def __repr__(self) -> str: ...
