@@ -13,7 +13,7 @@ pub struct Token {
 impl Token {
     /// Creates a new Token instance by loading environment variables.
     ///
-    /// Dotenv file takes presedence over terminal-defined variables.
+    /// System environment variables take precedence over .env file values.
     /// If `dotenv_path` is provided, it loads the .env file from that path.
     /// Otherwise, it looks for a .env file in the current or parent directories.
     pub fn new(dotenv_path: Option<String>) -> Self {
@@ -35,11 +35,11 @@ impl Token {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct Settings {
+pub struct Config {
     pub tokens: Token
 }
 
-impl Settings {
+impl Config {
     pub fn new(dotenv_path: Option<String>) -> Self {
         Self { tokens: Token::new(dotenv_path) }
     }
