@@ -24,17 +24,22 @@ impl MarketClient {
     pub fn get(
             &self,
             path: &str,
-            fmt: ResponseFormat
+            fmt: ResponseFormat,
+            params: &[(String, String)]
     ) -> Result<String, ClientError> {
         // In "Mercado Público", the response format
         // is part of the path, not a query parameter.
         // e.g., "<BASE_URL>/licitaciones.json
         let path = format!("{}.{}", path, fmt.as_str());
-        
-        let query = [
+
+        let mut query = vec![
             ("ticket", self.base.api_key.as_str())
         ];
-        
+
+        for (k, v) in params {
+            query.push((k, v));
+        }
+
         let response = self.base.get(path.as_str(), &query)?;
 
         Ok(response)

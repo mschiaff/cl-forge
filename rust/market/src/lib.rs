@@ -2,7 +2,7 @@ mod native;
 mod constants;
 
 use pyo3::prelude::*;
-use pyo3::types::{PyString, PyAny};
+use pyo3::types::{PyString, PyAny, PyDict};
 
 use base::enums::ResponseFormat;
 
@@ -32,15 +32,28 @@ impl MarketClient {
     }
 
     //noinspection DuplicatedCode
-    #[pyo3(signature = (path, fmt="json"))]
+    #[pyo3(signature = (path, fmt="json", params=None))]
     fn get<'py>(
             &self,
             py: Python<'py>,
             path: &str,
-            fmt: Option<&str>
+            fmt: Option<&str>,
+            params: Option<Bound<'py, PyDict>>
     ) -> PyResult<Bound<'py, PyAny>> {
         let fmt = ResponseFormat::try_from(fmt)?;
-        let body: String = self.client.get(path, fmt)?;
+
+        let mut new_params: Vec<(String, String)> = Vec::new();
+
+        if let Some(dict) = params {
+            for (k, v) in dict.iter() {
+                new_params.push(
+                    (k.to_string(), v.to_string())
+                )
+            }
+        }
+
+        let body: String = self.client
+            .get(path, fmt, &new_params)?;
 
         match fmt {
             ResponseFormat::Json => {
