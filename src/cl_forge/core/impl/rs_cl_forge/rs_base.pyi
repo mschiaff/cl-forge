@@ -31,7 +31,7 @@ class Token:
 
     Notes
     -----
-    - Enviornment variables used:
+    - Environment variables used:
         - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
         - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
     """
@@ -75,7 +75,7 @@ class Config:
       environment variables take precedence over .env file values.
     - If ``dotenv_path`` is provided, it loads the .env file from that path.
       Otherwise, it looks for a .env file in the current or parent directories.
-    - Enviornment variables used:
+    - Environment variables used:
         - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
         - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
     """
