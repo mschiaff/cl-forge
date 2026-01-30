@@ -1,13 +1,13 @@
-use base::errors::ClientError;
+use crate::errors::ClientError;
 
 
 #[derive(Clone, Copy, PartialEq, Eq)]
-pub enum CmfResponseFormat {
+pub enum ResponseFormat {
     Json,
     Xml,
 }
 
-impl CmfResponseFormat {
+impl ResponseFormat {
     pub const ALL: &'static [Self] = &[
         Self::Json,
         Self::Xml,
@@ -33,19 +33,19 @@ impl CmfResponseFormat {
     }
 }
 
-impl Default for CmfResponseFormat {
+impl Default for ResponseFormat {
     fn default() -> Self {
-        CmfResponseFormat::Json
+        ResponseFormat::Json
     }
 }
 
-impl TryFrom<&str> for CmfResponseFormat {
+impl TryFrom<&str> for ResponseFormat {
     type Error = ClientError;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         match s.to_lowercase().trim() {
-            "json" => Ok(CmfResponseFormat::Json),
-            "xml" => Ok(CmfResponseFormat::Xml),
+            "json" => Ok(ResponseFormat::Json),
+            "xml" => Ok(ResponseFormat::Xml),
             _ => Err(ClientError::UnsupportedFormat {
                 expected: Self::values(),
                 actual: s.to_string()
@@ -54,7 +54,7 @@ impl TryFrom<&str> for CmfResponseFormat {
     }
 }
 
-impl TryFrom<Option<&str>> for CmfResponseFormat {
+impl TryFrom<Option<&str>> for ResponseFormat {
     type Error = ClientError;
 
     fn try_from(opt: Option<&str>) -> Result<Self, Self::Error> {

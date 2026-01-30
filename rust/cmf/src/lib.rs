@@ -1,11 +1,10 @@
 mod constants;
 mod native;
-mod enums;
 
 use pyo3::prelude::*;
 use pyo3::types::{PyString, PyAny};
 
-use crate::enums::CmfResponseFormat;
+use base::enums::ResponseFormat;
 
 
 #[pyclass]
@@ -32,6 +31,7 @@ impl CmfClient {
         self.client.base.api_key.clone()
     }
 
+    //noinspection DuplicatedCode
     #[pyo3(signature = (path, fmt="json"))]
     fn get<'py>(
             &self,
@@ -39,14 +39,14 @@ impl CmfClient {
             path: &str,
             fmt: Option<&str>
     ) -> PyResult<Bound<'py, PyAny>> {
-        let fmt = CmfResponseFormat::try_from(fmt)?;
+        let fmt = ResponseFormat::try_from(fmt)?;
         let body: String = self.client.get(path, fmt)?;
-
+        
         match fmt {
-            CmfResponseFormat::Json => {
+            ResponseFormat::Json => {
                 Ok(base::json_to_dict(py, &body)?)
             }
-            CmfResponseFormat::Xml => {
+            ResponseFormat::Xml => {
                 Ok(PyString::new(py, &body).into_any())
             }
         }
