@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class ClientException(Exception): # noqa: N818
     """Base class for all exceptions raised by API clients."""
 
@@ -18,3 +20,83 @@ class BadStatus(ClientException):
 
 class UnsupportedFormat(ClientException):
     """Raised when an unsupported format is requested."""
+
+
+class Token:
+    """
+    Represents API tokens used for authentication.
+
+    Tokens are loaded from environment variables or a .env file.
+    System environment variables take precedence over .env file values.
+
+    Notes
+    -----
+    - Environment variables used:
+        - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
+        - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
+    """
+
+    def __init__(self, dotenv_path: str | None = None) -> None:
+        """
+        Initializes a new Token instance.
+
+        If ``dotenv_path`` is provided, it loads the .env file from that path.
+        Otherwise, it looks for a .env file in the current or parent directories.
+
+        Parameters
+        ----------
+        dotenv_path : str | None
+            Optional path to a .env file. Defaults to None.
+        """
+
+    @property
+    def cmf(self) -> str | None:
+        """
+        Returns the CMF token (API key), or ``None`` if not set.
+
+        Loaded from the ``CLFORGE_CMF_TOKEN`` environment variable. If the
+        environment variable is missing or empty, this property returns ``None``.
+        """
+
+    @property
+    def market(self) -> str | None:
+        """
+        Returns the Market token (ticket), or ``None`` if not set.
+
+        Loaded from the ``CLFORGE_MARKET_TOKEN`` environment variable. If the
+        environment variable is missing or empty, this property returns ``None``.
+        """
+
+class Config:
+    """
+    Configuration container for library settings.
+
+    Notes
+    -----
+    - Tokens are loaded from environment variables or a .env file. System
+      environment variables take precedence over .env file values.
+    - If ``dotenv_path`` is provided, it loads the .env file from that path.
+      Otherwise, it looks for a .env file in the current or parent directories.
+    - Environment variables used:
+        - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
+        - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
+    """
+
+    def __init__(self, dotenv_path: str | None = None) -> None:
+        """
+        Initializes a new Config instance.
+
+        If ``dotenv_path`` is provided, it loads the .env file from that path.
+        Otherwise, it looks for a .env file in the current or parent directories.
+
+        Parameters
+        ----------
+        dotenv_path : str | None
+            Optional path to a .env file for loading tokens.
+        """
+
+    @property
+    def tokens(self) -> Token:
+        """
+        Returns the loaded API tokens.
+        """

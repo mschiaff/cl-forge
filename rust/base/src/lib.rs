@@ -1,3 +1,4 @@
+pub mod settings;
 pub mod errors;
 pub mod native;
 pub mod enums;
@@ -95,6 +96,52 @@ pub fn json_to_dict<'py>(
     Ok(dict)
 }
 
+
+#[pyclass]
+pub struct Token {
+    pub inner: settings::Token
+}
+
+#[pymethods]
+impl Token {
+    #[new]
+    #[pyo3(signature = (dotenv_path = None))]
+    pub fn new(dotenv_path: Option<String>) -> Self {
+        Self { inner: settings::Token::new(dotenv_path) }
+    }
+    
+    #[getter]
+    fn cmf(&self) -> Option<String> {
+        self.inner.cmf.clone()
+    }
+    
+    #[getter]
+    fn market(&self) -> Option<String> {
+        self.inner.market.clone()
+    }
+}
+
+
+#[pyclass]
+pub struct Config {
+    pub inner: settings::Config
+}
+
+#[pymethods]
+impl Config {
+    #[new]
+    #[pyo3(signature = (dotenv_path = None))]
+    pub fn new(dotenv_path: Option<String>) -> Self {
+        Self { inner: settings::Config::new(dotenv_path) }
+    }
+    
+    #[getter]
+    fn tokens(&self) -> Token {
+        Token { inner: self.inner.tokens.clone() }
+    }
+}
+
+
 #[pymodule]
 pub fn rs_base(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("ClientException", m.py().get_type::<ClientException>())?;
@@ -104,5 +151,7 @@ pub fn rs_base(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add("HttpError", m.py().get_type::<HttpError>())?;
     m.add("BadStatus", m.py().get_type::<BadStatus>())?;
     m.add("UnsupportedFormat", m.py().get_type::<UnsupportedFormat>())?;
+    m.add_class::<Config>()?;
+    m.add_class::<Token>()?;
     Ok(())
 }
