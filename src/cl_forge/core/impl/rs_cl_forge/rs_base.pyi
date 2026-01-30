@@ -31,7 +31,7 @@ class Token:
 
     Notes
     -----
-    - Enviornment variables used:
+    - Environment variables used:
         - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
         - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
     """
@@ -50,19 +50,21 @@ class Token:
         """
 
     @property
-    def cmf(self) -> str:
+    def cmf(self) -> str | None:
         """
-        Returns the CMF token (API key).
+        Returns the CMF token (API key), or ``None`` if not set.
 
-        Loaded from the ``CLFORGE_CMF_TOKEN`` environment variable.
+        Loaded from the ``CLFORGE_CMF_TOKEN`` environment variable. If the
+        environment variable is missing or empty, this property returns ``None``.
         """
 
     @property
-    def market(self) -> str:
+    def market(self) -> str | None:
         """
-        Returns the Market token (ticket).
+        Returns the Market token (ticket), or ``None`` if not set.
 
-        Loaded from the ``CLFORGE_MARKET_TOKEN`` environment variable.
+        Loaded from the ``CLFORGE_MARKET_TOKEN`` environment variable. If the
+        environment variable is missing or empty, this property returns ``None``.
         """
 
 class Config:
@@ -75,7 +77,7 @@ class Config:
       environment variables take precedence over .env file values.
     - If ``dotenv_path`` is provided, it loads the .env file from that path.
       Otherwise, it looks for a .env file in the current or parent directories.
-    - Enviornment variables used:
+    - Environment variables used:
         - ``CLFORGE_CMF_TOKEN``: CMF token (API key).
         - ``CLFORGE_MARKET_TOKEN``: Market token (ticket).
     """
