@@ -2,7 +2,7 @@ use crate::constants;
 
 use base::native::BaseClient;
 use base::errors::ClientError;
-use::base::enums::ResponseFormat;
+use base::enums::ResponseFormat;
 
 pub struct CmfClient {
     pub base: BaseClient,
