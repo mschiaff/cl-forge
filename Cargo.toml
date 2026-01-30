@@ -12,6 +12,9 @@ members = [
 version = "0.5.1"
 edition = "2024"
 
+[workspace.dependencies.dotenv]
+version = "0.15.0"
+
 [workspace.dependencies.pyo3]
 version = "0.27.2"
 features = ["extension-module"]

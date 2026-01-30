@@ -1,6 +1,7 @@
 pub mod errors;
 pub mod native;
 pub mod enums;
+pub mod settings;
 
 use pyo3::prelude::*;
 use pyo3::create_exception;
