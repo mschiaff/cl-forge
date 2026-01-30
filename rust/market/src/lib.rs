@@ -2,10 +2,10 @@ mod native;
 mod constants;
 
 use pyo3::prelude::*;
+use pyo3::exceptions::PyValueError;
 use pyo3::types::{PyString, PyAny, PyDict};
 
 use base::enums::ResponseFormat;
-
 
 #[pyclass]
 struct MarketClient {
@@ -46,6 +46,13 @@ impl MarketClient {
 
         if let Some(dict) = params {
             for (k, v) in dict.iter() {
+                if k.to_string().to_lowercase().trim() == "ticket" {
+                    return Err(
+                        PyValueError::new_err(
+                            "Ticket cannot be overridden."
+                        )
+                    )
+                }
                 new_params.push(
                     (k.to_string(), v.to_string())
                 )
