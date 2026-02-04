@@ -11,7 +11,7 @@ authors = [
 ]
 
 dependencies = [
-    "orjson>=3.11.5",
+    "orjson>=3.11.7",
     "pydantic>=2.12.5",
 ]
 
@@ -62,17 +62,80 @@ python-source = "src"
 bindings = "pyo3"
 
 [dependency-groups]
-dev = [
-    "ipykernel>=7.1.0",
-    "ipywidgets>=8.1.8",
-    "maturin>=1.11.5",
-    "notebook>=7.5.3",
-    "ruff>=0.14.14",
+# Development
+test = [
+    "ruff>=0.15.0",
     "pytest>=8.0.0",
 ]
 
 build = [
-    "maturin>=1.11.5",
+    "maturin>=1.11.5,<2.0",
+]
+
+docs = [
+    "mkdocs-material>=9.7.1",
+]
+dev = [
+    {include-group = "build"},
+    {include-group = "docs"},
+    {include-group = "test"},
+    "cl-forge[notebook]",
+]
+
+[project.optional-dependencies]
+# Interoperability
+pyarrow = [
+    "pyarrow>=23.0.0",
+]
+polars = [
+    "cl-forge[pyarrow]",
+    "polars>=1.38.0",
+]
+pandas = [
+    "cl-forge[pyarrow]",
+    "pandas-stubs>=3.0.0.260204",
+    "pandas[performance]>=3.0.0",
+]
+interop = [
+    "cl-forge[polars]",
+    "cl-forge[pandas]",
+]
+
+# Excel
+calamine = [
+    "fastexcel>=0.19.0",
+]
+xlsxwriter = [
+    "xlsxwriter>=3.2.9",
+]
+openpyxl = [
+    "openpyxl>=3.1.5",
+]
+excel = [
+    "cl-forge[calamine]",
+    "cl-forge[xlsxwriter]",
+    "cl-forge[openpyxl]",
+]
+
+# Analytics
+analytics = [
+    "cl-forge[polars]",
+    "cl-forge[calamine]",
+    "cl-forge[xlsxwriter]",
+]
+
+# Jupyter Notebook
+notebook = [
+    "ipykernel>=7.1.0",
+    "ipywidgets>=8.1.8",
+    "notebook>=7.5.3",
+]
+
+# All
+all = [
+    "cl-forge[interop]",
+    "cl-forge[excel]",
+    "cl-forge[notebook]",
 ]
 
 [tool.ruff]

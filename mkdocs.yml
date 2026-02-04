@@ -1,0 +1,52 @@
+site_name: CL Forge User Guide
+site_url: https://mschiaff.github.io/cl-forge/
+repo_url: https://github.com/mschiaff/cl-forge
+repo_name: mschiaff/cl-forge
+
+docs_dir: docs
+
+nav:
+  - User Guide:
+    - index.md
+    - user-guide/installation.md
+  - Development:
+      - development/contributing.md
+
+theme:
+  name: material
+  locale: en
+  logo: assets/logo.png
+  favicon: assets/images/favicon.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - navigation.sections
+    - navigation.indexes
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
