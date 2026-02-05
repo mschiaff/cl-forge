@@ -13,7 +13,8 @@ nav:
     - Contributing: contributing.md
   - API Reference:
       - CMF:
-          - CmfClient: api/cmf_client.md
+          - CmfClient: api/cmf/base_client.md
+          - Ipc: api/cmf/ipc.md
 
 extra_css:
   - 'extra/tweaks.css'
@@ -67,6 +68,9 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
+          inventories:
+            - url: https://docs.python.org/3/objects.inv
+              domains: [ py, std ]
           options:
             members_order: source
             separate_signature: true
@@ -77,8 +81,10 @@ plugins:
             show_root_heading: true
             show_symbol_type_heading: true
             show_symbol_type_toc: true
+            show_signature_type_parameters: true
             docstring_style: numpy
             filters: ['!^_']
+            inherited_members: true
             #show_source: true
             #show_root_full_path: false
-            #show_if_no_docstring: true
+            show_if_no_docstring: true
