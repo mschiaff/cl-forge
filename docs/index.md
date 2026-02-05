@@ -1,4 +1,5 @@
-#
+# Welcome to CL Forge!
+
 <img style="border-radius: 25px;" alt="logo" src="assets/banner.png"/>
 
 <h2 style="text-align: center;">

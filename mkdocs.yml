@@ -1,4 +1,5 @@
 site_name: CL Forge User Guide
+site_description: Simple yet powerful Chilean tools written in Rust and Python
 site_url: https://mschiaff.github.io/cl-forge/
 repo_url: https://github.com/mschiaff/cl-forge
 repo_name: mschiaff/cl-forge
@@ -13,6 +14,9 @@ nav:
   - API Reference:
       - CMF:
           - CmfClient: api/cmf_client.md
+
+extra_css:
+  - 'extra/tweaks.css'
 
 theme:
   name: material
@@ -41,15 +45,17 @@ theme:
     - navigation.sections
     - navigation.tabs
     - navigation.path
+    - navigation.top
     - search.suggest
     - toc.follow
 
 markdown_extensions:
+  - admonition
   - toc:
       permalink: true
       title: Page Contents
   - attr_list
-  - admonition
+  - pymdownx.extra
   - pymdownx.details
   - pymdownx.snippets
   - pymdownx.superfences
