@@ -96,7 +96,7 @@ See the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html
 
 ## Contributing
 
-Pull requests are welcome. For changes and reporting bugs, please open an issue first to discuss it. Read our [Contributing Guide](development/contributing.md) for more details.
+Pull requests are welcome. For changes and reporting bugs, please open an issue first to discuss it. Read our [Contributing Guide](contributing.md) for more details.
 
 ## License
 
