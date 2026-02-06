@@ -32,6 +32,14 @@ class CmfEndpoint[T: BaseModel]:
         object.__setattr__(self, "_root_key", root_key)
 
     def current(self) -> T:
+        """
+        Fetches the current record from the endpoint.
+
+        Returns
+        -------
+        T
+            The current record.
+        """
         return self._fetch_current(
             self._client,
             self._path,

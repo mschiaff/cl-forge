@@ -15,6 +15,8 @@ nav:
       - CMF:
           - CmfClient: api/cmf/base_client.md
           - Ipc: api/cmf/ipc.md
+      - Schemas: core/schemas.md
+      - Exceptions: api/exceptions.md
 
 extra_css:
   - 'extra/tweaks.css'
@@ -88,15 +90,22 @@ plugins:
             docstring_options:
               ignore_init_summary: true
             merge_init_into_class: true
+            filters: ['!^_']
             show_signature_annotations: true
             show_root_heading: true
             show_symbol_type_heading: true
             show_symbol_type_toc: true
             show_signature_type_parameters: true
-            docstring_style: numpy
-            filters: ['!^_']
             show_overloads: false
-            #show_source: true
+            show_labels: true
+            docstring_style: numpy
+            #scoped_crossrefs: true
+            #relative_crossrefs: true
+            signature_crossrefs: true
+            #show_source: false
             #show_root_full_path: false
             inherited_members: true
             show_if_no_docstring: true
+            extensions:
+              - griffe_pydantic:
+                  schema: true

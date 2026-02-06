@@ -3,13 +3,13 @@ CL Forge is a Python librarie available on [PyPI](https://pypi.org/project/cl-fo
 
 ## From PyPI
 
-=== ":simple-uv: uv"
+=== ":simple-astral: uv"
 
     ```shell
     uv add cl-forge
     ```
 
-=== ":material-language-python: pip"
+=== ":simple-python: pip"
 
     ```shell
     pip install cl-forge
@@ -22,13 +22,13 @@ CL Forge is a Python librarie available on [PyPI](https://pypi.org/project/cl-fo
     Building from source requires a Rust toolchain installed on your system. See [Install Rust](https://rust-lang.
     org/tools/install/) for more information. 
 
-=== ":simple-uv: uv"
+=== ":simple-astral: uv"
 
     ```shell
     uv add "git+https://github.com/mschiaff/cl-forge.git@<version-tag>"
     ```
 
-=== ":material-language-python: pip"
+=== ":simple-python: pip"
     
     ```shell
     pip install "git+https://github.com/mschiaff/cl-forge.git@<version-tag>"
@@ -36,13 +36,13 @@ CL Forge is a Python librarie available on [PyPI](https://pypi.org/project/cl-fo
 
 Including optional dependencies:
 
-=== ":simple-uv: uv"
+=== ":simple-astral: uv"
 
     ```shell
     uv add "git+https://github.com/mschiaff/cl-forge.git@<version-tag>[dep1, ...]"
     ```
 
-=== ":material-language-python: pip"
+=== ":simple-python: pip"
 
     ```shell
     pip install "git+https://github.com/mschiaff/cl-forge.git@<version-tag>[dep1, ...]"
