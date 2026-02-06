@@ -14,7 +14,12 @@ nav:
   - API Reference:
       - CMF:
           - CmfClient: api/cmf/base_client.md
+          - CmfEndpoint: api/cmf/base_endpoint.md
           - Ipc: api/cmf/ipc.md
+          - Usd: api/cmf/usd.md
+          - Eur: api/cmf/eur.md
+          - Uf: api/cmf/uf.md
+          - Utm: api/cmf/utm.md
       - Schemas: core/schemas.md
       - Exceptions: api/exceptions.md
 
