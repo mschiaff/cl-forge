@@ -3,17 +3,17 @@ CL Forge is a Python librarie available on [PyPI](https://pypi.org/project/cl-fo
 
 ## From PyPI
 
-Using `uv`:
+=== ":simple-uv: uv"
 
-```shell
-uv add cl-forge
-```
+    ```shell
+    uv add cl-forge
+    ```
 
-Or using `pip`:
+=== ":material-language-python: pip"
 
-```shell
-pip install cl-forge
-```
+    ```shell
+    pip install cl-forge
+    ```
 
 ## From Source
 
@@ -22,29 +22,31 @@ pip install cl-forge
     Building from source requires a Rust toolchain installed on your system. See [Install Rust](https://rust-lang.
     org/tools/install/) for more information. 
 
-### Using `uv` (Recommended)
+=== ":simple-uv: uv"
 
-```shell
-uv add "git+https://github.com/mschiaff/cl-forge.git@<version-tag>"
-```
+    ```shell
+    uv add "git+https://github.com/mschiaff/cl-forge.git@<version-tag>"
+    ```
 
-Including optional dependencies:
-
-```shell
-uv add "git+https://github.com/mschiaff/cl-forge.git@<version-tag>[dep1, ...]"
-```
-
-### Using `pip`
-
-```shell
-pip install "git+https://github.com/mschiaff/cl-forge.git@<version-tag>"
-```
+=== ":material-language-python: pip"
+    
+    ```shell
+    pip install "git+https://github.com/mschiaff/cl-forge.git@<version-tag>"
+    ```
 
 Including optional dependencies:
 
-```shell
-pip install "git+https://github.com/mschiaff/cl-forge.git@<version-tag>[dep1, ...]"
-```
+=== ":simple-uv: uv"
+
+    ```shell
+    uv add "git+https://github.com/mschiaff/cl-forge.git@<version-tag>[dep1, ...]"
+    ```
+
+=== ":material-language-python: pip"
+
+    ```shell
+    pip install "git+https://github.com/mschiaff/cl-forge.git@<version-tag>[dep1, ...]"
+    ```
 
 ## Dependencies
 

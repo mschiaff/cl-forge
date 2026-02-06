@@ -43,6 +43,7 @@ theme:
         name: Switch to light mode
   features:
     - content.code.copy
+    - content.tabs.link
     - navigation.sections
     - navigation.tabs
     - navigation.path
@@ -51,11 +52,11 @@ theme:
     - toc.follow
 
 markdown_extensions:
+  - attr_list
   - admonition
   - toc:
       permalink: true
       title: Page Contents
-  - attr_list
   - pymdownx.extra
   - pymdownx.details
   - pymdownx.snippets
@@ -63,8 +64,18 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.highlight:
       pygments_lang_class: true
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 plugins:
+  - search:
+      lang: en
   - mkdocstrings:
       handlers:
         python:
@@ -84,7 +95,8 @@ plugins:
             show_signature_type_parameters: true
             docstring_style: numpy
             filters: ['!^_']
-            inherited_members: true
+            show_overloads: false
             #show_source: true
             #show_root_full_path: false
+            inherited_members: true
             show_if_no_docstring: true
