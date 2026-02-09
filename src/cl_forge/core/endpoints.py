@@ -153,7 +153,43 @@ class UsdEndpoint(CmfEndpoint[UsdRecord]):
     Client for the CMF USD endpoints.
     """
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the USD endpoint client.
+
+        Parameters
+        ----------
+        api_key : str
+            CMF API key.
+        """
         super().__init__(api_key, "/dolar", UsdRecord, "Dolares")
+
+    def current(self) -> UsdRecord:
+        """
+        Get the latest available USD value.
+
+        Returns
+        -------
+        UsdRecord
+            The latest USD record.
+        """
+        return super().current()
+
+    def year(self, year: int | None = None) -> list[UsdRecord]:
+        """
+        Get the USD values for a given year.
+
+        Parameters
+        ----------
+        year : int | None
+            The year for which to retrieve USD values. If None, defaults to the
+            current year.
+
+        Returns
+        -------
+        list[UsdRecord]
+            A list of USD records for the specified year.
+        """
+        return super().year(year)
 
 
 @dataclass(frozen=True)
@@ -162,7 +198,43 @@ class EuroEndpoint(CmfEndpoint[EuroRecord]):
     Client for the CMF Euro endpoints.
     """
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the Euro endpoint client.
+
+        Parameters
+        ----------
+        api_key : str
+            CMF API key.
+        """
         super().__init__(api_key, "/euro", EuroRecord, "Euros")
+
+    def current(self) -> EuroRecord:
+        """
+        Get the latest available Euro value.
+
+        Returns
+        -------
+        EuroRecord
+            The latest Euro record.
+        """
+        return super().current()
+
+    def year(self, year: int | None = None) -> list[EuroRecord]:
+        """
+        Get the Euro values for a given year.
+
+        Parameters
+        ----------
+        year : int | None
+            The year for which to retrieve Euro values. If None, defaults to the
+            current year.
+
+        Returns
+        -------
+        list[EuroRecord]
+            A list of Euro records for the specified year.
+        """
+        return super().year(year)
 
 
 @dataclass(frozen=True)
@@ -171,7 +243,43 @@ class UfEndpoint(CmfEndpoint[UfRecord]):
     Client for the CMF UF (Unidad de Fomento) endpoints.
     """
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the UF endpoint client.
+
+        Parameters
+        ----------
+        api_key : str
+            CMF API key.
+        """
         super().__init__(api_key, "/uf", UfRecord, "UFs")
+
+    def current(self) -> UfRecord:
+        """
+        Get the latest available UF value.
+
+        Returns
+        -------
+        UfRecord
+            The latest UF record.
+        """
+        return super().current()
+
+    def year(self, year: int | None = None) -> list[UfRecord]:
+        """
+        Get the UF values for a given year.
+
+        Parameters
+        ----------
+        year : int | None
+            The year for which to retrieve UF values. If None, defaults to the
+            current year.
+
+        Returns
+        -------
+        list[UfRecord]
+            A list of UF records for the specified year.
+        """
+        return super().year(year)
 
 
 @dataclass(frozen=True)
@@ -180,4 +288,40 @@ class UtmEndpoint(CmfEndpoint[UtmRecord]):
     Client for the CMF UTM (Unidad Tributaria Mensual) endpoints.
     """
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the UTM endpoint client.
+
+        Parameters
+        ----------
+        api_key : str
+            CMF API key.
+        """
         super().__init__(api_key, "/utm", UtmRecord, "UTMs")
+
+    def current(self) -> UtmRecord:
+        """
+        Get the latest available UTM value.
+
+        Returns
+        -------
+        UtmRecord
+            The latest UTM record.
+        """
+        return super().current()
+
+    def year(self, year: int | None = None) -> list[UtmRecord]:
+        """
+        Get the UTM values for a given year.
+
+        Parameters
+        ----------
+        year : int | None
+            The year for which to retrieve UTM values. If None, defaults to the
+            current year.
+
+        Returns
+        -------
+        list[UtmRecord]
+            A list of UTM records for the specified year.
+        """
+        return super().year(year)

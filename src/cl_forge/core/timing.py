@@ -32,36 +32,49 @@ class Timing:
     is_running : bool
         Whether the timer is currently running.
 
-    Example
-    -------
-    As a context manager::
-    
-        with Timing() as timer:
-            # code to time
-        print(timer.elapsed) # prints 'Elapsed time: 0.123456s'
-    
-    As a decorator::
+    Examples
+    --------
+    As a context manager:
 
-        @Timing # Works both with and without parenthesis
-        def my_function():
-            # code to time
-        my_function() # prints 'Function 'my_function' took 0.123456s'
-
-    Direct call::
-
-        def my_function(x):
-            # code to time
-        timer = Timing(my_function)
-        result = timer(10) # prints 'Function 'my_function' took 0.123456s'
-        # timer attributes are still available: timer.seconds
-    
-    Manually::
-
-        timer = Timing()
-        timer.start()
+    ```python
+    with Timing() as timer:
         # code to time
-        timer.stop()
-        print(timer.seconds) # prints elapsed time in seconds
+    print(timer.elapsed)
+    # prints 'Elapsed time: 0.123456s'
+    ```
+    
+    As a decorator:
+
+    ```python
+    @Timing # Works both with and without parenthesis
+    def my_function():
+        # code to time
+    my_function()
+    # prints 'Function 'my_function' took 0.123456s'
+    ```
+
+    Direct call:
+
+    ```python
+    def my_function(x):
+        # code to time
+    timer = Timing(my_function)
+    result = timer(10)
+    # prints 'Function 'my_function' took 0.123456s'
+
+    # timer attributes are still available: timer.seconds
+    ```
+    
+    Manually:
+
+    ```python
+    timer = Timing()
+    timer.start()
+    # code to time
+    timer.stop()
+    print(timer.seconds)
+    # prints elapsed time in seconds
+    ```
     
     Note
     ----
