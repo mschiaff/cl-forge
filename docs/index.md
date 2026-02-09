@@ -8,15 +8,24 @@
 
 <br>
 
-<div style="text-align: center;">
+<div style="text-align: center; text-decoration: none;">
    <a href="https://pypi.org/project/cl-forge/" style="text-decoration: none;">
       <img src="https://img.shields.io/pypi/v/cl-forge.svg" alt="pypi">
    </a>
+   <a href="https://mschiaff.github.io/cl-forge/" style="text-decoration: none;">
+      <img src="https://img.shields.io/badge/Pages-Docs-blue?logo=github" alt="docs">
+   </a>
+
+   <br>
+
    <a href="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml" style="text-decoration: none;">
       <img src="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main" alt="python package">
    </a>
    <a href="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml" style="text-decoration: none;">
       <img src="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml/badge.svg" alt="python release">
+   </a>
+   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment" style="text-decoration: none;">
+      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages" alt="pages build deployment">
    </a>
 </div>
 
