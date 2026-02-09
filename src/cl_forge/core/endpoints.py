@@ -5,14 +5,19 @@ from datetime import datetime
 from functools import lru_cache
 from typing import TypeVar
 
-from pydantic import BaseModel
-
 from cl_forge.core.impl.rs_cl_forge.rs_cmf import CmfClient
-from cl_forge.core.schemas import EurRecord, IpcRecord, UFRecord, UsdRecord, UTMRecord
+from cl_forge.core.schemas import (
+    CmfRecord,
+    EuroRecord,
+    IpcRecord,
+    UfRecord,
+    UsdRecord,
+    UtmRecord,
+)
 
-T = TypeVar("T", bound=BaseModel)
+T = TypeVar("T", bound=CmfRecord)
 
-class CmfEndpoint[T: BaseModel]:
+class CmfEndpoint[T]:
     """
     Base class for CMF API endpoints.
     """
@@ -25,6 +30,20 @@ class CmfEndpoint[T: BaseModel]:
         record_class: type[T],
         root_key: str
     ) -> None:
+        """
+        Initialize the endpoint client.
+
+        Parameters
+        ----------
+        api_key : str
+            CMF API key.
+        path : str
+            Path to the endpoint.
+        record_class : type[T]
+            Record class for the endpoint.
+        root_key : str
+            Root key in the API response containing the data.
+        """
         client = CmfClient(api_key=api_key)
         object.__setattr__(self, "_client", client)
         object.__setattr__(self, "_path", path)
@@ -32,6 +51,9 @@ class CmfEndpoint[T: BaseModel]:
         object.__setattr__(self, "_root_key", root_key)
 
     def current(self) -> T:
+        """
+        Get the latest available record.
+        """
         return self._fetch_current(
             self._client,
             self._path,
@@ -40,6 +62,13 @@ class CmfEndpoint[T: BaseModel]:
         )
 
     def year(self, year: int | None = None) -> list[T]:
+        """
+        Get the records for a given year.
+
+        Parameters
+        ----------
+        year : int | None
+        """
         return self._fetch_year(
             self._client,
             self._path,
@@ -74,45 +103,81 @@ class CmfEndpoint[T: BaseModel]:
 
 
 @dataclass(frozen=True)
-class Ipc(CmfEndpoint[IpcRecord]):
+class IpcEndpoint(CmfEndpoint[IpcRecord]):
     """
     Client for the CMF IPC (Índice de Precios al Consumidor) endpoints.
     """
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the IPC endpoint client.
+
+        Parameters
+        ----------
+        api_key : str
+            CMF API key.
+        """
         super().__init__(api_key, "/ipc", IpcRecord, "IPCs")
+
+    def current(self) -> IpcRecord:
+        """
+        Get the latest available IPC value.
+
+        Returns
+        -------
+        IpcRecord
+            The latest IPC record.
+        """
+        return super().current()
+
+    def year(self, year: int | None = None) -> list[IpcRecord]:
+        """
+        Get the IPC values for a given year.
+
+        Parameters
+        ----------
+        year : int | None
+            The year for which to retrieve IPC values. If None, defaults to the
+            current year.
+
+        Returns
+        -------
+        list[IpcRecord]
+            A list of IPC records for the specified year.
+        """
+        return super().year(year)
 
 
 @dataclass(frozen=True)
-class Usd(CmfEndpoint[UsdRecord]):
+class UsdEndpoint(CmfEndpoint[UsdRecord]):
     """
-    Client for the CMF USD (Dólar Observado) endpoints.
+    Client for the CMF USD endpoints.
     """
     def __init__(self, api_key: str) -> None:
         super().__init__(api_key, "/dolar", UsdRecord, "Dolares")
 
 
 @dataclass(frozen=True)
-class Eur(CmfEndpoint[EurRecord]):
+class EuroEndpoint(CmfEndpoint[EuroRecord]):
     """
-    Client for the CMF EUR (Euro) endpoints.
+    Client for the CMF Euro endpoints.
     """
     def __init__(self, api_key: str) -> None:
-        super().__init__(api_key, "/euro", EurRecord, "Euros")
+        super().__init__(api_key, "/euro", EuroRecord, "Euros")
 
 
 @dataclass(frozen=True)
-class Uf(CmfEndpoint[UFRecord]):
+class UfEndpoint(CmfEndpoint[UfRecord]):
     """
     Client for the CMF UF (Unidad de Fomento) endpoints.
     """
     def __init__(self, api_key: str) -> None:
-        super().__init__(api_key, "/uf", UFRecord, "UFs")
+        super().__init__(api_key, "/uf", UfRecord, "UFs")
 
 
 @dataclass(frozen=True)
-class Utm(CmfEndpoint[UTMRecord]):
+class UtmEndpoint(CmfEndpoint[UtmRecord]):
     """
     Client for the CMF UTM (Unidad Tributaria Mensual) endpoints.
     """
     def __init__(self, api_key: str) -> None:
-        super().__init__(api_key, "/utm", UTMRecord, "UTMs")
+        super().__init__(api_key, "/utm", UtmRecord, "UTMs")

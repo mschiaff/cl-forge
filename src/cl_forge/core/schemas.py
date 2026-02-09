@@ -1,9 +1,10 @@
 from datetime import datetime
+from typing import override
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
-class BaseCmfRecord(BaseModel):
+class CmfRecord(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     value: float = Field(alias="Valor")
@@ -20,20 +21,21 @@ class BaseCmfRecord(BaseModel):
         return datetime.strptime(v, '%Y-%m-%d')
 
 
-class IpcRecord(BaseCmfRecord):
+class IpcRecord(CmfRecord):
+    @override
     @field_validator('value', mode='before')
     @classmethod
     def convert_value(cls, v):
         return round(float(v.replace('.', '').replace(',', '.')) / 100, 5)
 
 
-class UsdRecord(BaseCmfRecord): ...
+class UsdRecord(CmfRecord): ...
 
 
-class EurRecord(BaseCmfRecord): ...
+class EuroRecord(CmfRecord): ...
 
 
-class UFRecord(BaseCmfRecord): ...
+class UfRecord(CmfRecord): ...
 
 
-class UTMRecord(BaseCmfRecord): ...
+class UtmRecord(CmfRecord): ...
