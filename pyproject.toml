@@ -42,8 +42,9 @@ keywords = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mschiaff/cl-forge"
+Homepage = "https://mschiaff.github.io/cl-forge/"
 Repository = "https://github.com/mschiaff/cl-forge.git"
+Documentation = "https://mschiaff.github.io/cl-forge/"
 Issues = "https://github.com/mschiaff/cl-forge/issues"
 
 [build-system]
