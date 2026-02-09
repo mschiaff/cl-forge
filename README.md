@@ -29,6 +29,8 @@
    </a>
 </div>
 
+<br>
+
 `cl-forge` provides a collection of high-performance utilities for common Chilean data formats and API integrations. The core logic is implemented in Rust for maximum speed, with a clean and easy-to-use Python interface.
 
 ## Features
