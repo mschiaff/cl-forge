@@ -8,7 +8,7 @@
 
 <br>
 
-<div style="text-align: center; text-decoration: none;">
+<div align="center" style="text-align: center; text-decoration: none;">
    <a href="https://pypi.org/project/cl-forge/" style="text-decoration: none;">
       <img src="https://img.shields.io/pypi/v/cl-forge.svg" alt="pypi">
    </a>
