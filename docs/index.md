@@ -1,6 +1,6 @@
 # Welcome to CL Forge!
 
-<img style="border-radius: 25px;" alt="banner" src="docs/assets/banner.png"/>
+<img style="border-radius: 25px;" alt="logo" src="assets/banner.png"/>
 
 <h2 style="text-align: center;">
    Simple yet powerful Chilean tools written in Rust and Python.
@@ -8,24 +8,15 @@
 
 <br>
 
-<div align="center" style="text-align: center; text-decoration: none;">
+<div style="text-align: center;">
    <a href="https://pypi.org/project/cl-forge/" style="text-decoration: none;">
       <img src="https://img.shields.io/pypi/v/cl-forge.svg" alt="pypi">
    </a>
-   <a href="https://mschiaff.github.io/cl-forge/" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/Pages-Docs-blue?logo=github" alt="docs">
-   </a>
-
-   <br>
-
    <a href="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml" style="text-decoration: none;">
       <img src="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main" alt="python package">
    </a>
    <a href="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml" style="text-decoration: none;">
       <img src="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml/badge.svg" alt="python release">
-   </a>
-   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment" style="text-decoration: none;">
-      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages" alt="pages build deployment">
    </a>
 </div>
 
@@ -98,15 +89,16 @@ print(ipc_data)
 # {'IPCs': [{'Valor': '-0,2', 'Fecha': '2025-12-01'}]}
 ```
 
-> [!NOTE]
-> To use the CMF API, you need an API key. You can request one at [CMF Chile](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
+!!! note
+   
+    To use the CMF API, you need an API key. You can request one at [CMF Chile](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
 
 See the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html) for details about the available endpoints.
 
 ## Contributing
 
-Pull requests are welcome. For changes and reporting bugs, please open an issue first to discuss it. Read our [Contributing Guide](CONTRIBUTING.md) for more details.
+Pull requests are welcome. For changes and reporting bugs, please open an issue first to discuss it. Read our [Contributing Guide](contributing.md) for more details.
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/mschiaff/cl-forge/blob/main/LICENSE) file for details.

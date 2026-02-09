@@ -9,11 +9,11 @@ class MarketClient:
     """
     Represents a client for interacting with the Chilean Public Market API.
 
+    Notes
+    -----
     The API is free to use, but requires an API ticket for authentication
-    which can be requested in `Contact`_ and is usually sent to the given
-    email during the day.
-
-    .. _Contact: https://api.mercadopublico.cl/modules/IniciarSesion.aspx
+    which can be requested in [Contact](https://api.mercadopublico.cl/modules/
+    IniciarSesion.aspx) and is usually sent to the given email during the day.
 
     Attributes
     ----------
@@ -75,10 +75,12 @@ class MarketClient:
             params: dict[str, Any] | None = None
     ) -> dict[str, Any] | str:
         """
-        Sends a GET request to the specified path of the market API. See the
-        `API Docs`_ for all the available endpoints.
+        Sends a GET request to the specified path of the market API.
 
-        .. _API Docs: https://api.mercadopublico.cl/modules/api.aspx
+        Notes
+        -----
+        See the [API Docs](https://api.mercadopublico.cl/modules/api.aspx)
+        for all the available endpoints.
 
         Parameters
         ----------
@@ -94,13 +96,11 @@ class MarketClient:
         Returns
         -------
         dict[str, Any] | str
-            The JSON response from the API as a dictionary or
-            the XML response as a string.
+            The JSON response from the API as a dictionary or the XML response
+            as a string.
 
         Raises
         ------
         ValueError
             If the ticket (API key) is included in `params`.
         """
-
-    def __repr__(self) -> str: ...

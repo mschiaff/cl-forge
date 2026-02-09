@@ -1,0 +1,17 @@
+/* API documentation link admonition */
+:root {
+  --md-admonition-icon--mkdocstrings-source: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M14 17h3l2-4V7h-6v6h3M6 17h3l2-4V7H5v6h3z\"/></svg>")
+}
+
+.md-typeset .mkdocstrings-source > .admonition-title::before, .md-typeset .mkdocstrings-source > summary::before {
+  background-color: #9e9e9e;
+  -webkit-mask-image: var(--md-admonition-icon--mkdocstrings-source);
+          mask-image: var(--md-admonition-icon--mkdocstrings-source);
+}
+
+.md-typeset .admonition.mkdocstrings-source, .md-typeset details.mkdocstrings-source {
+  background-color: hsla(230, 14.94%, 20.88%, 1);
+  border: 0.075rem solid #9e9e9e;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+}

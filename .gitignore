@@ -25,6 +25,9 @@ MANIFEST
 .coverage
 htmlcov/
 
+# MkDocs
+site/
+
 # Environments
 .env
 .venv
