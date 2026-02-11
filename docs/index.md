@@ -9,12 +9,12 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/cl-forge)](https://pypi.org/project/cl-forge/)
 [![GitHub Release](https://img.shields.io/github/v/release/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/releases/latest)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cl-forge)](https://pypi.org/project/cl-forge/)
+[![GH Pages - Docs](https://img.shields.io/badge/Pages-Docs-blue?logo=github)](https://mschiaff.github.io/cl-forge/)
 
 </figure>
 
 <figure markdown="1">
 
-[![GH Pages - Docs](https://img.shields.io/badge/Pages-Docs-blue?logo=github)](https://mschiaff.github.io/cl-forge/)
 ![PyPI - Status](https://img.shields.io/pypi/status/cl-forge)
 ![PyPI - Types](https://img.shields.io/pypi/types/cl-forge)
 [![GitHub License](https://img.shields.io/github/license/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/blob/main/LICENSE)
