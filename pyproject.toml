@@ -1,7 +1,8 @@
 [project]
 name = "cl-forge"
 description = "Simple yet powerful Chilean and other tools written in Rust and Python."
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dynamic = ["version"]

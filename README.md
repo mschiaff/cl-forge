@@ -1,35 +1,25 @@
 # Welcome to CL Forge!
 
-<img style="border-radius: 25px;" alt="banner" src="docs/assets/banner.png"/>
+<img src="https://github.com/mschiaff/cl-forge/blob/main/docs/assets/banner.png?raw=true" align="center" style="border-radius: 25px;" alt="banner"/>
 
-<h2 style="text-align: center;">
-   Simple yet powerful Chilean tools written in Rust and Python.
-</h2>
+<h2 align="center">Simple yet powerful Chilean tools written in Rust and Python.</h2>
 
-<br>
+<div align="center">
 
-<div align="center" style="text-align: center; text-decoration: none;">
-   <a href="https://pypi.org/project/cl-forge/" style="text-decoration: none;">
-      <img src="https://img.shields.io/pypi/v/cl-forge.svg" alt="pypi">
-   </a>
-   <a href="https://mschiaff.github.io/cl-forge/" style="text-decoration: none;">
-      <img src="https://img.shields.io/badge/Pages-Docs-blue?logo=github" alt="docs">
-   </a>
+[![PyPI - Version](https://img.shields.io/pypi/v/cl-forge)](https://pypi.org/project/cl-forge/)
+[![GitHub Release](https://img.shields.io/github/v/release/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/releases/latest)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cl-forge)](https://pypi.org/project/cl-forge/)
+[![GH Pages - Docs](https://img.shields.io/badge/Pages-Docs-blue?logo=github)](https://mschiaff.github.io/cl-forge/)
 
-   <br>
+![PyPI - Status](https://img.shields.io/pypi/status/cl-forge)
+![PyPI - Types](https://img.shields.io/pypi/types/cl-forge)
+[![GitHub License](https://img.shields.io/github/license/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/blob/main/LICENSE)
 
-   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml" style="text-decoration: none;">
-      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml/badge.svg?branch=main" alt="python package">
-   </a>
-   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml" style="text-decoration: none;">
-      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml/badge.svg" alt="python release">
-   </a>
-   <a href="https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment" style="text-decoration: none;">
-      <img src="https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages" alt="pages build deployment">
-   </a>
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/python-package.yml?logo=github&label=Tests)](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/release-python.yml?logo=github&label=Release)](https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml)
+[![pages-build-deployment](https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment)
+
 </div>
-
-<br>
 
 `cl-forge` provides a collection of high-performance utilities for common Chilean data formats and API integrations. The core logic is implemented in Rust for maximum speed, with a clean and easy-to-use Python interface.
 

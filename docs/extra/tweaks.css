@@ -15,3 +15,17 @@
   padding-left: 0.6rem;
   padding-right: 0.6rem;
 }
+
+.md-typeset figure {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem auto;
+  width: fit-content;
+  column-gap: 0.2rem;
+}
+
+.md-typeset figure p {
+  display: flex;
+  margin: auto;
+  column-gap: 0.2rem;
+}
