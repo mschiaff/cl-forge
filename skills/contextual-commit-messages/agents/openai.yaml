@@ -1,4 +1,0 @@
-interface:
-  display_name: "Contextual Commits"
-  short_description: "Draft Conventional Commits from staged and unstaged diffs."
-  default_prompt: "Write a Conventional Commit message that reflects all staged and unstaged changes in this repository."

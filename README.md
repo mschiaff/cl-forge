@@ -116,7 +116,7 @@ print(tenders_data)
 # ...}
 ```
 
-> ![IMPORTANT]
+> [!IMPORTANT]
 > To use the Mercado Público API, you need an API ticket. You can request one at [Contact Mercado Público](https://api.mercadopublico.cl/modules/IniciarSesion.aspx). To request this API ticket, you will also have to request and activate your [ClaveÚnica](https://claveunica.gob.cl).
 
 See the [Mercado Público API documentation](https://api.mercadopublico.cl/modules/api.aspx) for details about all the available endpoints. **Endpoint-specific clients coming soon in future updates.**
