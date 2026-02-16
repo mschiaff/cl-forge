@@ -99,11 +99,38 @@ print(ipc_data)
 # {'IPCs': [{'Valor': '-0,2', 'Fecha': '2025-12-01'}]}
 ```
 
-!!! note
+!!! important
    
-    To use the CMF API, you need an API key. You can request one at [CMF Chile](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
+    To use the CMF API, you need an API key. You can request one at [Contact CMF](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
 
-See the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html) for details about the available endpoints.
+See the [API Reference](https://mschiaff.github.io/cl-forge/api/cmf/base_client/) for endpoint-specific clients, and the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html) for details about all the available endpoints.
+
+The Public Market API client also allows you to easily interact with the [Mercado Público](https://api.mercadopublico.cl) API.
+
+```python
+from cl_forge.market import MarketClient
+
+client = MarketClient(ticket='your-api-ticket')
+
+tenders_data = client.get(path="/licitaciones")
+
+print(tenders_data)
+#{'Cantidad': 463,
+# 'FechaCreacion': '2026-02-12T16:07:58.813315Z',
+# 'Version': 'v1',
+# 'Listado': [{'CodigoExterno': '1057049-30-B226',
+#   'Nombre': 'CSP- SERVICIO DE INMUNOHISTOQUÍMICA Y CISH',
+#   'CodigoEstado': 5,
+#   'FechaCierre': '2026-02-23T15:30:00'},
+#  {'CodigoExterno': '1057374-8-L126',
+# ...}
+```
+
+!!! important
+
+    To use the Mercado Público API, you need an API ticket. You can request one at [Contact Mercado Público](https://api.mercadopublico.cl/modules/IniciarSesion.aspx). To request this API ticket, you will also have to request and activate your [ClaveÚnica](https://claveunica.gob.cl).
+
+See the [Mercado Público API documentation](https://api.mercadopublico.cl/modules/api.aspx) for details about all the available endpoints. **Endpoint-specific clients coming soon in future updates.**
 
 ## Contributing
 

@@ -51,3 +51,6 @@ ENV/
 
 # Shell scripts
 *.sh
+
+# Codex
+skills/
