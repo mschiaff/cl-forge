@@ -48,3 +48,9 @@ ENV/
 
 #macOS
 .DS_Store
+
+# Shell scripts
+*.sh
+
+# Codex
+skills/

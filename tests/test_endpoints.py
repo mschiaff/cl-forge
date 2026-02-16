@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from cl_forge.cmf import Eur, Ipc, Uf, Usd, Utm
+from cl_forge.cmf import EuroEndpoint, IpcEndpoint, UfEndpoint, UsdEndpoint, UtmEndpoint
 
 # Mock data based on real API responses
 MOCK_RESPONSES = {
@@ -67,7 +67,7 @@ def mock_cmf_client():
         yield client_instance
 
 def test_usd_endpoints(mock_cmf_client):
-    usd = Usd(api_key="test")
+    usd = UsdEndpoint(api_key="test")
     
     # Test current
     current = usd.current()
@@ -81,7 +81,7 @@ def test_usd_endpoints(mock_cmf_client):
     assert year_data[0].date == datetime(2025, 1, 2)
 
 def test_eur_endpoints(mock_cmf_client):
-    eur = Eur(api_key="test")
+    eur = EuroEndpoint(api_key="test")
     
     current = eur.current()
     assert current.value == 910.15
@@ -92,7 +92,7 @@ def test_eur_endpoints(mock_cmf_client):
     assert year_data[0].value == 1035.50
 
 def test_uf_endpoints(mock_cmf_client):
-    uf = Uf(api_key="test")
+    uf = UfEndpoint(api_key="test")
     
     current = uf.current()
     assert current.value == 38500.12
@@ -103,7 +103,7 @@ def test_uf_endpoints(mock_cmf_client):
     assert year_data[0].value == 37100.0
 
 def test_utm_endpoints(mock_cmf_client):
-    utm = Utm(api_key="test")
+    utm = UtmEndpoint(api_key="test")
     current = utm.current()
     assert current.value == 67123.0
     
@@ -112,7 +112,7 @@ def test_utm_endpoints(mock_cmf_client):
     assert year_data[0].value == 66500.0
 
 def test_ipc_endpoints(mock_cmf_client):
-    ipc = Ipc(api_key="test")
+    ipc = IpcEndpoint(api_key="test")
     
     current = ipc.current()
     # IpcRecord divides by 100: 0,5 -> 0.005
@@ -126,23 +126,23 @@ def test_ipc_endpoints(mock_cmf_client):
 def test_endpoint_init():
     api_key = "test_key"
 
-    ipc = Ipc(api_key)
+    ipc = IpcEndpoint(api_key)
     assert ipc._client.api_key == "test_key"
     assert ipc._path == "/ipc" # type: ignore
     assert ipc._root_key == "IPCs" # type: ignore
 
-    usd = Usd(api_key)
+    usd = UsdEndpoint(api_key)
     assert usd._path == "/dolar" # type: ignore
     assert usd._root_key == "Dolares" # type: ignore
 
-    eur = Eur(api_key)
+    eur = EuroEndpoint(api_key)
     assert eur._path == "/euro" # type: ignore
     assert eur._root_key == "Euros" # type: ignore
 
-    uf = Uf(api_key)
+    uf = UfEndpoint(api_key)
     assert uf._path == "/uf" # type: ignore
     assert uf._root_key == "UFs" # type: ignore
 
-    utm = Utm(api_key)
+    utm = UtmEndpoint(api_key)
     assert utm._path == "/utm" # type: ignore
     assert utm._root_key == "UTMs" # type: ignore
