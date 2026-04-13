@@ -114,6 +114,7 @@ jobs:
           args: >
             --release
             --target ${{ matrix.target }}
+            --interpreter python${{ matrix.python[0] }}
             --out dist/
           manylinux: auto
           maturin-version: 1.11.5
