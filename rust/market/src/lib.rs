@@ -7,7 +7,7 @@ use pyo3::types::{PyString, PyAny, PyDict};
 
 use base::enums::ResponseFormat;
 
-#[pyclass]
+#[pyclass(subclass, module = "cl_forge.core.impl.rs_cl_forge.rs_market")]
 struct MarketClient {
     client: native::MarketClient,
 }
