@@ -1,4 +1,4 @@
-from typing import Literal, overload
+from typing import Any, Literal, overload
 
 class BaseCmfClient:
     """
@@ -63,7 +63,7 @@ class BaseCmfClient:
             self,
             path: str,
             fmt: Literal["json"] = ...
-    ) -> dict[str, list[dict[str, str]]]: ...
+    ) -> dict[str, Any]: ...
     @overload
     def get(
             self,
@@ -75,7 +75,7 @@ class BaseCmfClient:
             self,
             path: str,
             fmt: Literal["json", "xml"] = "json"
-    ) -> dict[str, list[dict[str, str]]] | str:
+    ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified CMF API endpoint.
 
@@ -93,7 +93,7 @@ class BaseCmfClient:
 
         Returns
         -------
-        dict[str, list[dict[str, str]]] | str
+        dict[str, Any] | str
             The response from the CMF API. Returns a ``dict`` if format is
             ``'json'`` and a ``str`` if format is ``'xml'``.
         """
@@ -103,7 +103,7 @@ class BaseCmfClient:
             self,
             path: str,
             fmt: Literal["json"] = ...
-    ) -> dict[str, list[dict[str, str]]]: ...
+    ) -> dict[str, Any]: ...
     @overload
     async def aget(
             self,
@@ -115,7 +115,7 @@ class BaseCmfClient:
             self,
             path: str,
             fmt: Literal["json", "xml"] = "json"
-    ) -> dict[str, list[dict[str, str]]] | str:
+    ) -> dict[str, Any] | str:
         """
         Async implementation of :meth:`get`.
         
@@ -135,7 +135,7 @@ class BaseCmfClient:
 
         Returns
         -------
-        dict[str, list[dict[str, str]]] | str
+        dict[str, Any] | str
             The response from the CMF API. Returns a ``dict`` if format is
             ``'json'`` and a ``str`` if format is ``'xml'``.
         """
