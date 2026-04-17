@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from cl_forge.core.impl.rs_cl_forge.rs_market import (  # type: ignore
     MarketClient as _RSMarketClient,
 )
 from cl_forge.rest.market.endpoints import tender
-from cl_forge.rest.market.schemas import TenderDetails, TenderResponse
+
+if TYPE_CHECKING:
+    from cl_forge.rest.market.schemas import TenderDetailsResponse, TenderResponse
 
 
 class MarketClient(_RSMarketClient):
@@ -37,7 +39,7 @@ class MarketClient(_RSMarketClient):
             self, *,
             code: str,
             raw: bool = False,
-    ) -> TenderDetails | dict[str, Any]:
+    ) -> TenderDetailsResponse | dict[str, Any]:
         endpoint = tender.tender_details_endpoint(
             code=code
         )

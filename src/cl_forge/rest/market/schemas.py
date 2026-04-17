@@ -95,7 +95,7 @@ class TenderItems(BaseModel):
     entries: list[TenderItem] = Field(alias="Listado")
 
 
-class TenderDetail(BaseModel):
+class TenderDetails(BaseModel):
     code: str = Field(alias="CodigoExterno")
     name: str = Field(alias="Nombre")
     status_code: int = Field(alias="CodigoEstado")
@@ -158,8 +158,8 @@ class TenderDetail(BaseModel):
     items: TenderItems = Field(alias="Items")
 
 
-class TenderDetails(BaseModel):
+class TenderDetailsResponse(BaseModel):
     quantity: int = Field(alias="Cantidad")
     created_at: datetime = Field(alias="FechaCreacion")
     version: str = Field(alias="Version")
-    entries: list[TenderDetail] = Field(alias="Listado")
+    entries: list[TenderDetails] = Field(alias="Listado")

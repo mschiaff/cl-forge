@@ -3,7 +3,7 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 from cl_forge.rest.market.endpoints.base import MarketEndpoint
-from cl_forge.rest.market.schemas import TenderDetails, TenderResponse
+from cl_forge.rest.market.schemas import TenderDetailsResponse, TenderResponse
 
 
 class TendersParams(BaseModel):
@@ -56,7 +56,7 @@ class TenderDetailsParams(BaseModel):
 
 def tender_details_endpoint(
         code: str
-) -> MarketEndpoint[TenderDetails]:
+) -> MarketEndpoint[TenderDetailsResponse]:
     params = TenderDetailsParams(
         code=code
     ).model_dump(
@@ -64,6 +64,6 @@ def tender_details_endpoint(
     )
     return MarketEndpoint(
         path="/licitaciones",
-        model=TenderDetails,
+        model=TenderDetailsResponse,
         params=params
     )
