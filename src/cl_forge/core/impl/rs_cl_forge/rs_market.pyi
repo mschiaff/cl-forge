@@ -58,14 +58,15 @@ class MarketClient:
     def get(
             self,
             path: str,
-            fmt: Literal["json"] = ...
+            fmt: Literal["json"] = ...,
+            params: dict[str, Any] | None = ...
     ) -> dict[str, Any]: ...
-
     @overload
     def get(
             self,
             path: str,
-            fmt: Literal["xml"]
+            fmt: Literal["xml"],
+            params: dict[str, Any] | None = ...
     ) -> str: ...
 
     def get(
