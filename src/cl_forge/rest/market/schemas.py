@@ -162,4 +162,4 @@ class TenderDetailsResponse(BaseModel):
     quantity: int = Field(alias="Cantidad")
     created_at: datetime = Field(alias="FechaCreacion")
     version: str = Field(alias="Version")
-    entries: list[TenderDetails] = Field(alias="Listado")
+    tender: list[TenderDetails] = Field(alias="Listado")

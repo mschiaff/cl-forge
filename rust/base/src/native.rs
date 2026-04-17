@@ -36,6 +36,7 @@ impl BaseClient {
         })
     }
 
+    //noinspection DuplicatedCode
     pub fn get(
         &self,
         path: &str,
