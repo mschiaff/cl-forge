@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 class ClientException(Exception): # noqa: N818
     """Base class for all exceptions raised by API clients."""
 

@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use rand::Rng;
+use rand::RngExt;
 use rand::SeedableRng;
 use rand::rngs::StdRng;
 
@@ -613,7 +613,7 @@ pub fn generate(
         });
     }
 
-    let mut rng: Box<dyn rand::RngCore> = match seed {
+    let mut rng: Box<dyn rand::Rng> = match seed {
         Some(s) => Box::new(StdRng::seed_from_u64(s as u64)),
         None => Box::new(rand::rng()),
     };

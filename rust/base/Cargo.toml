@@ -18,3 +18,9 @@ workspace = true
 
 [dependencies.pyo3]
 workspace = true
+
+[dependencies.pyo3-async-runtimes]
+workspace = true
+
+[dependencies.tokio]
+workspace = true

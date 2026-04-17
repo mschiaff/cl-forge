@@ -1,11 +1,3 @@
-from cl_forge.core.market_schemas import (
-    TenderBuyer,
-    TenderDates,
-    TenderDetail,
-    TenderDetails,
-    TenderItem,
-    TenderItems,
-)
 from cl_forge.core.schemas import (
     CmfRecord,
     EuroRecord,
@@ -14,6 +6,13 @@ from cl_forge.core.schemas import (
     UsdRecord,
     UtmRecord,
 )
+from cl_forge.rest.market.schemas import (
+    TenderBuyer,
+    TenderDates,
+    TenderDetails,
+    TenderItem,
+    TenderItems,
+)
 
 __all__ = (
     "CmfRecord",
@@ -21,7 +20,6 @@ __all__ = (
     "IpcRecord",
     "TenderBuyer",
     "TenderDates",
-    "TenderDetail",
     "TenderDetails",
     "TenderItem",
     "TenderItems",

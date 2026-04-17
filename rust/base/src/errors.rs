@@ -11,7 +11,7 @@ pub enum ClientError {
     #[error("Path must start with '/'")]
     InvalidPath,
 
-    #[error("HTTP error: {0}")]
+    #[error("{0}")]
     HttpError(#[from] reqwest::Error),
     
     #[error("Unexpected status {status}: {body}")]
