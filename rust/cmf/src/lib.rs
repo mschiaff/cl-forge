@@ -79,11 +79,14 @@ impl BaseCmfClient {
         })
     }
 
-    fn __repr__(&self) -> String {
-        format!(
-            "BaseCmfClient(base_url='{}')",
-            self.base_url(),
-        )
+    fn __repr__(slf: Bound<'_, Self>) -> PyResult<String> {
+        let class_name = slf.get_type().name()?;
+        let base_url = slf.borrow().base_url();
+        Ok(format!(
+            "{}(base_url='{}')",
+            class_name,
+            base_url,
+        ))
     }
 }
 
