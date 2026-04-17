@@ -5,7 +5,7 @@ from cl_forge.core.endpoints import (
     UsdEndpoint,
     UtmEndpoint,
 )
-from cl_forge.core.impl.rs_cl_forge.rs_cmf import CmfClient
+from cl_forge.rest.cmf.client import CmfClient
 
 __all__ = (
     "EuroEndpoint",
