@@ -1,5 +1,6 @@
 mod constants;
 mod native;
+mod client;
 
 use pyo3::prelude::*;
 use pyo3::types::{PyString, PyAny};
