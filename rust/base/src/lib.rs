@@ -1,6 +1,5 @@
 pub mod settings;
 pub mod errors;
-pub mod native;
 pub mod enums;
 pub mod client;
 

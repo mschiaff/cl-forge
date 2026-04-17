@@ -36,7 +36,7 @@ impl CmfClient {
     fn get<'py>(
             &self,
             py: Python<'py>,
-            path: &str,
+            path: String,
             fmt: Option<&str>
     ) -> PyResult<Bound<'py, PyAny>> {
         let fmt = ResponseFormat::try_from(fmt)?;
