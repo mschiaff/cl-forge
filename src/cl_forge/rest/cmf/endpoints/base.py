@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic.dataclasses import dataclass
 
 
@@ -8,3 +8,4 @@ from pydantic.dataclasses import dataclass
 class CmfEndpoint[T: BaseModel]:
     path: str
     model: type[T]
+    root_key: str | None = Field(default=None)
