@@ -1,3 +1,3 @@
-from cl_forge.core.impl.rs_cl_forge.rs_market import MarketClient
+from cl_forge.rest.market.client import AsyncMarketClient, MarketClient
 
-__all__ = ("MarketClient",)
+__all__ = ("AsyncMarketClient", "MarketClient",)
