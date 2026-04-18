@@ -12,6 +12,7 @@ class CmfClient(BaseCmfClient):
     def ipc(
             self,
             year: int | None = None,
+            *,
             raw: ResponseFormat | None = None
     ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str:
         endpoint = ipc.ipc_endpoint(year=year)
