@@ -7,6 +7,14 @@ from cl_forge.rest.cmf.types import ResponseFormat
 
 class CmfClient(BaseCmfClient):
     @overload
+    def ipc(
+        self,
+        year: None = ...,
+        month: None = ...,
+        *,
+        raw: None = ...,
+    ) -> IpcRecord: ...
+    @overload
     @deprecated("Month cannot be specified without year.")
     def ipc(
         self,
@@ -15,14 +23,6 @@ class CmfClient(BaseCmfClient):
         *,
         raw: ResponseFormat | None = ...,
     ) -> Never: ...
-    @overload
-    def ipc(
-        self,
-        year: None = ...,
-        month: None = ...,
-        *,
-        raw: None = ...,
-    ) -> IpcRecord: ...
     @overload
     def ipc(
         self,
