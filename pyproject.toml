@@ -147,7 +147,7 @@ all = [
 
 [tool.ruff]
 line-length = 90
-target-version = "py313"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "A", "C4", "SIM"]
@@ -156,3 +156,4 @@ ignore = []
 [tool.ruff.lint.per-file-ignores]
 "src/cl_forge/core/cmf_ipc.py" = ["A002"]
 "src/cl_forge/verify.pyi" = ["A002"]
+"src/cl_forge/core/compat.py" = ["F401"]

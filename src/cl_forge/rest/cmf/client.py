@@ -12,10 +12,11 @@ class CmfClient(BaseCmfClient):
     def ipc(
             self,
             year: int | None = None,
+            month: int | None = None,
             *,
             raw: ResponseFormat | None = None
     ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str:
-        endpoint = ipc.ipc_endpoint(year=year)
+        endpoint = ipc.ipc_endpoint(year=year, month=month)
 
         if raw and raw in FormatEnum:
             # Raises UnsupportedFormat on wrong format
