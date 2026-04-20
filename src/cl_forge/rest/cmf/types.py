@@ -45,6 +45,6 @@ class ModeType(
         ),
         BaseType
 ):
-    AFTER = "ipc/posteriores"
-    BEFORE = "ipc/anteriores"
-    BETWEEN = "ipc/periodo"
+    AFTER = "/ipc/posteriores"
+    BEFORE = "/ipc/anteriores"
+    BETWEEN = "/ipc/periodo"
