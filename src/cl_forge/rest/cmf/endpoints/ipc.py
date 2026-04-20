@@ -1,11 +1,9 @@
 from __future__ import annotations
 
+from cl_forge.core.types import RangeMode
 from cl_forge.rest.cmf.endpoints.base import CmfEndpoint
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
-from cl_forge.rest.cmf.types import (
-    ModeType,
-    RangeMode,
-)
+from cl_forge.rest.cmf.types import ModeType
 
 
 def ipc_endpoint(
