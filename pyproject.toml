@@ -59,7 +59,7 @@ include = [
     "README.md",
     "CONTRIBUTING.md",
     "LICENSE",
-    "src/cl_forge/*.pyi",
+    "src/cl_forge/**/*.pyi",
     "src/cl_forge/py.typed",
     "tests/*.py",
 ]

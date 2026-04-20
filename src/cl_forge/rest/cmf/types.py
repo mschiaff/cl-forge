@@ -5,17 +5,6 @@ from typing import NamedTuple
 from cl_forge.core.types import BaseType
 
 
-class FormatType(
-        NamedTuple(
-            "FormatType",
-            [("fmt", str)]
-        ),
-        BaseType
-):
-    JSON = "json"
-    XML = "xml"
-
-
 class ModeType(
         NamedTuple(
             "ModeType",

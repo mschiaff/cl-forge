@@ -1,8 +1,8 @@
 from typing import Any, Literal, overload
 
 from cl_forge.core.impl.rs_cl_forge.rs_cmf import BaseCmfClient  # type: ignore
+from cl_forge.core.types import RangeMode, ResponseFormat
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
-from cl_forge.rest.cmf.types import RangeMode, ResponseFormat
 
 class AsyncCmfClient(BaseCmfClient):
     @overload
@@ -112,7 +112,7 @@ class AsyncCmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             mode: RangeMode = ...,
-            raw: Literal["json"] = ...,
+            raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
     async def ipc_range(
@@ -123,7 +123,7 @@ class AsyncCmfClient(BaseCmfClient):
             end_year: int,
             end_month: None = ...,
             mode: RangeMode = ...,
-            raw: Literal["json"] = ...,
+            raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
     async def ipc_range(
@@ -134,7 +134,7 @@ class AsyncCmfClient(BaseCmfClient):
             end_year: int,
             end_month: int,
             mode: RangeMode = ...,
-            raw: Literal["json"] = ...,
+            raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
     async def ipc_range(
@@ -145,7 +145,7 @@ class AsyncCmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             mode: RangeMode = ...,
-            raw: Literal["xml"] = ...,
+            raw: Literal["xml"],
     ) -> str: ...
     @overload
     async def ipc_range(
@@ -156,7 +156,7 @@ class AsyncCmfClient(BaseCmfClient):
             end_year: int,
             end_month: None = ...,
             mode: RangeMode = ...,
-            raw: Literal["xml"] = ...,
+            raw: Literal["xml"],
     ) -> str: ...
     @overload
     async def ipc_range(
@@ -167,7 +167,7 @@ class AsyncCmfClient(BaseCmfClient):
             end_year: int,
             end_month: int,
             mode: RangeMode = ...,
-            raw: Literal["xml"] = ...,
+            raw: Literal["xml"],
     ) -> str: ...
     @overload
     async def ipc_range(

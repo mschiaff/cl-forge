@@ -3,10 +3,9 @@ from __future__ import annotations
 from typing import Any
 
 from cl_forge.core.impl.rs_cl_forge.rs_cmf import BaseCmfClient  # type: ignore
-from cl_forge.core.types import RangeMode, ResponseFormat
+from cl_forge.core.types import FormatType, RangeMode, ResponseFormat
 from cl_forge.rest.cmf.endpoints import ipc
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
-from cl_forge.rest.cmf.types import FormatType
 
 
 class AsyncCmfClient(BaseCmfClient):
