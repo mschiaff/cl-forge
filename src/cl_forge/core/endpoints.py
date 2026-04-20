@@ -13,7 +13,7 @@ from cl_forge.core.schemas import (
     UsdRecord,
     UtmRecord,
 )
-from cl_forge.rest.cmf.client import CmfClient
+from cl_forge.rest.cmf.clients.sync_ import CmfClient
 
 T = TypeVar("T", bound=CmfRecord)
 
