@@ -85,5 +85,4 @@ def ipc_range_endpoint(
 
         path = f"{_mode.path}/{start_year}/{end_year}"
         return CmfEndpoint(path=path, model=ListIpcRecord)
-
-    raise NotImplementedError(f"Unsupported range mode: {mode!r}")
+    raise ValueError("Invalid mode specified.")

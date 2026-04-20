@@ -11,10 +11,8 @@ class BaseTypeMeta(enum.EnumType):
     def __contains__(cls, value: str) -> bool:
         if isinstance(value, str):
             value = value.strip().lower()
-            return any(
-                member.name.lower() == value # type: ignore
-                for member in cls
-            )
+            members = (member.name.lower() for member in cls) # type: ignore
+            return any(member == value for member in members)
         return super().__contains__(value)
 
 
@@ -26,11 +24,7 @@ class BaseType(enum.Enum, metaclass=BaseTypeMeta):
             for member in cls:
                 if member.name.lower() == value:
                     return member
-            raise ValueError(f"Invalid item: {value!r}")
-        raise ValueError(
-            "Expected a 'str' value, but got "
-            f"{type(value).__name__!r}."
-        )
+        super()._missing_(value)
 
 
 class FormatType(
