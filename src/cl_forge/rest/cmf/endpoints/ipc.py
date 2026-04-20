@@ -9,6 +9,7 @@ from cl_forge.rest.cmf.types import (
 
 
 def ipc_endpoint(
+        *,
         year: int | None = None,
         month: int | None = None
 ) -> CmfEndpoint[IpcRecord] | CmfEndpoint[ListIpcRecord]:
