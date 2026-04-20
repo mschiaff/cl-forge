@@ -5,7 +5,7 @@ from typing import Any
 from cl_forge.core.impl.rs_cl_forge.rs_cmf import BaseCmfClient  # type: ignore
 from cl_forge.rest.cmf.endpoints import ipc
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
-from cl_forge.rest.cmf.types import FormatEnum, ResponseFormat
+from cl_forge.rest.cmf.types import FormatType, ResponseFormat
 
 
 class CmfClient(BaseCmfClient):
@@ -18,7 +18,7 @@ class CmfClient(BaseCmfClient):
     ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str:
         endpoint = ipc.ipc_endpoint(year=year, month=month)
 
-        if raw and raw in FormatEnum:
+        if raw and raw in FormatType:
             # Raises UnsupportedFormat on wrong format
             return self.get(path=endpoint.path, fmt=raw)
 
