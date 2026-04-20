@@ -1,61 +1,56 @@
 from __future__ import annotations
 
 import enum
-from typing import ClassVar, Literal
+from typing import Literal, NamedTuple
 
 type ResponseFormat = Literal["json", "xml"]
-
-class FormatEnum(enum.StrEnum):
-    JSON = enum.auto()
-    XML = enum.auto()
-
-
 type RangeMode = Literal["after", "before", "between"]
 
-class RangeModeEnum(enum.StrEnum):
-    AFTER = enum.auto()
-    BEFORE = enum.auto()
-    BETWEEN = enum.auto()
 
-class ReadOnlyMeta(type):
-    def __setattr__(cls, name, value):
-        raise AttributeError(
-            f"Cannot modify attribute {name!r} "
-            f"of {cls.__name__!r}"
+class BaseTypeMeta(enum.EnumType):
+    def __contains__(cls, value: str) -> bool:
+        if isinstance(value, str):
+            value = value.strip().lower()
+            return any(
+                member.name.lower() == value # type: ignore
+                for member in cls
+            )
+        return super().__contains__(value)
+
+
+class BaseType(enum.Enum, metaclass=BaseTypeMeta):
+    @classmethod
+    def _missing_(cls, value: str):
+        if isinstance(value, str):
+            value = value.strip().lower()
+            for member in cls:
+                if member.name.lower() == value:
+                    return member
+            raise ValueError(f"Invalid item: {value!r}")
+        raise ValueError(
+            "Expected a 'str' value, but got "
+            f"{type(value).__name__!r}."
         )
 
-class RangeType(metaclass=ReadOnlyMeta):
-    path: ClassVar[str]
 
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
+class FormatType(
+        NamedTuple(
+            "FormatType",
+            [("fmt", str)]
+        ),
+        BaseType
+):
+    JSON = "json"
+    XML = "xml"
 
-        if "path" not in cls.__dict__:
-            raise NotImplementedError(
-                "Subclasses of 'RangeType' must "
-                "define a 'path' class variable."
-            )
-        
-        _name = cls.__name__
-        path = cls.__dict__.get("path")
 
-        if not isinstance(path, str):
-            raise TypeError(
-                "The 'path' class variable in "
-                f"{_name!r} must be of type 'str'."
-            )
-        
-        if not path or path is None:
-            raise ValueError(
-                f"The 'path' class variable in {_name!r} "
-                "cannot be an empty string or None."
-            )
-
-class RangeAfter(RangeType):
-    path = "ipc/posteriores"
-
-class RangeBefore(RangeType):
-    path = "ipc/anteriores"
-
-class RangeBetween(RangeType):
-    path = "ipc/periodo"
+class ModeType(
+        NamedTuple(
+            "ModeType",
+            [("path", str)]
+        ),
+        BaseType
+):
+    AFTER = "ipc/posteriores"
+    BEFORE = "ipc/anteriores"
+    BETWEEN = "ipc/periodo"
