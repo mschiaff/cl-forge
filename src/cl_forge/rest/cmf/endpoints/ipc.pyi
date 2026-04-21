@@ -1,8 +1,8 @@
 from typing import overload
 
+from cl_forge.core.types import RangeMode
 from cl_forge.rest.cmf.endpoints.base import CmfEndpoint
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
-from cl_forge.rest.cmf.types import RangeMode
 
 @overload
 def ipc_endpoint(

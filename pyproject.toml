@@ -59,7 +59,7 @@ include = [
     "README.md",
     "CONTRIBUTING.md",
     "LICENSE",
-    "src/cl_forge/*.pyi",
+    "src/cl_forge/**/*.pyi",
     "src/cl_forge/py.typed",
     "tests/*.py",
 ]
@@ -71,6 +71,7 @@ bindings = "pyo3"
 test = [
     "ruff>=0.15.0",
     "pytest>=8.0.0",
+    "pyright>=1.1.408",
 ]
 
 build = [

@@ -42,7 +42,9 @@ fn build_response<'py>(
     }
 }
 
-#[pyclass(subclass, module = "cl_forge.core.impl.rs_cl_forge.rs_market")]
+#[pyclass(subclass, module = "cl_forge.core.impl.market")]
+/// Base client for Market API. Not intended to be used directly,
+/// but can be subclassed for specific APIs.
 struct BaseMarketClient {
     inner: client::BaseMarketClient,
 }
@@ -57,17 +59,20 @@ impl BaseMarketClient {
     }
     
     #[getter]
+    /// Base URL of the API.
     fn base_url(&self) -> String {
         self.inner.client.base_url.clone()
     }
     
     #[getter]
+    /// API key used for authentication.
     fn api_key(&self) -> String {
         self.inner.client.api_key.clone()
     }
 
     //noinspection DuplicatedCode
     #[pyo3(signature = (path, fmt="json", params=None))]
+    /// Synchronous GET request to the API.
     fn get<'py>(
         &self,
         py: Python<'py>,
@@ -84,6 +89,7 @@ impl BaseMarketClient {
 
     //noinspection DuplicatedCode
     #[pyo3(signature = (path, fmt="json", params=None))]
+    /// Asynchronous version of `get` method.
     fn aget<'py>(
         &self,
         py: Python<'py>,
