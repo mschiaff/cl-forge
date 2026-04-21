@@ -146,15 +146,37 @@ all = [
     "cl-forge[notebook]",
 ]
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+junit_family = "legacy"
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+
 [tool.ruff]
-line-length = 90
+line-length = 100
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "N", "UP", "B", "A", "C4", "SIM"]
-ignore = []
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes errors
+    "I",    # isort errors
+    "N",    # naming conventions
+    "UP",   # pyupgrade errors
+    "B",    # bugbear errors
+    "A",    # flake8-annotations errors
+    "C4",   # flake8-comprehensions errors
+    "TC",   # flake8-type-checking errors
+    "SIM",   # flake8-simplify errors
+    "RUF",  # ruff-specific rules
+]
+#ignore = []
 
-[tool.ruff.lint.per-file-ignores]
-"src/cl_forge/core/cmf_ipc.py" = ["A002"]
-"src/cl_forge/verify.pyi" = ["A002"]
-"src/cl_forge/core/compat.py" = ["F401"]
+#[tool.ruff.lint.per-file-ignores]
+#src/cl_forge/... = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["cl_forge"]
