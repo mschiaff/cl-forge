@@ -55,36 +55,7 @@ def ipc_range_endpoint(
         return CmfEndpoint(path=path, model=ListIpcRecord)
 
     if _mode is ModeType.BETWEEN:
-        if not end_year:
-            raise ValueError(
-                "End year must be specified for 'between' mode."
-            )
-        if start_year > end_year:
-            raise ValueError(
-                "Start year cannot be greater than "
-                "end year for 'between' mode."
-            )
-        if start_month and not end_month:
-            raise ValueError(
-                "End month must be specified if start "
-                "month is specified for 'between' mode."
-            )
-        if not start_month and end_month:
-            raise ValueError(
-                "Start month must be specified if end "
-                "month is specified for 'between' mode."
-            )
-        if start_month and end_month:
-            if (start_year, start_month) > (end_year, end_month):
-                raise ValueError(
-                    "Start date cannot be greater than "
-                    "end date for 'between' mode."
-                )
-            if (start_year, start_month) == (end_year, end_month):
-                raise ValueError(
-                    "For individual month query, use the 'ipc' method."
-                )
-
+        if helpers.is_range_between_months(start_year, start_month, end_year, end_month, "ipc"):
             path = f"{_mode.path}/{start_year}/{start_month}/{end_year}/{end_month}"
             return CmfEndpoint(path=path, model=ListIpcRecord)
 
