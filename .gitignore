@@ -42,7 +42,6 @@ notebooks/
 
 # IDEs
 .idea/
-.vscode/
 
 # Rust
 /target
