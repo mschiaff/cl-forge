@@ -36,21 +36,15 @@ venv/
 ENV/
 
 # Jupyter
-.ipynb_checkpoints
 *.ipynb
+notebooks/
+.ipynb_checkpoints
 
 # IDEs
 .idea/
-.vscode/
 
 # Rust
 /target
 
 #macOS
 .DS_Store
-
-# Shell scripts
-*.sh
-
-# Codex
-skills/
