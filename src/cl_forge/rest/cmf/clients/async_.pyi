@@ -1,8 +1,8 @@
 from typing import Any, Literal, overload
 
 from cl_forge.core.impl.cmf import BaseCmfClient
-from cl_forge.core.types import RangeMode, ResponseFormat
-from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
+from cl_forge.core.types import RangeMode
+from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord, ListUfRecord, UfRecord
 
 class AsyncCmfClient(BaseCmfClient):
     @overload
@@ -61,14 +61,6 @@ class AsyncCmfClient(BaseCmfClient):
             month: int,
             raw: Literal["xml"],
     ) -> str: ...
-    @overload
-    async def ipc(
-            self,
-            *,
-            year: int | None = ...,
-            month: int | None = ...,
-            raw: ResponseFormat | None = ...,
-    ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str: ...
 
     @overload
     async def ipc_range(
@@ -169,14 +161,85 @@ class AsyncCmfClient(BaseCmfClient):
             mode: RangeMode = ...,
             raw: Literal["xml"],
     ) -> str: ...
+
     @overload
-    async def ipc_range(
+    async def uf(
             self,
             *,
-            start_year: int,
-            start_month: int | None = ...,
-            end_year: int | None = ...,
-            end_month: int | None = ...,
-            mode: RangeMode = ...,
-            raw: ResponseFormat | None = ...,
-    ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str: ...
+            year: None = ...,
+            month: None = ...,
+            day: None = ...,
+            raw: None = ...,
+    ) -> UfRecord: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: int,
+            month: int | None = ...,
+            day: None = ...,
+            raw: None = ...,
+    ) -> ListUfRecord: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: int,
+            month: int,
+            day: int,
+            raw: None = ...,
+    ) -> UfRecord: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: None = ...,
+            month: None = ...,
+            day: None = ...,
+            raw: Literal["json"],
+    ) -> dict[str, Any]: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: int,
+            month: int | None = ...,
+            day: None = ...,
+            raw: Literal["json"],
+    ) -> dict[str, Any]: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: int,
+            month: int,
+            day: int | None = ...,
+            raw: Literal["json"],
+    ) -> dict[str, Any]: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: None = ...,
+            month: None = ...,
+            day: None = ...,
+            raw: Literal["xml"],
+    ) -> str: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: int,
+            month: int | None = ...,
+            day: None = ...,
+            raw: Literal["xml"],
+    ) -> str: ...
+    @overload
+    async def uf(
+            self,
+            *,
+            year: int,
+            month: int,
+            day: int | None = ...,
+            raw: Literal["xml"],
+    ) -> str: ...
