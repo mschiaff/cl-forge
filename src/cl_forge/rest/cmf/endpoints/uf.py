@@ -33,6 +33,6 @@ def uf_endpoint(
         raise ValueError("Month cannot be specified without year.")
     if year and not month:
         return CmfEndpoint(path=path, model=ListUfRecord)
-    if year and month:
+    if year and month and not day:
         return CmfEndpoint(path=path, model=ListUfRecord)
     return CmfEndpoint(path=path, model=UfRecord)
