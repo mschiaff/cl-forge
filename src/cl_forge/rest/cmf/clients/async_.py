@@ -1,11 +1,18 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from cl_forge.core.impl.cmf import BaseCmfClient
 from cl_forge.core.types import FormatType, RangeMode, ResponseFormat
-from cl_forge.rest.cmf.endpoints import ipc
-from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
+from cl_forge.rest.cmf.endpoints import ipc, uf
+
+if TYPE_CHECKING:
+    from cl_forge.rest.cmf.schemas import (
+        IpcRecord,
+        ListIpcRecord,
+        ListUfRecord,
+        UfRecord,
+    )
 
 
 class AsyncCmfClient(BaseCmfClient):
@@ -42,6 +49,23 @@ class AsyncCmfClient(BaseCmfClient):
             end_month=end_month,
             mode=mode
         )
+
+        if raw and raw in FormatType:
+            # Raises UnsupportedFormat on wrong format
+            return await self.aget(path=endpoint.path, fmt=raw)
+
+        response = await self.aget(path=endpoint.path)
+        return endpoint.model.model_validate(response)
+    
+    async def uf(
+            self,
+            *,
+            year: int | None = None,
+            month: int | None = None,
+            day: int | None = None,
+            raw: ResponseFormat | None = None
+    ) -> UfRecord | ListUfRecord | dict[str, Any] | str:
+        endpoint = uf.uf_endpoint(year=year, month=month, day=day)
 
         if raw and raw in FormatType:
             # Raises UnsupportedFormat on wrong format
