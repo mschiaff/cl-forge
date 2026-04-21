@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-from cl_forge.core.types import RangeMode
+from typing import TYPE_CHECKING
+
 from cl_forge.rest.cmf.endpoints.base import CmfEndpoint
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
 from cl_forge.rest.cmf.types import ModeType
+
+if TYPE_CHECKING:
+    from cl_forge.core.types import RangeMode
 
 
 def ipc_endpoint(
@@ -31,7 +35,7 @@ def ipc_range_endpoint(
         end_month: int | None = None,
         mode: RangeMode = "after"
 ) -> CmfEndpoint[ListIpcRecord]:
-    if isinstance(mode, str):
+    if isinstance(mode, str): # type: ignore
         # ModeType will raise ValueError on invalid type
         # or value, so we don't need to check for that here.
         _mode = ModeType(mode)
