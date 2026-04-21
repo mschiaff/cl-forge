@@ -4,7 +4,7 @@ description = "Simple yet powerful Chilean and other tools written in Rust and P
 readme = { file = "README.md", content-type = "text/markdown" }
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.15"
 dynamic = ["version"]
 
 authors = [
@@ -69,19 +69,19 @@ bindings = "pyo3"
 [dependency-groups]
 # Development
 test = [
-    "ruff>=0.15.0",
-    "pytest>=8.0.0",
-    "pyright>=1.1.408",
+    "ruff>=0.15.0,<0.16.0",
+    "pytest>=9.0.0,<10.0.0",
+    "pyright>=1.1.408,<1.2.0",
 ]
 
 build = [
-    "maturin>=1.11.5,<2.0",
+    "maturin>=1.11.5,<2.0.0",
 ]
 
 docs = [
-    "griffe-pydantic>=1.2.0",
-    "mkdocs-material>=9.7.1",
-    "mkdocstrings[python]>=1.0.2",
+    "griffe-pydantic>=1.2.0,<2.0.0",
+    "mkdocs-material>=9.7.1,<10.0.0",
+    "mkdocstrings[python]>=1.0.2,<2.0.0",
 ]
 dev = [
     {include-group = "build"},
@@ -93,16 +93,16 @@ dev = [
 [project.optional-dependencies]
 # Interoperability
 pyarrow = [
-    "pyarrow>=23.0.0",
+    "pyarrow>=23.0.0,<24.0.0",
 ]
 polars = [
     "cl-forge[pyarrow]",
-    "polars>=1.38.0",
+    "polars>=1.40.0,<1.50.0",
 ]
 pandas = [
     "cl-forge[pyarrow]",
-    "pandas-stubs>=3.0.0.260204",
-    "pandas[performance]>=3.0.0",
+    "pandas-stubs>=3.0.0.260204,<4.0.0",
+    "pandas[performance]>=3.0.0,<4.0.0",
 ]
 interop = [
     "cl-forge[polars]",
@@ -111,13 +111,13 @@ interop = [
 
 # Excel
 calamine = [
-    "fastexcel>=0.19.0",
+    "fastexcel>=0.19.0,<0.20.0",
 ]
 xlsxwriter = [
-    "xlsxwriter>=3.2.9",
+    "xlsxwriter>=3.2.9,<3.3.0",
 ]
 openpyxl = [
-    "openpyxl>=3.1.5",
+    "openpyxl>=3.1.5,<3.2.0",
 ]
 excel = [
     "cl-forge[calamine]",
@@ -134,9 +134,9 @@ analytics = [
 
 # Jupyter Notebook
 notebook = [
-    "ipykernel>=7.1.0",
-    "ipywidgets>=8.1.8",
-    "notebook>=7.5.3",
+    "ipykernel>=7.1.0,<8.0.0",
+    "ipywidgets>=8.1.8,<9.0.0",
+    "notebook>=7.5.3,<8.0.0",
 ]
 
 # All

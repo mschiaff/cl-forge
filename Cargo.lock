@@ -38,7 +38,7 @@ dependencies = [
 
 [[package]]
 name = "base"
-version = "1.0.2"
+version = "2.0.0-alpha.1"
 dependencies = [
  "dotenv",
  "pyo3",
@@ -115,7 +115,7 @@ dependencies = [
 
 [[package]]
 name = "cl_forge"
-version = "1.0.2"
+version = "2.0.0-alpha.1"
 dependencies = [
  "base",
  "cmf",
@@ -135,7 +135,7 @@ dependencies = [
 
 [[package]]
 name = "cmf"
-version = "1.0.2"
+version = "2.0.0-alpha.1"
 dependencies = [
  "base",
  "pyo3",
@@ -720,7 +720,7 @@ checksum = "112b39cec0b298b6c1999fee3e31427f74f676e4cb9879ed1a121b43661a4154"
 
 [[package]]
 name = "market"
-version = "1.0.2"
+version = "2.0.0-alpha.1"
 dependencies = [
  "base",
  "pyo3",
@@ -1578,7 +1578,7 @@ checksum = "b6c140620e7ffbb22c2dee59cafe6084a59b5ffc27a8859a5f0d494b5d52b6be"
 
 [[package]]
 name = "verify"
-version = "1.0.2"
+version = "2.0.0-alpha.1"
 dependencies = [
  "pyo3",
  "rand 0.10.1",
