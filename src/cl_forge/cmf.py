@@ -1,3 +1,4 @@
+#TODO: Remove this entire module when ready with refactorin CMF endpoints
 from cl_forge.core.endpoints import (
     EuroEndpoint,
     IpcEndpoint,
