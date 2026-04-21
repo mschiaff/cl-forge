@@ -19,7 +19,9 @@ fn build_response<'py>(
 }
 
 
-#[pyclass(subclass, module = "cl_forge.core.impl.rs_cl_forge.rs_cmf")]
+#[pyclass(subclass, module = "cl_forge.core.impl.cmf")]
+/// Base client for CMF API. Not intended to be used directly,
+/// but can be subclassed for specific APIs.
 struct BaseCmfClient {
     inner: client::BaseCmfClient,
 }
@@ -34,16 +36,19 @@ impl BaseCmfClient {
     }
 
     #[getter]
+    /// Base URL of the API.
     fn base_url(&self) -> String {
         self.inner.client.base_url.clone()
     }
 
     #[getter]
+    /// API key used for authentication.
     fn api_key(&self) -> String {
         self.inner.client.api_key.clone()
     }
 
     #[pyo3(signature = (path, fmt="json"))]
+    /// Synchronous GET request to the API.
     fn get<'py>(
         &self,
         py: Python<'py>,
@@ -58,6 +63,7 @@ impl BaseCmfClient {
     }
 
     #[pyo3(signature = (path, fmt="json"))]
+    /// Asynchronous version of `get` method.
     fn aget<'py>(
         &self,
         py: Python<'py>,

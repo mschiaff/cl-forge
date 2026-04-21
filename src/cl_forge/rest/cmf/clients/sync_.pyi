@@ -1,6 +1,6 @@
 from typing import Any, Literal, overload
 
-from cl_forge.core.impl.rs_cl_forge.rs_cmf import BaseCmfClient  # type: ignore
+from cl_forge.core.impl.cmf import BaseCmfClient
 from cl_forge.core.types import RangeMode, ResponseFormat
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
 

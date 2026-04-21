@@ -17,7 +17,6 @@ version = "0.15.0"
 
 [workspace.dependencies.pyo3]
 version = "0.28.3"
-features = ["extension-module"]
 
 [workspace.dependencies.pyo3-async-runtimes]
 version = "0.28.0"
