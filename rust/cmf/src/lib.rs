@@ -1,5 +1,5 @@
 mod constants;
-mod native;
+mod client;
 
 use pyo3::prelude::*;
 use pyo3::types::{PyString, PyAny};
@@ -7,63 +7,97 @@ use pyo3::types::{PyString, PyAny};
 use base::enums::ResponseFormat;
 
 
-#[pyclass]
-struct CmfClient {
-    client: native::CmfClient,
+fn build_response<'py>(
+    py: Python<'py>,
+    fmt: ResponseFormat,
+    body: &str
+) -> PyResult<Bound<'py, PyAny>> {
+    match fmt {
+        ResponseFormat::Json => base::json_to_dict(py, body),
+        ResponseFormat::Xml => Ok(PyString::new(py, body).into_any()),
+    }
+}
+
+
+#[pyclass(subclass, module = "cl_forge.core.impl.cmf")]
+/// Base client for CMF API. Not intended to be used directly,
+/// but can be subclassed for specific APIs.
+struct BaseCmfClient {
+    inner: client::BaseCmfClient,
 }
 
 #[pymethods]
-impl CmfClient {
+impl BaseCmfClient {
     #[new]
     fn new(api_key: &str) -> PyResult<Self> {
-        let client = native::CmfClient::new(api_key)?;
+        let inner = client::BaseCmfClient::new(api_key)?;
         
-        Ok(Self { client })
+        Ok(Self { inner })
     }
-    
+
     #[getter]
+    /// Base URL of the API.
     fn base_url(&self) -> String {
-        self.client.base.base_url.clone()
+        self.inner.client.base_url.clone()
     }
-    
+
     #[getter]
+    /// API key used for authentication.
     fn api_key(&self) -> String {
-        self.client.base.api_key.clone()
+        self.inner.client.api_key.clone()
     }
 
-    //noinspection DuplicatedCode
     #[pyo3(signature = (path, fmt="json"))]
+    /// Synchronous GET request to the API.
     fn get<'py>(
-            &self,
-            py: Python<'py>,
-            path: String,
-            fmt: Option<&str>
+        &self,
+        py: Python<'py>,
+        path: &str,
+        fmt: Option<&str>
     ) -> PyResult<Bound<'py, PyAny>> {
+        let path = path.to_string();
         let fmt = ResponseFormat::try_from(fmt)?;
-        let body: String = self.client.get(path, fmt)?;
-        
-        match fmt {
-            ResponseFormat::Json => {
-                Ok(base::json_to_dict(py, &body)?)
-            }
-            ResponseFormat::Xml => {
-                Ok(PyString::new(py, &body).into_any())
-            }
-        }
+        let response = self.inner.get(path, fmt)?;
+
+        build_response(py, fmt, &response)
     }
 
-    fn __repr__(&self) -> String {
-        format!(
-            "CmfClient(api_key='{}', base_url='{}')",
-            self.api_key(),
-            self.base_url(),
-        )
+    #[pyo3(signature = (path, fmt="json"))]
+    /// Asynchronous version of `get` method.
+    fn aget<'py>(
+        &self,
+        py: Python<'py>,
+        path: &str,
+        fmt: Option<&str>
+    ) -> PyResult<Bound<'py, PyAny>> {
+        let inner = self.inner.clone();
+        let path = path.to_string();
+        let fmt = ResponseFormat::try_from(fmt)?;
+
+        pyo3_async_runtimes::tokio::future_into_py(py, async move {
+            let response = inner.aget(path, fmt).await?;
+            
+            Python::attach(|py|{
+                build_response(py, fmt, &response)
+                    .map(|object| object.unbind())
+            })
+        })
+    }
+
+    fn __repr__(slf: Bound<'_, Self>) -> PyResult<String> {
+        let class_name = slf.get_type().name()?;
+        let base_url = slf.borrow().base_url();
+        Ok(format!(
+            "{}(base_url='{}')",
+            class_name,
+            base_url,
+        ))
     }
 }
 
 
 #[pymodule]
 pub fn rs_cmf(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<CmfClient>()?;
+    m.add_class::<BaseCmfClient>()?;
     Ok(())
 }

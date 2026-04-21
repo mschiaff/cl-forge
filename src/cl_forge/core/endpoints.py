@@ -5,7 +5,6 @@ from datetime import datetime
 from functools import lru_cache
 from typing import TypeVar
 
-from cl_forge.core.impl.rs_cl_forge.rs_cmf import CmfClient
 from cl_forge.core.schemas import (
     CmfRecord,
     EuroRecord,
@@ -14,6 +13,7 @@ from cl_forge.core.schemas import (
     UsdRecord,
     UtmRecord,
 )
+from cl_forge.rest.cmf.clients.sync_ import CmfClient
 
 T = TypeVar("T", bound=CmfRecord)
 

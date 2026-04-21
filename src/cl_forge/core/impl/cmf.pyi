@@ -1,6 +1,6 @@
-from typing import Literal, overload
+from typing import Any, Literal, overload
 
-class CmfClient:
+class BaseCmfClient:
     """
     Base client for interacting with the CMF API.
 
@@ -63,8 +63,7 @@ class CmfClient:
             self,
             path: str,
             fmt: Literal["json"] = ...
-    ) -> dict[str, list[dict[str, str]]]: ...
-
+    ) -> dict[str, Any]: ...
     @overload
     def get(
             self,
@@ -76,7 +75,7 @@ class CmfClient:
             self,
             path: str,
             fmt: Literal["json", "xml"] = "json"
-    ) -> dict[str, list[dict[str, str]]] | str:
+    ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified CMF API endpoint.
 
@@ -94,7 +93,49 @@ class CmfClient:
 
         Returns
         -------
-        dict[str, list[dict[str, str]]] | str
+        dict[str, Any] | str
+            The response from the CMF API. Returns a ``dict`` if format is
+            ``'json'`` and a ``str`` if format is ``'xml'``.
+        """
+    
+    @overload
+    async def aget(
+            self,
+            path: str,
+            fmt: Literal["json"] = ...
+    ) -> dict[str, Any]: ...
+    @overload
+    async def aget(
+            self,
+            path: str,
+            fmt: Literal["xml"]
+    ) -> str: ...
+
+    async def aget(
+            self,
+            path: str,
+            fmt: Literal["json", "xml"] = "json"
+    ) -> dict[str, Any] | str:
+        """
+        Async implementation of :meth:`get`.
+        
+        Sends a GET request to the specified CMF API endpoint.
+
+        Notes
+        -----
+        See the [API Docs](https://api.cmfchile.cl/documentacion/index.html)
+        for all the available endpoints.
+
+        Parameters
+        ----------
+        path : str
+            The API endpoint path. Must start with ``'/'``.
+        fmt : Literal["json", "xml"]
+            The format of the response. Can be ``'json'``, ``'xml'``.
+
+        Returns
+        -------
+        dict[str, Any] | str
             The response from the CMF API. Returns a ``dict`` if format is
             ``'json'`` and a ``str`` if format is ``'xml'``.
         """

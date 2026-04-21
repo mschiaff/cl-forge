@@ -1,6 +1,6 @@
 from typing import Any, Literal, overload
 
-from cl_forge.core.impl.rs_cl_forge.rs_market import BaseMarketClient  # type: ignore
+from cl_forge.core.impl.market import BaseMarketClient
 from cl_forge.rest.market.schemas import TenderDetailsResponse, TenderResponse
 
 class MarketClient(BaseMarketClient):
