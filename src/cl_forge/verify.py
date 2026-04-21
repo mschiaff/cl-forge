@@ -1,4 +1,4 @@
-from cl_forge.core.impl.rs_cl_forge.rs_verify import (
+from cl_forge.core.impl.verify import (
     Ppu,
     calculate_verifier,
     generate,
@@ -10,8 +10,8 @@ from cl_forge.core.impl.rs_cl_forge.rs_verify import (
 __all__ = (
     "Ppu",
     "calculate_verifier",
+    "generate",
     "normalize_ppu",
     "ppu_to_numeric",
     "validate_rut",
-    "generate",
 )
