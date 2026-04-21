@@ -36,8 +36,9 @@ venv/
 ENV/
 
 # Jupyter
-.ipynb_checkpoints
 *.ipynb
+notebooks/
+.ipynb_checkpoints
 
 # IDEs
 .idea/
@@ -48,9 +49,3 @@ ENV/
 
 #macOS
 .DS_Store
-
-# Shell scripts
-*.sh
-
-# Codex
-skills/
