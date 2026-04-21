@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from cl_forge.rest.cmf import helpers
 from cl_forge.rest.cmf.endpoints.base import CmfEndpoint
 from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
 from cl_forge.rest.cmf.types import ModeType
@@ -15,11 +16,14 @@ def ipc_endpoint(
         year: int | None = None,
         month: int | None = None
 ) -> CmfEndpoint[IpcRecord] | CmfEndpoint[ListIpcRecord]:
+    helpers.validate_month(month) if month else None
+    
     path = (
         f"/ipc/{year}/{month}" if year and month
-        else f"/ipc/{year}" if year
-        else "/ipc"
+            else f"/ipc/{year}" if year
+            else "/ipc"
     )
+    
     if year and not month:
         return CmfEndpoint(path=path, model=ListIpcRecord)
     if not year and month:
@@ -35,15 +39,13 @@ def ipc_range_endpoint(
         end_month: int | None = None,
         mode: RangeMode = "after"
 ) -> CmfEndpoint[ListIpcRecord]:
+    helpers.validate_month(start_month, "start") if start_month else None
+    helpers.validate_month(end_month, "end") if end_month else None
+
     if isinstance(mode, str): # type: ignore
         # ModeType will raise ValueError on invalid type
         # or value, so we don't need to check for that here.
         _mode = ModeType(mode)
-
-    if start_month and not (1 <= start_month <= 12):
-        raise ValueError("Start month must be between 1 and 12.")
-    if end_month and not (1 <= end_month <= 12):
-        raise ValueError("End month must be between 1 and 12.")
 
     if _mode in (ModeType.AFTER, ModeType.BEFORE):
         if not start_month:
