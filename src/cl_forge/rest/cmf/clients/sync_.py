@@ -73,3 +73,30 @@ class CmfClient(BaseCmfClient):
 
         response = self.get(path=endpoint.path)
         return endpoint.model.model_validate(response)
+    
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int | None = None,
+            end_year: int | None = None,
+            end_month: int | None = None,
+            day: int | None = None,
+            mode: RangeMode = "after",
+            raw: ResponseFormat | None = None
+    ) -> ListUfRecord | dict[str, Any] | str:
+        endpoint = uf.uf_range_endpoint(
+            start_year=start_year,
+            start_month=start_month,
+            end_year=end_year,
+            end_month=end_month,
+            day=day,
+            mode=mode
+        )
+
+        if raw and raw in FormatEnum:
+            # Raises UnsupportedFormat on wrong format
+            return self.get(path=endpoint.path, fmt=raw)
+
+        response = self.get(path=endpoint.path)
+        return endpoint.model.model_validate(response)
