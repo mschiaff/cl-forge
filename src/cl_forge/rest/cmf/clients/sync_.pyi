@@ -69,7 +69,7 @@ class CmfClient(BaseCmfClient):
             start_month: int | None = ...,
             end_year: None = ...,
             end_month: None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: None = ...,
     ) -> ListIpcRecord: ...
     @overload
@@ -102,7 +102,7 @@ class CmfClient(BaseCmfClient):
             start_month: int | None = ...,
             end_year: None = ...,
             end_month: None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
@@ -135,7 +135,7 @@ class CmfClient(BaseCmfClient):
             start_month: int | None = ...,
             end_year: None = ...,
             end_month: None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: Literal["xml"],
     ) -> str: ...
     @overload
@@ -252,7 +252,7 @@ class CmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             day: None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: None = ...,
     ) -> ListUfRecord: ...
     @overload
@@ -264,7 +264,7 @@ class CmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             day: None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: Literal["json"]
     ) -> dict[str, Any]: ...
     @overload
@@ -276,7 +276,7 @@ class CmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             day: None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: Literal["xml"]
     ) -> str: ...
     @overload
@@ -288,7 +288,7 @@ class CmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             day: int | None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: None = ...,
     ) -> ListUfRecord: ...
     @overload
@@ -300,7 +300,7 @@ class CmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             day: int | None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: Literal["json"]
     ) -> dict[str, Any]: ...
     @overload
@@ -312,7 +312,7 @@ class CmfClient(BaseCmfClient):
             end_year: None = ...,
             end_month: None = ...,
             day: int | None = ...,
-            mode: Literal["after", "before"],
+            mode: Literal["after", "before"] = ...,
             raw: Literal["xml"]
     ) -> str: ...
     @overload
