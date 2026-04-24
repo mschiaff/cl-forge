@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from cl_forge.core.impl.cmf import BaseCmfClient
-from cl_forge.core.types import FormatType, RangeMode, ResponseFormat
+from cl_forge.core.types import FormatEnum, RangeMode, ResponseFormat
 from cl_forge.rest.cmf.endpoints import ipc, uf
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ class CmfClient(BaseCmfClient):
     ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str:
         endpoint = ipc.ipc_endpoint(year=year, month=month)
 
-        if raw and raw in FormatType:
+        if raw and raw in FormatEnum:
             # Raises UnsupportedFormat on wrong format
             return self.get(path=endpoint.path, fmt=raw)
 
@@ -50,7 +50,7 @@ class CmfClient(BaseCmfClient):
             mode=mode
         )
 
-        if raw and raw in FormatType:
+        if raw and raw in FormatEnum:
             # Raises UnsupportedFormat on wrong format
             return self.get(path=endpoint.path, fmt=raw)
 
@@ -67,7 +67,7 @@ class CmfClient(BaseCmfClient):
     ) -> UfRecord | ListUfRecord | dict[str, Any] | str:
         endpoint = uf.uf_endpoint(year=year, month=month, day=day)
 
-        if raw and raw in FormatType:
+        if raw and raw in FormatEnum:
             # Raises UnsupportedFormat on wrong format
             return self.get(path=endpoint.path, fmt=raw)
 
