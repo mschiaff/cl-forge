@@ -1,4 +1,4 @@
-from typing import overload
+from typing import Literal, overload
 
 from cl_forge.core.types import RangeMode
 from cl_forge.rest.cmf.endpoints.base import CmfEndpoint
@@ -33,14 +33,18 @@ def ipc_range_endpoint(
         *,
         start_year: int,
         start_month: int | None = ...,
-        mode: RangeMode = ...
+        end_year: None = ...,
+        end_month: None = ...,
+        mode: Literal["after", "before"]
 ) -> CmfEndpoint[ListIpcRecord]: ...
 @overload
 def ipc_range_endpoint(
         *,
         start_year: int,
+        start_month: None = ...,
         end_year: int,
-        mode: RangeMode = ...
+        end_month: None = ...,
+        mode: Literal["between"]
 ) -> CmfEndpoint[ListIpcRecord]: ...
 @overload
 def ipc_range_endpoint(
@@ -49,7 +53,7 @@ def ipc_range_endpoint(
         start_month: int,
         end_year: int,
         end_month: int,
-        mode: RangeMode = ...
+        mode: Literal["between"]
 ) -> CmfEndpoint[ListIpcRecord]: ...
 @overload
 def ipc_range_endpoint(

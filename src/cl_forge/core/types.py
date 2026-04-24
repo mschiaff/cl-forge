@@ -1,38 +1,47 @@
 from __future__ import annotations
 
-from enum import Enum, EnumType
-from typing import Literal, NamedTuple
+import enum
+from typing import Literal
 
 type ResponseFormat = Literal["json", "xml"]
 type RangeMode = Literal["after", "before", "between"]
 
 
-class BaseTypeMeta(EnumType):
-    def __contains__(cls, value: object) -> bool:
-        if isinstance(value, str):
-            value = value.strip().lower()
-            members = (member.name.lower() for member in cls) # type: ignore
-            return any(member == value for member in members)
-        return super().__contains__(value)
-
-
-class BaseType(Enum, metaclass=BaseTypeMeta):
+class BaseStrEnum(enum.StrEnum):
     @classmethod
-    def _missing_(cls, value: object):
+    def _missing_(cls, value: object) -> BaseStrEnum:
         if isinstance(value, str):
-            value = value.strip().lower()
+            value = value.lower()
             for member in cls:
-                if member.name.lower() == value:
+                if member.lowercase == value:
                     return member
-        super()._missing_(value)
+        return super()._missing_(value)
+    
+    @enum.property
+    def lowercase(self) -> str:
+        """Lowercase name of the enum member."""
+        return self.name.lower()
+    
+    @enum.property
+    def private(self) -> str:
+        """Lowercase private name of the enum member."""
+        return f"_{self.lowercase}"
 
 
-class FormatType(
-        NamedTuple(
-            "FormatType",
-            [("fmt", str)]
-        ),
-        BaseType
-):
-    JSON = "json"
-    XML = "xml"
+class FormatEnum(BaseStrEnum):
+    JSON = enum.auto()
+    XML = enum.auto()
+
+
+class EndpointEnum(BaseStrEnum):
+    IPC = enum.auto()
+    UF = enum.auto()
+    USD = enum.auto()
+    EURO = enum.auto()
+    UTM = enum.auto()
+
+
+class ModeEnum(BaseStrEnum):
+    AFTER = "posteriores"
+    BEFORE = "anteriores"
+    BETWEEN = "periodo"

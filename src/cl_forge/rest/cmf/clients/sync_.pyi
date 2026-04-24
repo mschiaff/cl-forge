@@ -1,8 +1,7 @@
 from typing import Any, Literal, overload
 
 from cl_forge.core.impl.cmf import BaseCmfClient
-from cl_forge.core.types import RangeMode, ResponseFormat
-from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord
+from cl_forge.rest.cmf.schemas import IpcRecord, ListIpcRecord, ListUfRecord, UfRecord
 
 class CmfClient(BaseCmfClient):
     @overload
@@ -61,14 +60,6 @@ class CmfClient(BaseCmfClient):
             month: int,
             raw: Literal["xml"],
     ) -> str: ...
-    @overload
-    def ipc(
-            self,
-            *,
-            year: int | None = ...,
-            month: int | None = ...,
-            raw: ResponseFormat | None = ...,
-    ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str: ...
 
     @overload
     def ipc_range(
@@ -78,7 +69,7 @@ class CmfClient(BaseCmfClient):
             start_month: int | None = ...,
             end_year: None = ...,
             end_month: None = ...,
-            mode: RangeMode = ...,
+            mode: Literal["after", "before"] = ...,
             raw: None = ...,
     ) -> ListIpcRecord: ...
     @overload
@@ -89,7 +80,7 @@ class CmfClient(BaseCmfClient):
             start_month: None = ...,
             end_year: int,
             end_month: None = ...,
-            mode: RangeMode = ...,
+            mode: Literal["between"],
             raw: None = ...,
     ) -> ListIpcRecord: ...
     @overload
@@ -100,7 +91,7 @@ class CmfClient(BaseCmfClient):
             start_month: int,
             end_year: int,
             end_month: int,
-            mode: RangeMode = ...,
+            mode: Literal["between"],
             raw: None = ...,
     ) -> ListIpcRecord: ...
     @overload
@@ -111,7 +102,7 @@ class CmfClient(BaseCmfClient):
             start_month: int | None = ...,
             end_year: None = ...,
             end_month: None = ...,
-            mode: RangeMode = ...,
+            mode: Literal["after", "before"] = ...,
             raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
@@ -122,7 +113,7 @@ class CmfClient(BaseCmfClient):
             start_month: None = ...,
             end_year: int,
             end_month: None = ...,
-            mode: RangeMode = ...,
+            mode: Literal["between"],
             raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
@@ -133,7 +124,7 @@ class CmfClient(BaseCmfClient):
             start_month: int,
             end_year: int,
             end_month: int,
-            mode: RangeMode = ...,
+            mode: Literal["between"],
             raw: Literal["json"],
     ) -> dict[str, Any]: ...
     @overload
@@ -144,7 +135,7 @@ class CmfClient(BaseCmfClient):
             start_month: int | None = ...,
             end_year: None = ...,
             end_month: None = ...,
-            mode: RangeMode = ...,
+            mode: Literal["after", "before"] = ...,
             raw: Literal["xml"],
     ) -> str: ...
     @overload
@@ -155,7 +146,7 @@ class CmfClient(BaseCmfClient):
             start_month: None = ...,
             end_year: int,
             end_month: None = ...,
-            mode: RangeMode = ...,
+            mode: Literal["between"],
             raw: Literal["xml"],
     ) -> str: ...
     @overload
@@ -166,17 +157,233 @@ class CmfClient(BaseCmfClient):
             start_month: int,
             end_year: int,
             end_month: int,
-            mode: RangeMode = ...,
+            mode: Literal["between"],
+            raw: Literal["xml"],
+    ) -> str: ...
+
+    @overload
+    def uf(
+            self,
+            *,
+            year: None = ...,
+            month: None = ...,
+            day: None = ...,
+            raw: None = ...,
+    ) -> UfRecord: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: int,
+            month: int | None = ...,
+            day: None = ...,
+            raw: None = ...,
+    ) -> ListUfRecord: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: int,
+            month: int,
+            day: int,
+            raw: None = ...,
+    ) -> UfRecord: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: None = ...,
+            month: None = ...,
+            day: None = ...,
+            raw: Literal["json"],
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: int,
+            month: int | None = ...,
+            day: None = ...,
+            raw: Literal["json"],
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: int,
+            month: int,
+            day: int | None = ...,
+            raw: Literal["json"],
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: None = ...,
+            month: None = ...,
+            day: None = ...,
             raw: Literal["xml"],
     ) -> str: ...
     @overload
-    def ipc_range(
+    def uf(
+            self,
+            *,
+            year: int,
+            month: int | None = ...,
+            day: None = ...,
+            raw: Literal["xml"],
+    ) -> str: ...
+    @overload
+    def uf(
+            self,
+            *,
+            year: int,
+            month: int,
+            day: int | None = ...,
+            raw: Literal["xml"],
+    ) -> str: ...
+
+    @overload
+    def uf_range(
             self,
             *,
             start_year: int,
             start_month: int | None = ...,
-            end_year: int | None = ...,
-            end_month: int | None = ...,
-            mode: RangeMode = ...,
-            raw: ResponseFormat | None = ...,
-    ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str: ...
+            end_year: None = ...,
+            end_month: None = ...,
+            day: None = ...,
+            mode: Literal["after", "before"] = ...,
+            raw: None = ...,
+    ) -> ListUfRecord: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int | None = ...,
+            end_year: None = ...,
+            end_month: None = ...,
+            day: None = ...,
+            mode: Literal["after", "before"] = ...,
+            raw: Literal["json"]
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int | None = ...,
+            end_year: None = ...,
+            end_month: None = ...,
+            day: None = ...,
+            mode: Literal["after", "before"] = ...,
+            raw: Literal["xml"]
+    ) -> str: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int,
+            end_year: None = ...,
+            end_month: None = ...,
+            day: int | None = ...,
+            mode: Literal["after", "before"] = ...,
+            raw: None = ...,
+    ) -> ListUfRecord: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int,
+            end_year: None = ...,
+            end_month: None = ...,
+            day: int | None = ...,
+            mode: Literal["after", "before"] = ...,
+            raw: Literal["json"]
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int,
+            end_year: None = ...,
+            end_month: None = ...,
+            day: int | None = ...,
+            mode: Literal["after", "before"] = ...,
+            raw: Literal["xml"]
+    ) -> str: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: None = ...,
+            end_year: int,
+            end_month: None = ...,
+            day: None = ...,
+            mode: Literal["between"],
+            raw: None = ...,
+    ) -> ListUfRecord: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: None = ...,
+            end_year: int,
+            end_month: None = ...,
+            day: None = ...,
+            mode: Literal["between"],
+            raw: Literal["json"]
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: None = ...,
+            end_year: int,
+            end_month: None = ...,
+            day: None = ...,
+            mode: Literal["between"],
+            raw: Literal["xml"]
+    ) -> str: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int,
+            end_year: int,
+            end_month: int,
+            day: None = ...,
+            mode: Literal["between"],
+            raw: None = ...,
+    ) -> ListUfRecord: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int,
+            end_year: int,
+            end_month: int,
+            day: None = ...,
+            mode: Literal["between"],
+            raw: Literal["json"]
+    ) -> dict[str, Any]: ...
+    @overload
+    def uf_range(
+            self,
+            *,
+            start_year: int,
+            start_month: int,
+            end_year: int,
+            end_month: int,
+            day: None = ...,
+            mode: Literal["between"],
+            raw: Literal["xml"]
+    ) -> str: ...
