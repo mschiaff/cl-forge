@@ -23,7 +23,7 @@ class ModeProxy:
 
     @property
     def path(self) -> str:
-        return f"{self._owner.endpoint}/{self._mode}"
+        return f"/{self._owner.endpoint}/{self._mode}"
 
 
 @dataclass
