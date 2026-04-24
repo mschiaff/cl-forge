@@ -55,16 +55,20 @@ def uf_range_endpoint(
     helpers.validate_month(end_month, "end") if end_month else None
     helpers.validate_day(day) if day else None
 
-    # ModeType will raise ValueError on invalid type
+    # ModeEnum will raise ValueError on invalid type
     # or value, so we don't need to check for that here.
     _mode = UF_MODE(mode)
 
     if _mode.type in (ModeEnum.AFTER, ModeEnum.BEFORE):
-        if not start_month:
+        if not start_month and not day:
             path = f"{_mode.path}/{start_year}"
             return CmfEndpoint(path=path, model=ListUfRecord)
-        path = f"{_mode.path}/{start_year}/{start_month}"
-        return CmfEndpoint(path=path, model=ListUfRecord)
+        if start_month and not day:
+            path = f"{_mode.path}/{start_year}/{start_month}"
+            return CmfEndpoint(path=path, model=ListUfRecord)
+        if start_month and day:
+            path = f"{_mode.path}/{start_year}/{start_month}/dias/{day}"
+            return CmfEndpoint(path=path, model=UfRecord)
 
     if _mode.type is ModeEnum.BETWEEN:
         if helpers.is_range_between_months(
@@ -76,19 +80,8 @@ def uf_range_endpoint(
         ):
             path = f"{_mode.path}/{start_year}/{start_month}/{end_year}/{end_month}"
             return CmfEndpoint(path=path, model=ListUfRecord)
-        if helpers.is_range_between_days(
-                start_year,
-                start_month,
-                day,
-                end_year,
-                end_month,
-                day,
-                "uf"
-        ):
-            path = (
-                f"{_mode.path}/{start_year}/{start_month}/dias"
-                f"/{day}/{end_year}/{end_month}/dias/{day}"
-            )
-            return CmfEndpoint(path=path, model=UfRecord)
+        
+        path = f"{_mode.path}/{start_year}/{end_year}"
+        return CmfEndpoint(path=path, model=ListUfRecord)
 
-    raise ValueError("Invalid combination of parameters for uf range endpoint.")
+    raise ValueError("Invalid combination of parameters for uf range.")
