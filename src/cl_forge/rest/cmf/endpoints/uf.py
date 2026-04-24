@@ -50,7 +50,7 @@ def uf_range_endpoint(
         end_month: int | None = None,
         day: int | None = None,
         mode: RangeMode = "after"
-) -> CmfEndpoint[UfRecord] | CmfEndpoint[ListUfRecord]:
+) -> CmfEndpoint[ListUfRecord]:
     helpers.validate_month(start_month, "start") if start_month else None
     helpers.validate_month(end_month, "end") if end_month else None
     helpers.validate_day(day) if day else None
@@ -68,7 +68,9 @@ def uf_range_endpoint(
             return CmfEndpoint(path=path, model=ListUfRecord)
         if start_month and day:
             path = f"{_mode.path}/{start_year}/{start_month}/dias/{day}"
-            return CmfEndpoint(path=path, model=UfRecord)
+            return CmfEndpoint(path=path, model=ListUfRecord)
+        if not start_month and day:
+            raise ValueError("Day cannot be specified without a start year and month.")
 
     if _mode.type is ModeEnum.BETWEEN:
         if helpers.is_range_between_months(
