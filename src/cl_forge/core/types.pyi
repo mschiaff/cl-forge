@@ -1,7 +1,7 @@
 import enum
 from typing import Literal
 
-type ResponseFormat = Literal["json", "xml"]
+type RawFormat = Literal["json", "xml"]
 type RangeMode = Literal["after", "before", "between"]
 
 
