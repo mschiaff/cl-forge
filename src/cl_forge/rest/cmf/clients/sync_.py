@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from cl_forge.core.impl.cmf import BaseCmfClient
-from cl_forge.core.types import FormatEnum, RangeMode, ResponseFormat
+from cl_forge.core.types import FormatEnum, RangeMode, RawFormat
 from cl_forge.rest.cmf.endpoints import ipc, uf
 
 if TYPE_CHECKING:
@@ -21,7 +21,7 @@ class CmfClient(BaseCmfClient):
             *,
             year: int | None = None,
             month: int | None = None,
-            raw: ResponseFormat | None = None
+            raw: RawFormat | None = None
     ) -> IpcRecord | ListIpcRecord | dict[str, Any] | str:
         endpoint = ipc.ipc_endpoint(year=year, month=month)
 
@@ -40,7 +40,7 @@ class CmfClient(BaseCmfClient):
             end_year: int | None = None,
             end_month: int | None = None,
             mode: RangeMode = "after",
-            raw: ResponseFormat | None = None
+            raw: RawFormat | None = None
     ) -> ListIpcRecord | dict[str, Any] | str:
         endpoint = ipc.ipc_range_endpoint(
             start_year=start_year,
@@ -63,7 +63,7 @@ class CmfClient(BaseCmfClient):
             year: int | None = None,
             month: int | None = None,
             day: int | None = None,
-            raw: ResponseFormat | None = None
+            raw: RawFormat | None = None
     ) -> UfRecord | ListUfRecord | dict[str, Any] | str:
         endpoint = uf.uf_endpoint(year=year, month=month, day=day)
 
@@ -83,7 +83,7 @@ class CmfClient(BaseCmfClient):
             end_month: int | None = None,
             day: int | None = None,
             mode: RangeMode = "after",
-            raw: ResponseFormat | None = None
+            raw: RawFormat | None = None
     ) -> ListUfRecord | dict[str, Any] | str:
         endpoint = uf.uf_range_endpoint(
             start_year=start_year,
