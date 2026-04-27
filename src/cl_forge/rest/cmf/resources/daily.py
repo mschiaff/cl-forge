@@ -13,10 +13,6 @@ class DailyIndicatorResource[
     RecordT: IndicatorRecord,
     CollectionT: IndicatorCollection[Any]
 ](MonthlyIndicatorResource[RecordT, CollectionT]):
-    def current(self) -> RecordT:
-        path = IndicatorPath.current(self._spec.path_name).build()
-        return self._get(path, shape=ResponseShape.SINGLE)
-
     @override
     def after(
             self,
