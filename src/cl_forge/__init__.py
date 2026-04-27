@@ -18,10 +18,13 @@ from cl_forge.core.impl.verify import (
     validate_rut,
 )
 from cl_forge.core.timing import Timing
+from cl_forge.rest.cmf.clients import AsyncCmfClient, CmfClient
 from cl_forge.rest.market.clients import AsyncMarketClient, MarketClient
 
 __all__ = (
+    "AsyncCmfClient",
     "AsyncMarketClient",
+    "CmfClient",
     "Config",
     "MarketClient",
     "Ppu",

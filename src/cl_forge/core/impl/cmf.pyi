@@ -1,6 +1,6 @@
 from typing import Any, Literal, overload
 
-from cl_forge.core.types import RawFormat
+from cl_forge.rest.cmf.types import RawFormat
 
 class BaseCmfClient:
     """
