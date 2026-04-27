@@ -1,5 +1,7 @@
 from typing import Any, Literal, overload
 
+from cl_forge.rest.cmf.types import RawFormat
+
 class BaseCmfClient:
     """
     Base client for interacting with the CMF API.
@@ -70,11 +72,17 @@ class BaseCmfClient:
             path: str,
             fmt: Literal["xml"]
     ) -> str: ...
+    @overload
+    def get(
+            self,
+            path: str,
+            fmt: RawFormat = ...
+    ) -> dict[str, Any] | str: ...
 
     def get(
             self,
             path: str,
-            fmt: Literal["json", "xml"] = "json"
+            fmt: RawFormat = "json"
     ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified CMF API endpoint.
@@ -88,7 +96,7 @@ class BaseCmfClient:
         ----------
         path : str
             The API endpoint path. Must start with ``'/'``.
-        fmt : Literal["json", "xml"]
+        fmt : RawFormat
             The format of the response. Can be ``'json'``, ``'xml'``.
 
         Returns
@@ -110,11 +118,17 @@ class BaseCmfClient:
             path: str,
             fmt: Literal["xml"]
     ) -> str: ...
+    @overload
+    async def aget(
+            self,
+            path: str,
+            fmt: RawFormat = ...
+    ) -> dict[str, Any] | str: ...
 
     async def aget(
             self,
             path: str,
-            fmt: Literal["json", "xml"] = "json"
+            fmt: RawFormat = "json"
     ) -> dict[str, Any] | str:
         """
         Async implementation of :meth:`get`.
@@ -130,7 +144,7 @@ class BaseCmfClient:
         ----------
         path : str
             The API endpoint path. Must start with ``'/'``.
-        fmt : Literal["json", "xml"]
+        fmt : RawFormat
             The format of the response. Can be ``'json'``, ``'xml'``.
 
         Returns

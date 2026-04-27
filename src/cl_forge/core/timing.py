@@ -84,7 +84,7 @@ class Timing:
     - The timer uses time.perf_counter_ns() for high-resolution timing.
     - The timer raises `RuntimeError` if the elapsed time is accessed before stopping.
     """
-    __slots__ = ("_start_ns", "_end_ns", "_fn")
+    __slots__ = ("_end_ns", "_fn", "_start_ns")
 
     @overload
     def __init__(self, fn: Callable[..., Any], /) -> None: ...

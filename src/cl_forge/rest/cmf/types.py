@@ -1,65 +1,40 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any
+from typing import Annotated, Any, Literal, Protocol, overload
 
-from cl_forge.core.types import EndpointEnum, ModeEnum, RangeMode
+from pydantic import Field
+
+type RawFormat = Literal["json", "xml"]
+
+type YearInt = Annotated[int, Field(ge=0)]
+type MonthInt = Annotated[int, Field(ge=1, le=12)]
+type DayInt = Annotated[int, Field(ge=1, le=31)]
+
+type TwoTupleDate = tuple[YearInt, MonthInt]
+type ThreeTupleDate = tuple[YearInt, MonthInt, DayInt]
 
 
-@dataclass(frozen=True)
-class ModeProxy:
-    _mode: ModeEnum
-    _owner: BoundedMode
-
-    def __repr__(self) -> str:
-        _type = self.type
-        _path = self.path
-        _cls = type(self).__name__
-        return f"{_cls}(type={_type!r}, path={_path!r})"
+class CmfTransport(Protocol):
+    @property
+    def base_url(self) -> str: ...
 
     @property
-    def type(self) -> ModeEnum:
-        return self._mode
+    def api_key(self) -> str: ...
 
-    @property
-    def path(self) -> str:
-        return f"/{self._owner.endpoint}/{self._mode}"
+    @overload
+    def get(self, path: str, fmt: Literal["json"] = ... ) -> dict[str, Any]: ...
+    @overload
+    def get(self, path: str, fmt: Literal["xml"]) -> str: ...
+    @overload
+    def get(self, path: str, fmt: RawFormat = ...) -> dict[str, Any] | str: ...
 
+    def get(self, path: str, fmt: RawFormat = "json") -> dict[str, Any] | str: ...
 
-@dataclass
-class ModeDescriptor:
-    def __init__(self, mode: ModeEnum) -> None:
-        self._mode = mode
-        self._name = mode.private
+    @overload
+    async def aget(self, path: str, fmt: Literal["json"] = ... ) -> dict[str, Any]: ...
+    @overload
+    async def aget(self, path: str, fmt: Literal["xml"]) -> str: ...
+    @overload
+    async def aget(self, path: str, fmt: RawFormat = ...) -> dict[str, Any] | str: ...
 
-    def __get__(
-            self,
-            obj: BoundedMode | None,
-            owner: type[BoundedMode]
-    ) -> ModeProxy | Exception:
-        if obj is not None:
-            return ModeProxy(self._mode, obj)
-
-        _name = self._name
-        _owner = owner.__name__
-        raise AttributeError(f"Cannot access managed attribute {_name!r} from class {_owner!r}")
-
-    def __set__(self, obj: Any, value: Any) -> None:
-        raise AttributeError(f"Cannot assign to managed attribute {self._name!r}")
-
-
-@dataclass
-class BoundedMode:
-    endpoint: EndpointEnum
-
-    def __call__(self, mode: RangeMode) -> ModeProxy:
-        name = f"_{mode}"
-        if not hasattr(BoundedMode, name):
-            setattr(
-                BoundedMode,
-                name,
-                ModeDescriptor(
-                    ModeEnum(mode)
-                )
-            )
-        return getattr(self, name)
+    async def aget(self, path: str, fmt: RawFormat = "json") -> dict[str, Any] | str: ...
