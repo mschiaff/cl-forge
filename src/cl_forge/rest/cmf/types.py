@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated, Any, Literal, Protocol, overload
+from typing import Annotated, Any, Literal, Protocol, overload
 
 from pydantic import Field
 
-if TYPE_CHECKING:
-    from cl_forge.core.types import RawFormat
-
+type RawFormat = Literal["json", "xml"]
 
 type YearInt = Annotated[int, Field(ge=0)]
 type MonthInt = Annotated[int, Field(ge=1, le=12)]
@@ -29,7 +27,7 @@ class CmfTransport(Protocol):
     def get(self, path: str, fmt: Literal["xml"]) -> str: ...
     @overload
     def get(self, path: str, fmt: RawFormat = ...) -> dict[str, Any] | str: ...
-    
+
     def get(self, path: str, fmt: RawFormat = "json") -> dict[str, Any] | str: ...
 
     @overload
@@ -38,5 +36,5 @@ class CmfTransport(Protocol):
     async def aget(self, path: str, fmt: Literal["xml"]) -> str: ...
     @overload
     async def aget(self, path: str, fmt: RawFormat = ...) -> dict[str, Any] | str: ...
-    
+
     async def aget(self, path: str, fmt: RawFormat = "json") -> dict[str, Any] | str: ...

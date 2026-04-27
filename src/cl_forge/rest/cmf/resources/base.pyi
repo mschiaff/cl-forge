@@ -2,7 +2,7 @@ from typing import Any, Literal, overload
 
 from pydantic import BaseModel, RootModel
 
-from cl_forge.core.types import RawFormat
+from cl_forge.rest.cmf.types import RawFormat
 
 from ..models.base import (
     IndicatorCollection,

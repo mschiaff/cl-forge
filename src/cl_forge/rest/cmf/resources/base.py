@@ -16,7 +16,7 @@ from ..models.base import (
 from ..parsing.parser import BaseCmfResponseParser, IndicatorResponseParser, RateResponseParser
 
 if TYPE_CHECKING:
-    from cl_forge.core.types import RawFormat
+    from cl_forge.rest.cmf.types import RawFormat
 
     from ..parsing.shape import ResponseShape
     from ..specs.base import BaseSpec, IndicatorSpec, RateSpec
