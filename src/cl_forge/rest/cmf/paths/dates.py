@@ -17,7 +17,8 @@ class YearMonth:
     year: YearInt
     month: MonthInt | None = None
 
-    def path_parts(self) -> list[str]:
+    @property
+    def parts(self) -> list[str]:
         parts = [str(self.year)]
 
         if self.month is not None:
@@ -32,7 +33,8 @@ class YearMonthDay:
     month: MonthInt
     day: DayInt
 
-    def path_parts(self) -> list[str]:
+    @property
+    def parts(self) -> list[str]:
         return [
             str(self.year),
             f"{self.month:02d}",

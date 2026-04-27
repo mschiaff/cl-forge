@@ -26,28 +26,16 @@ class IndicatorPath:
 
     @classmethod
     def year_month(cls, indicator: str, date: YearMonth) -> IndicatorPath:
-        return cls(
-            indicator=indicator,
-            parts=(*date.path_parts(),)
-        )
+        return cls(indicator=indicator, parts=(*date.parts,))
 
     @classmethod
     def day(cls, indicator: str, date: YearMonthDay) -> IndicatorPath:
-        return cls(
-            indicator=indicator,
-            parts=(*date.path_parts(),)
-        )
+        return cls(indicator=indicator, parts=(*date.parts,))
 
     @classmethod
     def after_year_month(cls, indicator: str, date: YearMonth) -> IndicatorPath:
-        return cls(
-            indicator=indicator,
-            parts=(PathSegment.AFTER, *date.path_parts())
-        )
+        return cls(indicator=indicator, parts=(PathSegment.AFTER, *date.parts))
     
     @classmethod
     def after_day(cls, indicator: str, date: YearMonthDay) -> IndicatorPath:
-        return cls(
-            indicator=indicator,
-            parts=(PathSegment.AFTER, *date.path_parts())
-        )
+        return cls(indicator=indicator, parts=(PathSegment.AFTER, *date.parts))
