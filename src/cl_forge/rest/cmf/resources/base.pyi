@@ -38,7 +38,6 @@ class BaseRawResource:
 class BaseResource[
     RecordT: BaseModel,
     CollectionT: RootModel[list[BaseModel]],
-    ParserT: BaseCmfResponseParser[BaseModel, RootModel[list[BaseModel]]],
 ]:
     _transport: CmfTransport
     _spec: BaseSpec[RecordT, CollectionT]
@@ -47,7 +46,8 @@ class BaseResource[
     def __init__(self,
             transport: CmfTransport,
             *,
-            spec: BaseSpec[RecordT, CollectionT]
+            spec: BaseSpec[RecordT, CollectionT],
+            parser: type[BaseCmfResponseParser[RecordT, CollectionT]],
     ) -> None: ...
 
     @overload
