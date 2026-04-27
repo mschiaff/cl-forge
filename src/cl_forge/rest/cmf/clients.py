@@ -32,9 +32,7 @@ __all__ = ("AsyncCmfClient", "CmfClient")
 
 
 class CmfClient:
-    """
-    Client for interacting with the CMF API.
-    """
+    """Client for interacting with the CMF API."""
     raw: RawResource
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
     uf: DailyIndicatorResource[UfRecord, UfCollection]
@@ -91,6 +89,7 @@ class CmfClient:
 
 
 class AsyncCmfClient:
+    """Asynchronous client for interacting with the CMF API."""
     raw: AsyncRawResource
     ipc: AsyncMonthlyIndicatorResource[IpcRecord, IpcCollection]
     uf: AsyncDailyIndicatorResource[UfRecord, UfCollection]
@@ -101,6 +100,14 @@ class AsyncCmfClient:
     tmc: AsyncRateResource[TmcRecord, TmcCollection]
 
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the asynchronous CMF client.
+
+        Parameters
+        ----------
+        api_key : str
+            The API key for authenticating with the CMF API.
+        """
         self._transport: CmfTransport = BaseCmfClient(api_key)
 
         self.raw = AsyncRawResource(self._transport)
