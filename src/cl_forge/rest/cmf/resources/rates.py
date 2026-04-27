@@ -4,7 +4,7 @@ from typing import Any
 
 from cl_forge.rest.cmf.types import MonthInt, TwoTupleDate, YearInt  # noqa: TC001
 
-from ..models.base import InterestRateCollection, InterestRateRecord
+from ..models.base import RateCollection, RateRecord
 from ..parsing.shape import ResponseShape
 from ..paths.builder import IndicatorPath
 from ..paths.dates import YearMonth
@@ -12,8 +12,8 @@ from .base import BaseRateResource
 
 
 class RateResource[
-    RecordT: InterestRateRecord,
-    CollectionT: InterestRateCollection[Any]
+    RecordT: RateRecord,
+    CollectionT: RateCollection[Any]
 ](BaseRateResource[RecordT, CollectionT]):
     def current(self) -> CollectionT:
         path = IndicatorPath.current(self._spec.path_name).build()
@@ -28,7 +28,7 @@ class RateResource[
         date = YearMonth(year=year, month=month)
         path = IndicatorPath.year_month(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
-    
+
     def after(
             self,
             year: YearInt,
@@ -37,7 +37,7 @@ class RateResource[
         date = YearMonth(year=year, month=month)
         path = IndicatorPath.after_year_month(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
-    
+
     def before(
             self,
             year: YearInt,
@@ -46,7 +46,7 @@ class RateResource[
         date = YearMonth(year=year, month=month)
         path = IndicatorPath.before_year_month(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
-    
+
     def between(
             self,
             start: YearInt | TwoTupleDate,

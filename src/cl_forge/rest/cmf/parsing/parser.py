@@ -4,19 +4,23 @@ from typing import TYPE_CHECKING, Any, Literal, overload
 
 from pydantic import BaseModel, RootModel
 
+from cl_forge.rest.cmf.models.indicators import IndicatorCollection, IndicatorRecord
+from cl_forge.rest.cmf.models.rates import RateCollection, RateRecord
+from cl_forge.rest.cmf.specs.base import BaseSpec
+
 from .shape import ResponseShape
 
 if TYPE_CHECKING:
-    from ..specs.base import IndicatorSpec
+    from ..specs.base import BaseSpec, IndicatorSpec, RateSpec
 
 
-class CmfResponseParser[
+class BaseCmfResponseParser[
     RecordT: BaseModel,
     CollectionT: RootModel[list[BaseModel]]
 ]:
     def __init__(
             self,
-            spec: IndicatorSpec[RecordT, CollectionT]
+            spec: BaseSpec[RecordT, CollectionT]
     ) -> None:
         self._spec = spec
     
@@ -78,3 +82,19 @@ class CmfResponseParser[
 
     def _parse_collection(self, records: list[dict[str, Any]]) -> CollectionT:
         return self._spec.collection_model.model_validate(records)
+
+
+class IndicatorResponseParser[
+    RecordT: IndicatorRecord,
+    CollectionT: IndicatorCollection[Any]
+](BaseCmfResponseParser[RecordT, CollectionT]):
+    def __init__(self, spec: IndicatorSpec[RecordT, CollectionT]) -> None:
+        super().__init__(spec)
+
+
+class RateResponseParser[
+    RecordT: RateRecord,
+    CollectionT: RateCollection[Any]
+](BaseCmfResponseParser[RecordT, CollectionT]):
+    def __init__(self, spec: RateSpec[RecordT, CollectionT]) -> None:
+        super().__init__(spec)

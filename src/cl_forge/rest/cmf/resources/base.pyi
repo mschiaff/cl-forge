@@ -7,12 +7,12 @@ from cl_forge.core.types import RawFormat
 from ..models.base import (
     IndicatorCollection,
     IndicatorRecord,
-    InterestRateCollection,
-    InterestRateRecord,
+    RateCollection,
+    RateRecord,
 )
-from ..parsing.parser import CmfResponseParser
+from ..parsing.parser import BaseCmfResponseParser
 from ..parsing.shape import ResponseShape
-from ..specs.base import IndicatorSpec
+from ..specs.base import BaseSpec, IndicatorSpec, RateSpec
 from ..types import CmfTransport
 
 class BaseRawResource:
@@ -37,16 +37,17 @@ class BaseRawResource:
 
 class BaseResource[
     RecordT: BaseModel,
-    CollectionT: RootModel[list[BaseModel]]
+    CollectionT: RootModel[list[BaseModel]],
+    ParserT: BaseCmfResponseParser[BaseModel, RootModel[list[BaseModel]]],
 ]:
     _transport: CmfTransport
-    _spec: IndicatorSpec[RecordT, CollectionT]
-    _parser: CmfResponseParser[RecordT, CollectionT]
+    _spec: BaseSpec[RecordT, CollectionT]
+    _parser: BaseCmfResponseParser[RecordT, CollectionT]
 
     def __init__(self,
             transport: CmfTransport,
             *,
-            spec: IndicatorSpec[RecordT, CollectionT]
+            spec: BaseSpec[RecordT, CollectionT]
     ) -> None: ...
 
     @overload
@@ -97,10 +98,22 @@ class BaseResource[
 class BaseIndicatorResource[
     RecordT: IndicatorRecord,
     CollectionT: IndicatorCollection[Any]
-](BaseResource[RecordT, CollectionT]): ...
+](BaseResource[RecordT, CollectionT]):
+    def __init__(
+            self,
+            transport: CmfTransport,
+            *,
+            spec: IndicatorSpec[RecordT, CollectionT]
+    ) -> None: ...
 
 
 class BaseRateResource[
-    RecordT: InterestRateRecord,
-    CollectionT: InterestRateCollection[Any]
-](BaseResource[RecordT, CollectionT]): ...
+    RecordT: RateRecord,
+    CollectionT: RateCollection[Any]
+](BaseResource[RecordT, CollectionT]):
+    def __init__(
+            self,
+            transport: CmfTransport,
+            *,
+            spec: RateSpec[RecordT, CollectionT],
+    ) -> None: ...

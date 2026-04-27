@@ -22,7 +22,7 @@ class IndicatorRecord(BaseModel):
 class IndicatorCollection[T: IndicatorRecord](RootModel[list[T]]): ...
 
 
-class InterestRateRecord(BaseModel):
+class RateRecord(BaseModel):
     title: str = Field(validation_alias="Titulo")
     subtitle: str = Field(validation_alias="SubTitulo")
     value: float = Field(validation_alias="Valor")
@@ -36,4 +36,4 @@ class InterestRateRecord(BaseModel):
         return round(convert_decimal(value) / 100, 5)
 
 
-class InterestRateCollection[T: InterestRateRecord](RootModel[list[T]]): ...
+class RateCollection[T: RateRecord](RootModel[list[T]]): ...

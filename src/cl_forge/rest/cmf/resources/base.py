@@ -4,19 +4,22 @@ from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, RootModel
 
+from cl_forge.rest.cmf.specs.base import BaseSpec
+from cl_forge.rest.cmf.types import CmfTransport
+
 from ..models.base import (
     IndicatorCollection,
     IndicatorRecord,
-    InterestRateCollection,
-    InterestRateRecord,
+    RateCollection,
+    RateRecord,
 )
-from ..parsing.parser import CmfResponseParser
+from ..parsing.parser import BaseCmfResponseParser, IndicatorResponseParser, RateResponseParser
 
 if TYPE_CHECKING:
     from cl_forge.core.types import RawFormat
 
     from ..parsing.shape import ResponseShape
-    from ..specs.base import IndicatorSpec
+    from ..specs.base import BaseSpec, IndicatorSpec, RateSpec
     from ..types import CmfTransport
 
 
@@ -33,17 +36,19 @@ class BaseRawResource:
 
 class BaseResource[
     RecordT: BaseModel,
-    CollectionT: RootModel[list[BaseModel]]
+    CollectionT: RootModel[list[BaseModel]],
+    ParserT: BaseCmfResponseParser[BaseModel, RootModel[list[BaseModel]]]
 ]:
     def __init__(
             self,
             transport: CmfTransport,
             *,
-            spec: IndicatorSpec[RecordT, CollectionT]
+            spec: BaseSpec[RecordT, CollectionT],
+            parser: type[ParserT]
     ) -> None:
         self._transport = transport
         self._spec = spec
-        self._parser = CmfResponseParser(spec)
+        self._parser = parser(spec)
 
     def _get(
             self,
@@ -67,10 +72,24 @@ class BaseResource[
 class BaseIndicatorResource[
     RecordT: IndicatorRecord,
     CollectionT: IndicatorCollection[Any]
-](BaseResource[RecordT, CollectionT]): ...
+](BaseResource[RecordT, CollectionT]):
+    def __init__(
+            self,
+            transport: CmfTransport,
+            *,
+            spec: IndicatorSpec[RecordT, CollectionT]
+    ) -> None:
+        super().__init__(transport, spec=spec, parser=IndicatorResponseParser)
 
 
 class BaseRateResource[
-    RecordT: InterestRateRecord,
-    CollectionT: InterestRateCollection[Any]
-](BaseResource[RecordT, CollectionT]): ...
+    RecordT: RateRecord,
+    CollectionT: RateCollection[Any]
+](BaseResource[RecordT, CollectionT]):
+    def __init__(
+            self,
+            transport: CmfTransport,
+            *,
+            spec: RateSpec[RecordT, CollectionT],
+    ) -> None:
+        super().__init__(transport, spec=spec, parser=RateResponseParser)
