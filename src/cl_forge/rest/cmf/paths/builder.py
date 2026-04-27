@@ -23,6 +23,13 @@ class IndicatorPath:
     @classmethod
     def current(cls, indicator: str) -> IndicatorPath:
         return cls(indicator=indicator)
+    
+    @classmethod
+    def year_month(cls, indicator: str, date: YearMonth) -> IndicatorPath:
+        return cls(
+            indicator=indicator,
+            parts=(*date.path_parts(),)
+        )
 
     @classmethod
     def after_monthly(cls, indicator: str, date: YearMonth) -> IndicatorPath:
