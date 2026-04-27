@@ -30,7 +30,10 @@ UF_SPEC = IndicatorSpec[
     daily=True,
 )
 
-UTM_SPEC = IndicatorSpec(
+UTM_SPEC = IndicatorSpec[
+    UtmRecord,
+    UtmCollection
+](
     public_name="UTM",
     path_name="utm",
     root_key="UTMs",
@@ -38,7 +41,10 @@ UTM_SPEC = IndicatorSpec(
     collection_model=UtmCollection,
 )
 
-USD_SPEC = IndicatorSpec(
+USD_SPEC = IndicatorSpec[
+    UsdRecord,
+    UsdCollection
+](
     public_name="USD",
     path_name="dolar",
     root_key="Dolares",
@@ -47,7 +53,10 @@ USD_SPEC = IndicatorSpec(
     daily=True,
 )
 
-EURO_SPEC = IndicatorSpec(
+EURO_SPEC = IndicatorSpec[
+    EuroRecord,
+    EuroCollection
+](
     public_name="EURO",
     path_name="euro",
     root_key="Euros",
