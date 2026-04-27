@@ -44,3 +44,13 @@ class MonthlyIndicatorResource[
         date = YearMonth(year=year, month=month)
         path = IndicatorPath.before_year_month(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
+
+    def between(
+            self,
+            start: YearInt | tuple[YearInt, MonthInt],
+            end: YearInt | tuple[YearInt, MonthInt]
+    ) -> CollectionT:
+        _start = YearMonth.from_value(start)
+        _end = YearMonth.from_value(end)
+        path = IndicatorPath.between_year_month(self._spec.path_name, _start, _end).build()
+        return self._get(path, shape=ResponseShape.COLLECTION)

@@ -6,5 +6,5 @@ from enum import StrEnum
 class PathSegment(StrEnum):
     AFTER = "posteriores"
     BEFORE = "anteriores"
-    PERIOD = "periodo"
+    BETWEEN = "periodo"
     DAYS = "dias"

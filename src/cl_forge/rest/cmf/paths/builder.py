@@ -47,3 +47,7 @@ class IndicatorPath:
     @classmethod
     def before_day(cls, indicator: str, date: YearMonthDay) -> IndicatorPath:
         return cls(indicator=indicator, parts=(PathSegment.BEFORE, *date.parts))
+
+    @classmethod
+    def between_year_month(cls, indicator: str, start: YearMonth, end: YearMonth) -> IndicatorPath:
+        return cls(indicator=indicator, parts=(PathSegment.BETWEEN, *start.parts, *end.parts))

@@ -17,6 +17,17 @@ class YearMonth:
     year: YearInt
     month: MonthInt | None = None
 
+    @classmethod
+    def from_value(
+            cls,
+            value: YearInt | tuple[YearInt, MonthInt]
+    ) -> YearMonth:
+        if isinstance(value, int):
+            return cls(year=value)
+
+        year, month = value
+        return cls(year=year, month=month)
+
     @property
     def parts(self) -> list[str]:
         parts = [str(self.year)]
