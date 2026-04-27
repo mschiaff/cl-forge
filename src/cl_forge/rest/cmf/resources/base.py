@@ -2,7 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from ..models.base import IndicatorCollection, IndicatorRecord
+from pydantic import BaseModel, RootModel
+
+from ..models.base import (
+    IndicatorCollection,
+    IndicatorRecord,
+    InterestRateCollection,
+    InterestRateRecord,
+)
 from ..parsing.parser import CmfResponseParser
 
 if TYPE_CHECKING:
@@ -13,9 +20,20 @@ if TYPE_CHECKING:
     from ..types import CmfTransport
 
 
-class BaseIndicatorResource[
-    RecordT: IndicatorRecord,
-    CollectionT: IndicatorCollection[Any]
+class BaseRawResource:
+    def __init__(self, transport: CmfTransport) -> None:
+        self._transport = transport
+
+    def _get(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
+        return self._transport.get(path, fmt=raw)
+
+    async def _aget(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
+        return await self._transport.aget(path, fmt=raw)
+
+
+class BaseResource[
+    RecordT: BaseModel,
+    CollectionT: RootModel[list[BaseModel]]
 ]:
     def __init__(
             self,
@@ -46,15 +64,13 @@ class BaseIndicatorResource[
         return self._parser.parse(data, shape=shape)
 
 
-class BaseRawResource:
-    def __init__(
-            self,
-            transport: CmfTransport,
-    ) -> None:
-        self._transport = transport
+class BaseIndicatorResource[
+    RecordT: IndicatorRecord,
+    CollectionT: IndicatorCollection[Any]
+](BaseResource[RecordT, CollectionT]): ...
 
-    def _get(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
-        return self._transport.get(path, fmt=raw)
 
-    async def _aget(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
-        return await self._transport.aget(path, fmt=raw)
+class BaseRateResource[
+    RecordT: InterestRateRecord,
+    CollectionT: InterestRateCollection[Any]
+](BaseResource[RecordT, CollectionT]): ...

@@ -1,11 +1,18 @@
 from __future__ import annotations
 
-from ..models.euro import EuroCollection, EuroRecord
-from ..models.ipc import IpcCollection, IpcRecord
-from ..models.uf import UfCollection, UfRecord
-from ..models.usd import UsdCollection, UsdRecord
-from ..models.utm import UtmCollection, UtmRecord
-from .base import IndicatorSpec
+from cl_forge.rest.cmf.models.indicators import (
+    EuroCollection,
+    EuroRecord,
+    IpcCollection,
+    IpcRecord,
+    UfCollection,
+    UfRecord,
+    UsdCollection,
+    UsdRecord,
+    UtmCollection,
+    UtmRecord,
+)
+from cl_forge.rest.cmf.specs.base import IndicatorSpec
 
 IPC_SPEC = IndicatorSpec[
     IpcRecord,
@@ -27,7 +34,6 @@ UF_SPEC = IndicatorSpec[
     root_key="UFs",
     record_model=UfRecord,
     collection_model=UfCollection,
-    daily=True,
 )
 
 UTM_SPEC = IndicatorSpec[
@@ -50,7 +56,6 @@ USD_SPEC = IndicatorSpec[
     root_key="Dolares",
     record_model=UsdRecord,
     collection_model=UsdCollection,
-    daily=True,
 )
 
 EURO_SPEC = IndicatorSpec[
@@ -62,5 +67,4 @@ EURO_SPEC = IndicatorSpec[
     root_key="Euros",
     record_model=EuroRecord,
     collection_model=EuroCollection,
-    daily=True,
 )

@@ -20,3 +20,20 @@ class IndicatorRecord(BaseModel):
 
 
 class IndicatorCollection[T: IndicatorRecord](RootModel[list[T]]): ...
+
+
+class InterestRateRecord(BaseModel):
+    title: str = Field(validation_alias="Titulo")
+    subtitle: str = Field(validation_alias="SubTitulo")
+    value: float = Field(validation_alias="Valor")
+    date: datetime = Field(validation_alias="Fecha")
+    date_to: datetime | None = Field(default=None, validation_alias="Hasta")
+    type: int = Field(validation_alias="Tipo")
+
+    @field_validator('value', mode='before')
+    @classmethod
+    def _parse_value(cls, value: str) -> float:
+        return round(convert_decimal(value) / 100, 5)
+
+
+class InterestRateCollection[T: InterestRateRecord](RootModel[list[T]]): ...

@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal, overload
 
-from ..models.base import IndicatorCollection, IndicatorRecord
+from pydantic import BaseModel, RootModel
+
 from .shape import ResponseShape
 
 if TYPE_CHECKING:
@@ -10,8 +11,8 @@ if TYPE_CHECKING:
 
 
 class CmfResponseParser[
-    RecordT: IndicatorRecord,
-    CollectionT: IndicatorCollection[Any]
+    RecordT: BaseModel,
+    CollectionT: RootModel[list[BaseModel]]
 ]:
     def __init__(
             self,

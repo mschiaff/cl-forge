@@ -10,12 +10,19 @@ from .resources.raw import RawResource
 from .specs.indicators import EURO_SPEC, IPC_SPEC, UF_SPEC, USD_SPEC, UTM_SPEC
 
 if TYPE_CHECKING:
-    from .models.euro import EuroCollection, EuroRecord
-    from .models.ipc import IpcCollection, IpcRecord
-    from .models.uf import UfCollection, UfRecord
-    from .models.usd import UsdCollection, UsdRecord
-    from .models.utm import UtmCollection, UtmRecord
-    from .types import CmfTransport
+    from cl_forge.rest.cmf.models.indicators import (
+        EuroCollection,
+        EuroRecord,
+        IpcCollection,
+        IpcRecord,
+        UfCollection,
+        UfRecord,
+        UsdCollection,
+        UsdRecord,
+        UtmCollection,
+        UtmRecord,
+    )
+    from cl_forge.rest.cmf.types import CmfTransport
 
 class CmfClient:
     raw: RawResource
