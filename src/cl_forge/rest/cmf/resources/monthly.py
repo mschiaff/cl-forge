@@ -21,7 +21,7 @@ class MonthlyIndicatorResource[
         date = YearMonth(year=year)
         path = IndicatorPath.year_month(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
-    
+
     def month(self, year: YearInt, month: MonthInt) -> RecordT:
         date = YearMonth(year=year, month=month)
         path = IndicatorPath.year_month(self._spec.path_name, date).build()

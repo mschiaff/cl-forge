@@ -5,7 +5,7 @@ from typing import Any, override
 from ..models.base import IndicatorCollection, IndicatorRecord
 from ..parsing.shape import ResponseShape
 from ..paths.builder import IndicatorPath
-from ..paths.dates import DayInt, MonthInt, YearInt, YearMonthDay
+from ..paths.dates import DayInt, MonthInt, YearInt, YearMonth, YearMonthDay
 from .monthly import MonthlyIndicatorResource
 
 
@@ -13,6 +13,12 @@ class DailyIndicatorResource[
     RecordT: IndicatorRecord,
     CollectionT: IndicatorCollection[Any]
 ](MonthlyIndicatorResource[RecordT, CollectionT]):
+    @override
+    def month(self, year: YearInt, month: MonthInt) -> CollectionT: # type: ignore
+        date = YearMonth(year=year, month=month)
+        path = IndicatorPath.year_month(self._spec.path_name, date).build()
+        return self._get(path, shape=ResponseShape.COLLECTION)
+
     @override
     def after(
             self,
