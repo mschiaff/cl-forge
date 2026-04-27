@@ -32,11 +32,7 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: ResponseShape,
-            raw: RawFormat | None = None,
-    ) -> RecordT | CollectionT | dict[str, Any] | str:
-        if raw:
-            return self._transport.get(path, fmt=raw)
-
+    ) -> RecordT | CollectionT:
         data = self._transport.get(path)
         return self._parser.parse(data, shape=shape)
 
@@ -45,10 +41,20 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: ResponseShape,
-            raw: RawFormat | None = None,
-    ) -> RecordT | CollectionT | dict[str, Any] | str:
-        if raw:
-            return await self._transport.aget(path, fmt=raw)
-
+    ) -> RecordT | CollectionT:
         data = await self._transport.aget(path)
         return self._parser.parse(data, shape=shape)
+
+
+class BaseRawResource:
+    def __init__(
+            self,
+            transport: CmfTransport,
+    ) -> None:
+        self._transport = transport
+
+    def _get(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
+        return self._transport.get(path, fmt=raw)
+
+    async def _aget(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
+        return await self._transport.aget(path, fmt=raw)

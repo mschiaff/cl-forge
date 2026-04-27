@@ -29,7 +29,6 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: Literal[ResponseShape.SINGLE],
-            raw: None = ...,
     ) -> RecordT: ...
     @overload
     def _get(
@@ -37,7 +36,6 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: Literal[ResponseShape.COLLECTION],
-            raw: None = ...,
     ) -> CollectionT: ...
     @overload
     def _get(
@@ -45,24 +43,7 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: ResponseShape,
-            raw: Literal["json"],
-    ) -> dict[str, Any]: ...
-    @overload
-    def _get(
-            self,
-            path: str,
-            *,
-            shape: ResponseShape,
-            raw: Literal["xml"],
-    ) -> str: ...
-    @overload
-    def _get(
-            self,
-            path: str,
-            *,
-            shape: ResponseShape,
-            raw: RawFormat | None = ...,
-    ) -> RecordT | CollectionT | dict[str, Any] | str: ...
+    ) -> RecordT | CollectionT: ...
 
     @overload
     async def _aget(
@@ -70,7 +51,6 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: Literal[ResponseShape.SINGLE],
-            raw: None = ...,
     ) -> RecordT: ...
     @overload
     async def _aget(
@@ -78,7 +58,6 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: Literal[ResponseShape.COLLECTION],
-            raw: None = ...,
     ) -> CollectionT: ...
     @overload
     async def _aget(
@@ -86,21 +65,27 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: ResponseShape,
-            raw: Literal["json"],
-    ) -> dict[str, Any]: ...
-    @overload
-    async def _aget(
+    ) -> RecordT | CollectionT: ...
+
+
+class BaseRawResource:
+    _transport: CmfTransport
+
+    def __init__(
             self,
-            path: str,
-            *,
-            shape: ResponseShape,
-            raw: Literal["xml"],
-    ) -> str: ...
+            transport: CmfTransport,
+    ) -> None: ...
+
     @overload
-    async def _aget(
-            self,
-            path: str,
-            *,
-            shape: ResponseShape,
-            raw: RawFormat | None = ...,
-    ) -> RecordT | CollectionT | dict[str, Any] | str: ...
+    def _get(self, path: str, raw: Literal["json"] = ...) -> dict[str, Any]: ...
+    @overload
+    def _get(self, path: str, raw: Literal["xml"]) -> str: ...
+    @overload
+    def _get(self, path: str, raw: RawFormat = ...) -> dict[str, Any] | str: ...
+
+    @overload
+    async def _aget(self, path: str, raw: Literal["json"] = ...) -> dict[str, Any]: ...
+    @overload
+    async def _aget(self, path: str, raw: Literal["xml"]) -> str: ...
+    @overload
+    async def _aget(self, path: str, raw: RawFormat = ...) -> dict[str, Any] | str: ...
