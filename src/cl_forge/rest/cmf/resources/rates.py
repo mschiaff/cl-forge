@@ -11,7 +11,7 @@ from ..paths.dates import YearMonth
 from .base import BaseRateResource
 
 
-class RatesResource[
+class RateResource[
     RecordT: InterestRateRecord,
     CollectionT: InterestRateCollection[Any]
 ](BaseRateResource[RecordT, CollectionT]):
