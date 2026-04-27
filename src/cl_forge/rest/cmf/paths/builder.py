@@ -8,7 +8,7 @@ from pydantic.dataclasses import dataclass
 from .segments import PathSegment
 
 if TYPE_CHECKING:
-    from .dates import YearMonth, YearMonthDay
+    from .dates import EndDay, StartDay, YearMonth, YearMonthDay
 
 
 @dataclass(frozen=True, slots=True)
@@ -50,4 +50,8 @@ class IndicatorPath:
 
     @classmethod
     def between_year_month(cls, indicator: str, start: YearMonth, end: YearMonth) -> IndicatorPath:
+        return cls(indicator=indicator, parts=(PathSegment.BETWEEN, *start.parts, *end.parts))
+
+    @classmethod
+    def between_days(cls, indicator: str, start: StartDay, end: EndDay) -> IndicatorPath:
         return cls(indicator=indicator, parts=(PathSegment.BETWEEN, *start.parts, *end.parts))

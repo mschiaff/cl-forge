@@ -1,9 +1,19 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Literal, Protocol, overload
+from typing import TYPE_CHECKING, Annotated, Any, Literal, Protocol, overload
+
+from pydantic import Field
 
 if TYPE_CHECKING:
     from cl_forge.core.types import RawFormat
+
+
+type YearInt = Annotated[int, Field(ge=0)]
+type MonthInt = Annotated[int, Field(ge=1, le=12)]
+type DayInt = Annotated[int, Field(ge=1, le=31)]
+
+type TwoTupleDate = tuple[YearInt, MonthInt]
+type ThreeTupleDate = tuple[YearInt, MonthInt, DayInt]
 
 
 class CmfTransport(Protocol):

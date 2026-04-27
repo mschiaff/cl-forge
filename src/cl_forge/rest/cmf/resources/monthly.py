@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
+from cl_forge.rest.cmf.types import MonthInt, TwoTupleDate, YearInt  # noqa: TC001
+
 from ..models.base import IndicatorCollection, IndicatorRecord
 from ..parsing.shape import ResponseShape
 from ..paths.builder import IndicatorPath
-from ..paths.dates import MonthInt, YearInt, YearMonth
+from ..paths.dates import YearMonth
 from .base import BaseIndicatorResource
 
 
@@ -47,8 +49,8 @@ class MonthlyIndicatorResource[
 
     def between(
             self,
-            start: YearInt | tuple[YearInt, MonthInt],
-            end: YearInt | tuple[YearInt, MonthInt]
+            start: YearInt | TwoTupleDate,
+            end: YearInt | TwoTupleDate
     ) -> CollectionT:
         _start = YearMonth.from_value(start)
         _end = YearMonth.from_value(end)

@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Self, override
 
-from pydantic import Field
 from pydantic.dataclasses import dataclass
 
-from .segments import PathSegment
-
-type YearInt = Annotated[int, Field(ge=0)]
-type MonthInt = Annotated[int, Field(ge=1, le=12)]
-type DayInt = Annotated[int, Field(ge=1, le=31)]
+from cl_forge.rest.cmf.paths.segments import PathSegment
+from cl_forge.rest.cmf.types import (  # noqa: TC001
+    DayInt,
+    MonthInt,
+    ThreeTupleDate,
+    TwoTupleDate,
+    YearInt,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,13 +22,12 @@ class YearMonth:
     @classmethod
     def from_value(
             cls,
-            value: YearInt | tuple[YearInt, MonthInt]
+            value: YearInt | TwoTupleDate
     ) -> YearMonth:
         if isinstance(value, int):
             return cls(year=value)
 
-        year, month = value
-        return cls(year=year, month=month)
+        return cls(*value)
 
     @property
     def parts(self) -> list[str]:
@@ -44,11 +45,44 @@ class YearMonthDay:
     month: MonthInt
     day: DayInt
 
+    @classmethod
+    def from_value(
+            cls,
+            value: ThreeTupleDate
+    ) -> Self:
+        return cls(*value)
+
     @property
     def parts(self) -> list[str]:
         return [
             str(self.year),
             f"{self.month:02d}",
             PathSegment.DAYS,
+            f"{self.day:02d}"
+        ]
+
+
+@dataclass(frozen=True, slots=True)
+class StartDay(YearMonthDay):
+    @property
+    @override
+    def parts(self) -> list[str]:
+        return [
+            str(self.year),
+            f"{self.month:02d}",
+            PathSegment.START,
+            f"{self.day:02d}"
+        ]
+
+
+@dataclass(frozen=True, slots=True)
+class EndDay(YearMonthDay):
+    @property
+    @override
+    def parts(self) -> list[str]:
+        return [
+            str(self.year),
+            f"{self.month:02d}",
+            PathSegment.END,
             f"{self.day:02d}"
         ]

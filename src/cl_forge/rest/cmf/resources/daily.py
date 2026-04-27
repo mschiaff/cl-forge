@@ -2,11 +2,23 @@ from __future__ import annotations
 
 from typing import Any, override
 
+from cl_forge.rest.cmf.types import (  # noqa: TC001
+    DayInt,
+    MonthInt,
+    ThreeTupleDate,
+    TwoTupleDate,
+    YearInt,
+)
+
 from ..models.base import IndicatorCollection, IndicatorRecord
 from ..parsing.shape import ResponseShape
 from ..paths.builder import IndicatorPath
-from ..paths.dates import DayInt, MonthInt, YearInt, YearMonth, YearMonthDay
+from ..paths.dates import EndDay, StartDay, YearMonth, YearMonthDay
 from .monthly import MonthlyIndicatorResource
+
+
+def is_three_tuple(value: YearInt | TwoTupleDate | ThreeTupleDate) -> bool:
+    return isinstance(value, tuple) and len(value) == 3
 
 
 class DailyIndicatorResource[
@@ -57,3 +69,17 @@ class DailyIndicatorResource[
         date = YearMonthDay(year=year, month=month, day=day)
         path = IndicatorPath.before_day(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
+
+    @override
+    def between(
+            self,
+            start: YearInt | TwoTupleDate | ThreeTupleDate,
+            end: YearInt | TwoTupleDate | ThreeTupleDate
+    ) -> CollectionT:
+        if is_three_tuple(start) and is_three_tuple(end):
+            _start = StartDay.from_value(start) # type: ignore
+            _end = EndDay.from_value(end) # type: ignore
+            path = IndicatorPath.between_days(self._spec.path_name, _start, _end).build()
+            return self._get(path, shape=ResponseShape.COLLECTION)
+
+        return super().between(start, end) # type: ignore

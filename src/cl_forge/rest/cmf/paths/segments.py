@@ -8,3 +8,5 @@ class PathSegment(StrEnum):
     BEFORE = "anteriores"
     BETWEEN = "periodo"
     DAYS = "dias"
+    START = "dias_i"
+    END = "dias_f"
