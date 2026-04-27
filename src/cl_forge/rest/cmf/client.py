@@ -42,31 +42,10 @@ class CmfClient:
 
         self.raw = RawResource(self._transport)
 
-        self.ipc = MonthlyIndicatorResource(
-            transport=self._transport,
-            spec=IPC_SPEC
-        )
-        self.uf = DailyIndicatorResource(
-            transport=self._transport,
-            spec=UF_SPEC
-        )
-        self.utm = MonthlyIndicatorResource(
-            transport=self._transport,
-            spec=UTM_SPEC
-        )
-        self.usd = DailyIndicatorResource(
-            transport=self._transport,
-            spec=USD_SPEC
-        )
-        self.euro = DailyIndicatorResource(
-            transport=self._transport,
-            spec=EURO_SPEC
-        )
-        self.tip = RateResource(
-            transport=self._transport,
-            spec=TIP_SPEC
-        )
-        self.tmc = RateResource(
-            transport=self._transport,
-            spec=TMC_SPEC
-        )
+        self.ipc = MonthlyIndicatorResource(transport=self._transport, spec=IPC_SPEC)
+        self.uf = DailyIndicatorResource(transport=self._transport, spec=UF_SPEC)
+        self.utm = MonthlyIndicatorResource(transport=self._transport, spec=UTM_SPEC)
+        self.usd = DailyIndicatorResource(transport=self._transport, spec=USD_SPEC)
+        self.euro = DailyIndicatorResource(transport=self._transport, spec=EURO_SPEC)
+        self.tip = RateResource(transport=self._transport, spec=TIP_SPEC)
+        self.tmc = RateResource(transport=self._transport, spec=TMC_SPEC)
