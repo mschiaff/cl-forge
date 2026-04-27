@@ -35,3 +35,12 @@ class MonthlyIndicatorResource[
         date = YearMonth(year=year, month=month)
         path = IndicatorPath.after_year_month(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
+
+    def before(
+            self,
+            year: YearInt,
+            month: MonthInt | None = None,
+    ) -> CollectionT:
+        date = YearMonth(year=year, month=month)
+        path = IndicatorPath.before_year_month(self._spec.path_name, date).build()
+        return self._get(path, shape=ResponseShape.COLLECTION)

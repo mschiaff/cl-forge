@@ -40,3 +40,20 @@ class DailyIndicatorResource[
         date = YearMonthDay(year=year, month=month, day=day)
         path = IndicatorPath.after_day(self._spec.path_name, date).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
+
+    @override
+    def before(
+            self,
+            year: YearInt,
+            month: MonthInt | None = None,
+            day: DayInt | None = None,
+    ) -> CollectionT:
+        if day is None:
+            return super().before(year=year, month=month)
+
+        if month is None:
+            raise ValueError("Month is required when day is provided")
+
+        date = YearMonthDay(year=year, month=month, day=day)
+        path = IndicatorPath.before_day(self._spec.path_name, date).build()
+        return self._get(path, shape=ResponseShape.COLLECTION)
