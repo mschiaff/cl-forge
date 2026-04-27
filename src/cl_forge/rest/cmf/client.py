@@ -6,8 +6,10 @@ from cl_forge.core.impl.cmf import BaseCmfClient
 
 from .resources.daily import DailyIndicatorResource
 from .resources.monthly import MonthlyIndicatorResource
+from .resources.rates import RateResource
 from .resources.raw import RawResource
 from .specs.indicators import EURO_SPEC, IPC_SPEC, UF_SPEC, USD_SPEC, UTM_SPEC
+from .specs.rates import TIP_SPEC, TMC_SPEC
 
 if TYPE_CHECKING:
     from cl_forge.rest.cmf.models.indicators import (
@@ -22,6 +24,7 @@ if TYPE_CHECKING:
         UtmCollection,
         UtmRecord,
     )
+    from cl_forge.rest.cmf.models.rates import TipCollection, TipRecord, TmcCollection, TmcRecord
     from cl_forge.rest.cmf.types import CmfTransport
 
 class CmfClient:
@@ -31,6 +34,8 @@ class CmfClient:
     utm: MonthlyIndicatorResource[UtmRecord, UtmCollection]
     usd: DailyIndicatorResource[UsdRecord, UsdCollection]
     euro: DailyIndicatorResource[EuroRecord, EuroCollection]
+    tip: RateResource[TipRecord, TipCollection]
+    tmc: RateResource[TmcRecord, TmcCollection]
 
     def __init__(self, api_key: str) -> None:
         self._transport: CmfTransport = BaseCmfClient(api_key)
@@ -56,4 +61,12 @@ class CmfClient:
         self.euro = DailyIndicatorResource(
             transport=self._transport,
             spec=EURO_SPEC
+        )
+        self.tip = RateResource(
+            transport=self._transport,
+            spec=TIP_SPEC
+        )
+        self.tmc = RateResource(
+            transport=self._transport,
+            spec=TMC_SPEC
         )

@@ -23,7 +23,7 @@ class IndicatorCollection[T: IndicatorRecord](RootModel[list[T]]): ...
 
 
 class RateRecord(BaseModel):
-    title: str = Field(validation_alias="Titulo")
+    title: str | None = Field(validation_alias="Titulo")
     subtitle: str = Field(validation_alias="SubTitulo")
     value: float = Field(validation_alias="Valor")
     date: datetime = Field(validation_alias="Fecha")
