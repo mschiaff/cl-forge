@@ -6,6 +6,7 @@ from cl_forge.core.impl.cmf import BaseCmfClient
 
 from .resources.daily import DailyIndicatorResource
 from .resources.monthly import MonthlyIndicatorResource
+from .resources.raw import RawResource
 from .specs.indicators import IPC_SPEC, UF_SPEC
 
 if TYPE_CHECKING:
@@ -14,11 +15,14 @@ if TYPE_CHECKING:
     from .types import CmfTransport
 
 class CmfClient:
+    raw: RawResource
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
     uf: DailyIndicatorResource[UfRecord, UfCollection]
 
     def __init__(self, api_key: str) -> None:
         self._transport: CmfTransport = BaseCmfClient(api_key)
+        
+        self.raw = RawResource(self._transport)
 
         self.ipc = MonthlyIndicatorResource(
             transport=self._transport,
