@@ -1,25 +1,45 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal, overload
 
+from ..models.base import IndicatorCollection, IndicatorRecord
 from .shape import ResponseShape
 
 if TYPE_CHECKING:
-    from pydantic import BaseModel, RootModel
-    
     from ..specs.base import IndicatorSpec
 
 
-class CmfResponseParser[T: BaseModel, C: RootModel[Any]]:
-    def __init__(self, spec: IndicatorSpec[T, C]) -> None:
+class CmfResponseParser[
+    RecordT: IndicatorRecord,
+    CollectionT: IndicatorCollection[Any]
+]:
+    def __init__(
+            self,
+            spec: IndicatorSpec[RecordT, CollectionT]
+    ) -> None:
         self._spec = spec
+    
+    @overload
+    def parse(
+            self,
+            response: dict[str, Any],
+            *,
+            shape: Literal[ResponseShape.SINGLE],
+    ) -> RecordT: ...
+    @overload
+    def parse(
+            self,
+            response: dict[str, Any],
+            *,
+            shape: Literal[ResponseShape.COLLECTION],
+    ) -> CollectionT: ...
 
     def parse(
             self,
             response: dict[str, Any],
             *,
             shape: ResponseShape
-    ) -> T | C:
+    ) -> RecordT | CollectionT:
         records = self._extract_records(response)
 
         if shape is ResponseShape.SINGLE:
@@ -46,7 +66,7 @@ class CmfResponseParser[T: BaseModel, C: RootModel[Any]]:
 
         return records # type: ignore
 
-    def _parse_single(self, records: list[dict[str, Any]]) -> T:
+    def _parse_single(self, records: list[dict[str, Any]]) -> RecordT:
         if len(records) != 1:
             raise ValueError(
                 f"Expected exactly one record for "
@@ -55,5 +75,5 @@ class CmfResponseParser[T: BaseModel, C: RootModel[Any]]:
 
         return self._spec.record_model.model_validate(records[0])
 
-    def _parse_collection(self, records: list[dict[str, Any]]) -> C:
+    def _parse_collection(self, records: list[dict[str, Any]]) -> CollectionT:
         return self._spec.collection_model.model_validate(records)

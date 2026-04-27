@@ -1,18 +1,20 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic.dataclasses import dataclass
 
-if TYPE_CHECKING:
-    from pydantic import BaseModel, RootModel
+from ..models.base import IndicatorCollection, IndicatorRecord
 
 
 @dataclass(frozen=True, slots=True)
-class IndicatorSpec[T: BaseModel, C: RootModel[Any]]:
+class IndicatorSpec[
+    RecordT: IndicatorRecord,
+    CollectionT: IndicatorCollection[Any]
+]:
     public_name: str
     path_name: str
     root_key: str
-    record_model: type[T]
-    collection_model: type[C]
+    record_model: type[RecordT]
+    collection_model: type[CollectionT]
     daily: bool = False
