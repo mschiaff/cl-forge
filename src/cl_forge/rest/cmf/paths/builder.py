@@ -8,7 +8,7 @@ from pydantic.dataclasses import dataclass
 from .segments import PathSegment
 
 if TYPE_CHECKING:
-    from .dates import YearMonth
+    from .dates import YearMonth, YearMonthDay
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,6 +26,13 @@ class IndicatorPath:
 
     @classmethod
     def after_monthly(cls, indicator: str, date: YearMonth) -> IndicatorPath:
+        return cls(
+            indicator=indicator,
+            parts=(PathSegment.AFTER, *date.path_parts())
+        )
+    
+    @classmethod
+    def after_day(cls, indicator: str, date: YearMonthDay) -> IndicatorPath:
         return cls(
             indicator=indicator,
             parts=(PathSegment.AFTER, *date.path_parts())
