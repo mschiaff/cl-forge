@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Literal, overload
+from typing import TYPE_CHECKING, Any
 
 from ..models.base import IndicatorCollection, IndicatorRecord
 from ..parsing.parser import CmfResponseParser
 
 if TYPE_CHECKING:
+    from cl_forge.core.types import RawFormat
+
     from ..parsing.shape import ResponseShape
     from ..specs.base import IndicatorSpec
     from ..types import CmfTransport
@@ -25,34 +27,16 @@ class BaseIndicatorResource[
         self._spec = spec
         self._parser = CmfResponseParser(spec)
 
-    @overload
-    def _get(
-            self,
-            path: str,
-            *,
-            shape: Literal[ResponseShape.SINGLE],
-    ) -> RecordT: ...
-    @overload
-    def _get(
-            self,
-            path: str,
-            *,
-            shape: Literal[ResponseShape.COLLECTION],
-    ) -> CollectionT: ...
-    @overload
     def _get(
             self,
             path: str,
             *,
             shape: ResponseShape,
-    ) -> RecordT | CollectionT: ...
+            raw: RawFormat | None = None,
+    ) -> RecordT | CollectionT | dict[str, Any] | str:
+        if raw:
+            return self._transport.get(path, fmt=raw)
 
-    def _get(
-            self,
-            path: str,
-            *,
-            shape: ResponseShape,
-    ) -> RecordT | CollectionT:
         data = self._transport.get(path)
         return self._parser.parse(data, shape=shape)
 
@@ -61,6 +45,10 @@ class BaseIndicatorResource[
             path: str,
             *,
             shape: ResponseShape,
-    ) -> RecordT | CollectionT:
+            raw: RawFormat | None = None,
+    ) -> RecordT | CollectionT | dict[str, Any] | str:
+        if raw:
+            return await self._transport.aget(path, fmt=raw)
+
         data = await self._transport.aget(path)
         return self._parser.parse(data, shape=shape)
