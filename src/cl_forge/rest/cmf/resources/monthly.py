@@ -56,3 +56,50 @@ class MonthlyIndicatorResource[
         _end = YearMonth.from_value(end)
         path = IndicatorPath.between_year_month(self._spec.path_name, _start, _end).build()
         return self._get(path, shape=ResponseShape.COLLECTION)
+
+
+class AsyncMonthlyIndicatorResource[
+    RecordT: IndicatorRecord,
+    CollectionT: IndicatorCollection[Any]
+](BaseIndicatorResource[RecordT, CollectionT]):
+    async def current(self) -> RecordT:
+        path = IndicatorPath.current(self._spec.path_name).build()
+        return await self._aget(path, shape=ResponseShape.SINGLE)
+
+    async def year(self, year: YearInt) -> CollectionT:
+        date = YearMonth(year=year)
+        path = IndicatorPath.year_month(self._spec.path_name, date).build()
+        return await self._aget(path, shape=ResponseShape.COLLECTION)
+
+    async def month(self, year: YearInt, month: MonthInt) -> RecordT:
+        date = YearMonth(year=year, month=month)
+        path = IndicatorPath.year_month(self._spec.path_name, date).build()
+        return await self._aget(path, shape=ResponseShape.SINGLE)
+
+    async def after(
+            self,
+            year: YearInt,
+            month: MonthInt | None = None,
+    ) -> CollectionT:
+        date = YearMonth(year=year, month=month)
+        path = IndicatorPath.after_year_month(self._spec.path_name, date).build()
+        return await self._aget(path, shape=ResponseShape.COLLECTION)
+
+    async def before(
+            self,
+            year: YearInt,
+            month: MonthInt | None = None,
+    ) -> CollectionT:
+        date = YearMonth(year=year, month=month)
+        path = IndicatorPath.before_year_month(self._spec.path_name, date).build()
+        return await self._aget(path, shape=ResponseShape.COLLECTION)
+
+    async def between(
+            self,
+            start: YearInt | TwoTupleDate,
+            end: YearInt | TwoTupleDate
+    ) -> CollectionT:
+        _start = YearMonth.from_value(start)
+        _end = YearMonth.from_value(end)
+        path = IndicatorPath.between_year_month(self._spec.path_name, _start, _end).build()
+        return await self._aget(path, shape=ResponseShape.COLLECTION)
