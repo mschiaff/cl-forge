@@ -27,7 +27,14 @@ if TYPE_CHECKING:
     from cl_forge.rest.cmf.models.rates import TipCollection, TipRecord, TmcCollection, TmcRecord
     from cl_forge.rest.cmf.types import CmfTransport
 
+
+__all__ = ("AsyncCmfClient", "CmfClient")
+
+
 class CmfClient:
+    """
+    Client for interacting with the CMF API.
+    """
     raw: RawResource
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
     uf: DailyIndicatorResource[UfRecord, UfCollection]
@@ -38,6 +45,14 @@ class CmfClient:
     tmc: RateResource[TmcRecord, TmcCollection]
 
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the CMF client.
+
+        Parameters
+        ----------
+        api_key : str
+            The API key for authenticating with the CMF API.
+        """
         self._transport: CmfTransport = BaseCmfClient(api_key)
 
         self.raw = RawResource(self._transport)
@@ -49,6 +64,30 @@ class CmfClient:
         self.euro = DailyIndicatorResource(transport=self._transport, spec=EURO_SPEC)
         self.tip = RateResource(transport=self._transport, spec=TIP_SPEC)
         self.tmc = RateResource(transport=self._transport, spec=TMC_SPEC)
+
+    @property
+    def api_key(self) -> str:
+        """
+        Get the API key used for authentication.
+
+        Returns
+        -------
+        str
+            The API key.
+        """
+        return self._transport.api_key
+
+    @property
+    def base_url(self) -> str:
+        """
+        Get the base URL for the CMF API.
+
+        Returns
+        -------
+        str
+            The base URL.
+        """
+        return self._transport.base_url
 
 
 class AsyncCmfClient:
@@ -73,3 +112,27 @@ class AsyncCmfClient:
         self.euro = AsyncDailyIndicatorResource(transport=self._transport, spec=EURO_SPEC)
         self.tip = AsyncRateResource(transport=self._transport, spec=TIP_SPEC)
         self.tmc = AsyncRateResource(transport=self._transport, spec=TMC_SPEC)
+
+    @property
+    def api_key(self) -> str:
+        """
+        Get the API key used for authentication.
+
+        Returns
+        -------
+        str
+            The API key.
+        """
+        return self._transport.api_key
+
+    @property
+    def base_url(self) -> str:
+        """
+        Get the base URL for the CMF API.
+
+        Returns
+        -------
+        str
+            The base URL.
+        """
+        return self._transport.base_url
