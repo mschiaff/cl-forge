@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any
-
-from pydantic.dataclasses import dataclass
 
 from ..models.base import IndicatorCollection, IndicatorRecord
 
