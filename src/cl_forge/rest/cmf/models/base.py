@@ -10,8 +10,16 @@ def convert_decimal(value: str) -> float:
 
 
 class IndicatorRecord(BaseModel):
-    value: float = Field(validation_alias="Valor")
-    date: datetime = Field(validation_alias="Fecha")
+    value: float = Field(
+        validation_alias="Valor",
+        description="The value of the indicator.",
+    )
+    """The value of the indicator."""
+    date: datetime = Field(
+        validation_alias="Fecha",
+        description="The date of the indicator.",
+    )
+    """The date of the indicator."""
 
     @field_validator('value', mode='before')
     @classmethod
@@ -23,12 +31,37 @@ class IndicatorCollection[T: IndicatorRecord](RootModel[list[T]]): ...
 
 
 class RateRecord(BaseModel):
-    title: str | None = Field(validation_alias="Titulo")
-    subtitle: str = Field(validation_alias="SubTitulo")
-    value: float = Field(validation_alias="Valor")
-    date: datetime = Field(validation_alias="Fecha")
-    date_to: datetime | None = Field(default=None, validation_alias="Hasta")
-    type: int = Field(validation_alias="Tipo")
+    title: str | None = Field(
+        validation_alias="Titulo",
+        description="Descriptive title of the rate.",
+    )
+    """Descriptive title of the rate."""
+    subtitle: str = Field(
+        validation_alias="SubTitulo",
+        description="More descriptive details about the rate.",
+    )
+    """More descriptive details about the rate."""
+    value: float = Field(
+        validation_alias="Valor",
+        description="The value of the rate.",
+    )
+    """The value of the rate."""
+    date: datetime = Field(
+        validation_alias="Fecha",
+        description="The date of the rate.",
+    )
+    """The date of the rate."""
+    date_to: datetime | None = Field(
+        default=None,
+        validation_alias="Hasta",
+        description="Date until which the rate is valid (if applicable).",
+    )
+    """Date until which the rate is valid (if applicable)."""
+    type: int = Field(
+        validation_alias="Tipo",
+        description="Code of the rate type that matches title and subtitle descriptions.",
+    )
+    """Code of the rate type that matches title and subtitle descriptions."""
 
     @field_validator('value', mode='before')
     @classmethod
