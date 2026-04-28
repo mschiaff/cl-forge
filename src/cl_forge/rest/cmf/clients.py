@@ -28,7 +28,7 @@ if TYPE_CHECKING:
     from cl_forge.rest.cmf.types import CmfTransport
 
 
-__all__ = ("AsyncCmfClient", "CmfClient")
+__all__ = ("AsyncCmfClient", "CmfClient",)
 
 
 class CmfClient:
@@ -36,6 +36,7 @@ class CmfClient:
     
     raw: RawResource
     """Resource for accessing raw CMF API requests."""
+    
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
     """Resource for accessing IPC indicator data."""
     uf: DailyIndicatorResource[UfRecord, UfCollection]
@@ -99,14 +100,24 @@ class CmfClient:
 
 class AsyncCmfClient:
     """Asynchronous client for interacting with the CMF API."""
+    
     raw: AsyncRawResource
+    """Resource for accessing raw CMF API requests."""
+    
     ipc: AsyncMonthlyIndicatorResource[IpcRecord, IpcCollection]
+    """Resource for accessing IPC indicator data."""
     uf: AsyncDailyIndicatorResource[UfRecord, UfCollection]
+    """Resource for accessing UF indicator data."""
     utm: AsyncMonthlyIndicatorResource[UtmRecord, UtmCollection]
+    """Resource for accessing UTM indicator data."""
     usd: AsyncDailyIndicatorResource[UsdRecord, UsdCollection]
+    """Resource for accessing USD/CLP exchange rate data."""
     euro: AsyncDailyIndicatorResource[EuroRecord, EuroCollection]
+    """Resource for accessing Euro/CLP exchange rate data."""
     tip: AsyncRateResource[TipRecord, TipCollection]
+    """Resource for accessing TIP data."""
     tmc: AsyncRateResource[TmcRecord, TmcCollection]
+    """Resource for accessing TMC data."""
 
     def __init__(self, api_key: str) -> None:
         """
