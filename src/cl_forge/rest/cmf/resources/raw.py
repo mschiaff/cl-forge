@@ -24,8 +24,8 @@ class RawJsonResource(BaseRawResource):
         dict[str, Any]
             The JSON response from the CMF API as a dictionary.
 
-        Example
-        -------
+        Examples
+        --------
         ```python
         from cl_forge import CmfClient
 
@@ -52,8 +52,8 @@ class RawXmlResource(BaseRawResource):
         str
             The XML response from the CMF API as a string.
 
-        Example
-        -------
+        Examples
+        --------
         ```python
         from cl_forge import CmfClient
 
@@ -88,8 +88,8 @@ class AsyncRawJsonResource(BaseRawResource):
         dict[str, Any]
             The JSON response from the CMF API as a dictionary.
 
-        Example
-        -------
+        Examples
+        --------
         ```python
         from cl_forge import AsyncCmfClient
 
@@ -115,9 +115,9 @@ class AsyncRawXmlResource(BaseRawResource):
         -------
         str
             The XML response from the CMF API as a string.
-        
-        Example
-        -------
+
+        Examples
+        --------
         ```python
         from cl_forge import AsyncCmfClient
         

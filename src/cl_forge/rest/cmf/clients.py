@@ -37,12 +37,19 @@ class CmfClient:
     raw: RawResource
     """Resource for accessing raw CMF API requests."""
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
+    """Resource for accessing IPC indicator data."""
     uf: DailyIndicatorResource[UfRecord, UfCollection]
+    """Resource for accessing UF indicator data."""
     utm: MonthlyIndicatorResource[UtmRecord, UtmCollection]
+    """Resource for accessing UTM indicator data."""
     usd: DailyIndicatorResource[UsdRecord, UsdCollection]
+    """Resource for accessing USD/CLP exchange rate data."""
     euro: DailyIndicatorResource[EuroRecord, EuroCollection]
+    """Resource for accessing Euro/CLP exchange rate data."""
     tip: RateResource[TipRecord, TipCollection]
+    """Resource for accessing TIP rate data."""
     tmc: RateResource[TmcRecord, TmcCollection]
+    """Resource for accessing TMC rate data."""
 
     def __init__(self, api_key: str) -> None:
         """
