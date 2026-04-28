@@ -33,7 +33,9 @@ __all__ = ("AsyncCmfClient", "CmfClient")
 
 class CmfClient:
     """Client for interacting with the CMF API."""
+    
     raw: RawResource
+    """Resource for accessing raw CMF API requests."""
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
     uf: DailyIndicatorResource[UfRecord, UfCollection]
     utm: MonthlyIndicatorResource[UtmRecord, UtmCollection]
