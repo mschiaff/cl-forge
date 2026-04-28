@@ -47,9 +47,9 @@ class CmfClient:
     euro: DailyIndicatorResource[EuroRecord, EuroCollection]
     """Resource for accessing Euro/CLP exchange rate data."""
     tip: RateResource[TipRecord, TipCollection]
-    """Resource for accessing TIP rate data."""
+    """Resource for accessing TIP data."""
     tmc: RateResource[TmcRecord, TmcCollection]
-    """Resource for accessing TMC rate data."""
+    """Resource for accessing TMC data."""
 
     def __init__(self, api_key: str) -> None:
         """
