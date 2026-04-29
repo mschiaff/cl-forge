@@ -2,18 +2,18 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from .base import BaseMarketRawResource
+from .base import BaseMarketResource
 
 if TYPE_CHECKING:
     from ..types import MarketTransport
 
 
-class RawMarketJsonResource(BaseMarketRawResource):
+class RawMarketJsonResource(BaseMarketResource):
     def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         return self._get(path=path, params=params)
 
 
-class RawMarketXmlResource(BaseMarketRawResource):
+class RawMarketXmlResource(BaseMarketResource):
     def get(self, path: str, params: dict[str, Any] | None = None) -> str:
         return self._get(path=path, fmt="xml", params=params)
 

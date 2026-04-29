@@ -1,9 +1,19 @@
-from typing import Any, Literal, overload
+from __future__ import annotations
 
-from cl_forge.rest.market.types import MarketTransport, ResponseFormat
+from typing import TYPE_CHECKING, Any, Literal, overload
+
+from cl_forge.rest.market.types import MarketTransport
+
+if TYPE_CHECKING:
+    from pydantic import BaseModel
+
+    from cl_forge.rest.market.types import MarketTransport, ResponseFormat
+
+    from ..parsing.tenders import TenderQuery
+    from ..specs.tenders import TenderSpec
 
 
-class BaseMarketRawResource:
+class BaseMarketResource:
     def __init__(self, transport: MarketTransport) -> None:
         self._transport = transport
 
@@ -52,3 +62,33 @@ class BaseMarketRawResource:
             params: dict[str, Any] | None = None
     ) -> dict[str, Any] | str:
         return await self._transport.aget(path, fmt=fmt, params=params)
+
+
+class BaseTendersResource[
+    RecordsT: BaseModel,
+    DetailsT: BaseModel
+](BaseMarketResource):
+    def __init__(
+            self,
+            transport: MarketTransport,
+            *,
+            spec: TenderSpec[RecordsT, DetailsT]
+    ) -> None:
+        super().__init__(transport)
+        self._spec = spec
+
+    def _get_tenders(self, query: TenderQuery | None = None) -> RecordsT:
+        data = self._get(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.record_model.model_validate(data)
+
+    def _get_details(self, query: TenderQuery) -> DetailsT:
+        data = self._get(path=self._spec.path_name, params=query.params)
+        return self._spec.details_model.model_validate(data)
+
+    async def _aget_tenders(self, query: TenderQuery | None = None) -> RecordsT:
+        data = await self._aget(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.record_model.model_validate(data)
+
+    async def _aget_details(self, query: TenderQuery) -> DetailsT:
+        data = await self._aget(path=self._spec.path_name, params=query.params)
+        return self._spec.details_model.model_validate(data)
