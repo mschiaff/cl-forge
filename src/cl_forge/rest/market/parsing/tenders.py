@@ -15,6 +15,12 @@ class TenderQuery(BaseModel):
     parameters as a dict with keys matching the API's expected parameter names,
     which can then be passed to the API request.
     """
+    allow_others: bool = Field(
+        default=False,
+        exclude=True,
+        repr=False,
+        description="Whether to allow `TenderStatus.others` status values."
+    )
 
     tender_code: str | None = Field(
         default=None,
