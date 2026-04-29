@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import datetime
 import enum
-from typing import Annotated, Any, Literal, Protocol, overload
+from typing import TYPE_CHECKING, Annotated, Any, Literal, Protocol, Self, overload
 
 from pydantic import AfterValidator, PlainSerializer, StringConstraints
+
+if TYPE_CHECKING:
+    from pydantic import ValidationInfo
 
 __all__ = ("DateLike", "MarketTransport", "StatusLike", "TenderStatus", "TenderStatusCode")
 
@@ -16,17 +19,34 @@ DATE_PATTERN = r"^\d{4}-\d{2}-\d{2}$"
 """Regex pattern to validate date strings in ISO format (yyyy-mm-dd)."""
 
 
+type ResponseFormat = Literal["json", "xml"]
+
+
 def to_date(date: datetime.datetime | datetime.date) -> datetime.date:
     return date.date() if isinstance(date, datetime.datetime) else date
 
 def serialize_date(date: datetime.date) -> str:
     return date.strftime(DATE_FORMAT)
 
+def validate_status(
+        value: TenderStatus | TenderStatus.others | str,
+        info: ValidationInfo
+) -> TenderStatus | TenderStatus.others:
+    if info.data.get("allow_others", False):
+        return TenderStatus.others.from_str(value)
+    return TenderStatus.from_str(value)
 
-type ResponseFormat = Literal["json", "xml"]
+
+class BaseStrEnum(enum.StrEnum):
+    @classmethod
+    def from_str(cls, status: str) -> Self:
+        for member in cls:
+            if member == status.strip().lower():
+                return member
+        raise ValueError(f"Unknown status: {status!r}")
 
 
-class TenderStatus(enum.StrEnum):
+class TenderStatus(BaseStrEnum):
     PUBLISHED = "publicada"
     CLOSED = "cerrada"
     DESERTED = "desierta"
@@ -35,16 +55,9 @@ class TenderStatus(enum.StrEnum):
     SUSPENDED = "suspendida"
 
     @enum.nonmember
-    class others(enum.StrEnum):  # noqa: N801
+    class others(BaseStrEnum):  # noqa: N801
         ALL = "todos"
         ACTIVE = "activas"
-
-    @classmethod
-    def from_str(cls, status: str) -> TenderStatus:
-        for member in cls:
-            if member == status.strip().lower():
-                return member
-        raise ValueError(f"Unknown status: {status!r}")
 
 
 class TenderStatusCode(enum.IntEnum):
@@ -86,7 +99,7 @@ type StatusString = Annotated[
         strip_whitespace=True
     ),
     AfterValidator(
-        TenderStatus.from_str
+        validate_status
     ),
 ]
 type StatusLike = Annotated[
