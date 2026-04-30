@@ -16,7 +16,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
             self,
             rut: RutLike,
             *,
-            ignore_root: bool = False,
+            ignore_meta: bool = False,
             only_record: bool = False,
     ) -> SupplierRecord | SuppliersDirectory | SuppliersResult:
         """
@@ -28,7 +28,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
             The RUT of the supplier to search for. Exptects a string in format
             "12345678-9", "12.345.678-9" or an integer like 12345678 only with
             RUT's digits.
-        ignore_root : bool, optional
+        ignore_meta : bool, optional
             Whether to ignore the response metadata object, by default False
         only_record : bool, optional
             Whether to return only the record, by default False
@@ -60,7 +60,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
 
         if only_record:
                 return response.records.root[0]
-        if ignore_root:
+        if ignore_meta:
              return response.records
 
         return response

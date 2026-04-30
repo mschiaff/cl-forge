@@ -11,7 +11,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
             self,
             rut: RutLike,
             *,
-            ignore_root: Literal[False] = ...,
+            ignore_meta: Literal[False] = ...,
             only_record: Literal[False] = ...,
     ) -> SuppliersResult: ...
     @overload
@@ -19,7 +19,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
             self,
             rut: RutLike,
             *,
-            ignore_root: Literal[True],
+            ignore_meta: Literal[True],
             only_record: Literal[False] = ...,
     ) -> SuppliersDirectory: ...
     @overload
@@ -27,7 +27,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
             self,
             rut: RutLike,
             *,
-            ignore_root: bool = ...,
+            ignore_meta: bool = ...,
             only_record: Literal[True],
     ) -> SupplierRecord: ...
 
