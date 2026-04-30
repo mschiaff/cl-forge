@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
     from cl_forge.rest.market.types import MarketTransport, ResponseFormat
 
-    from ..parsing.tenders import TenderQuery
+    from ..query.tenders import TenderQuery
     from ..specs.tenders import TenderSpec
 
 

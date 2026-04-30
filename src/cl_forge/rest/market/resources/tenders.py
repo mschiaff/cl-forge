@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from ..models.tenders import Tender, TenderDetails
-from ..parsing.tenders import TenderQuery
+from ..query.tenders import TenderQuery
 from ..types import TenderStatus
 from .base import BaseTendersResource
 
