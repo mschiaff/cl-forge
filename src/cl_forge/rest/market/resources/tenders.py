@@ -15,10 +15,10 @@ class TendersResource(BaseTendersResource[Tender, TenderDetails]):
     def today(self) -> Tender:
         return self._get_tenders()
 
-    def details(self, code: str) -> TenderDetails:
-        query = TenderQuery(tender_code=code)
+    def details(self, tender_code: str) -> TenderDetails:
+        query = TenderQuery(tender_code=tender_code)
         return self._get_details(query)
-    
+
     def active(self) -> Tender:
         query = TenderQuery(
             status=TenderStatus.others.ACTIVE,
@@ -44,4 +44,28 @@ class TendersResource(BaseTendersResource[Tender, TenderDetails]):
             date: DateLike | None = None
     ) -> Tender:
         query = TenderQuery(status=status, date=date)
+        return self._get_tenders(query)
+
+    def by_buyer(
+            self,
+            buyer_code: str | int,
+            *,
+            date: DateLike | None = None,
+    ) -> Tender:
+        query = TenderQuery(
+            date=date,
+            buyer_code=buyer_code,
+        )
+        return self._get_tenders(query)
+
+    def by_supplier(
+            self,
+            supplier_code: str | int,
+            *,
+            date: DateLike | None = None,
+    ) -> Tender:
+        query = TenderQuery(
+            date=date,
+            supplier_code=supplier_code,
+        )
         return self._get_tenders(query)
