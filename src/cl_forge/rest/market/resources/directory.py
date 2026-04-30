@@ -1,14 +1,20 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from ..models.directory import BuyersResult, SupplierRecord, SuppliersDirectory, SuppliersResult
 from ..query.directory import BuyerQuery, SupplierQuery
+from ..types import RutLikeAdapter
 from .base import BaseDirectoryResource
+
+if TYPE_CHECKING:
+     from ..types import RutLike
 
 
 class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
     def search(
             self,
-            rut: str,
+            rut: RutLike,
             *,
             ignore_root: bool = False,
             only_record: bool = False,
@@ -18,7 +24,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
 
         Parameters
         ----------
-        rut : str
+        rut : RutLike
             The RUT of the supplier to search for.
         ignore_root : bool, optional
             Whether to ignore the response metadata object, by default False
@@ -37,6 +43,7 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
             If the the searched supplier is not found or any other error
             occurs during the search.
         """
+        rut = RutLikeAdapter.validate_python(rut)
         query = SupplierQuery(rut=rut)
         response =  self._search(query)
 
