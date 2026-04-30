@@ -4,7 +4,13 @@ from datetime import datetime  # noqa: TC003
 
 from pydantic import BaseModel, Field, RootModel
 
-__all__ = ("BuyersResult", "DirectoryResult", "SuppliersResult",)
+__all__ = (
+    "BuyersResult",
+    "DirectoryResult",
+    "SupplierRecord",
+    "SuppliersDirectory", 
+    "SuppliersResult",
+)
 
 
 class DirectoryRecord(BaseModel): ...

@@ -1,14 +1,27 @@
 from __future__ import annotations
 
-from ..models.directory import BuyersResult, SuppliersResult
+from ..models.directory import BuyersResult, SupplierRecord, SuppliersDirectory, SuppliersResult
 from ..query.directory import BuyerQuery, SupplierQuery
 from .base import BaseDirectoryResource
 
 
 class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
-    def search(self, rut: str) -> SuppliersResult:
+    def search(
+            self,
+            rut: str,
+            *,
+            ignore_root: bool = False,
+            only_record: bool = False,
+    ) -> SupplierRecord | SuppliersDirectory | SuppliersResult:
         query = SupplierQuery(rut=rut)
-        return self._search(query)
+        response =  self._search(query)
+
+        if only_record:
+                return response.records.root[0]
+        if ignore_root:
+             return response.records
+
+        return response
 
 
 class BuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
