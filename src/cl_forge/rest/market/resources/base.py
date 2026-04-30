@@ -9,7 +9,10 @@ if TYPE_CHECKING:
 
     from cl_forge.rest.market.types import MarketTransport, ResponseFormat
 
+    from ..models.directory import DirectoryResult
+    from ..query.directory import DirectoryQuery
     from ..query.tenders import TenderQuery
+    from ..specs.directory import DirectorySpec
     from ..specs.tenders import TenderSpec
 
 
@@ -92,3 +95,21 @@ class BaseTendersResource[
     async def _aget_details(self, query: TenderQuery) -> DetailsT:
         data = await self._aget(path=self._spec.path_name, params=query.params)
         return self._spec.details_model.model_validate(data)
+
+
+class BaseDirectoryResource[
+    ResultT: DirectoryResult,
+    QueryT: DirectoryQuery,
+](BaseMarketResource):
+    def __init__(
+            self,
+            transport: MarketTransport,
+            *,
+            spec: DirectorySpec[ResultT]
+    ) -> None:
+        super().__init__(transport)
+        self._spec = spec
+
+    def _search(self, query: QueryT | None = None) -> ResultT:
+        data = self._get(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.model.model_validate(data)
