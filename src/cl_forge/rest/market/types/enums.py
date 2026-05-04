@@ -47,6 +47,7 @@ class OrderStatus(BaseStrEnum):
     PARTIAL = "RecepcionadaParcialmente"
     INCOMPLETE = "RecepcionConformeIncompleta"
 
+    @enum.nonmember
     class others(BaseStrEnum):  # noqa: N801
         ALL = "Todos"
 
