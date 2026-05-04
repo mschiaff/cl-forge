@@ -25,6 +25,18 @@ class OrderQuery(BaseModel):
         serialization_alias="Codigo",
         description="The code of the order to query.",
     )
+    buyer_code: str | int | None = Field(
+        default=None,
+        coerce_numbers_to_str=True,
+        serialization_alias="CodigoOrganismo",
+        description="The code of the buyer to query.",
+    )
+    supplier_code: str | int | None = Field(
+        default=None,
+        coerce_numbers_to_str=True,
+        serialization_alias="CodigoProveedor",
+        description="The code of the supplier to query.",
+    )
     status: OrderStatusLike | None = Field(
         default=None,
         serialization_alias="Estado",
