@@ -119,6 +119,14 @@ class BaseOrdersResource[
     def _get_details(self, query: OrderQuery) -> DetailsT:
         data = self._get(path=self._spec.path_name, params=query.params)
         return self._spec.details_model.model_validate(data)
+    
+    async def _aget_orders(self, query: OrderQuery | None = None) -> RecordsT:
+        data = await self._aget(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.record_model.model_validate(data)
+
+    async def _aget_details(self, query: OrderQuery) -> DetailsT:
+        data = await self._aget(path=self._spec.path_name, params=query.params)
+        return self._spec.details_model.model_validate(data)
 
 
 class BaseDirectoryResource[
