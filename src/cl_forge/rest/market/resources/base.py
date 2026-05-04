@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from ..query.directory import DirectoryQuery
     from ..query.tenders import TenderQuery
     from ..specs.directory import DirectorySpec
+    from ..specs.orders import OrderSpec
     from ..specs.tenders import TenderSpec
 
 
@@ -95,6 +96,23 @@ class BaseTendersResource[
     async def _aget_details(self, query: TenderQuery) -> DetailsT:
         data = await self._aget(path=self._spec.path_name, params=query.params)
         return self._spec.details_model.model_validate(data)
+
+
+class BaseOrdersResource[
+    RecordsT: BaseModel,
+](BaseMarketResource):
+    def __init__(
+            self,
+            transport: MarketTransport,
+            *,
+            spec: OrderSpec[RecordsT]
+    ) -> None:
+        super().__init__(transport)
+        self._spec = spec
+
+    def _get_orders(self, query: TenderQuery | None = None) -> RecordsT:
+        data = self._get(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.record_model.model_validate(data)
 
 
 class BaseDirectoryResource[
