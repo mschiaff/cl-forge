@@ -39,7 +39,6 @@ class TendersResource(BaseTendersResource[Tender, TenderDetails]):
         query = TenderQuery(status=status, date=date)
         return self._get_tenders(query)
 
-
     def by_supplier(self, supplier_code: str | int, *, date: DateLike | None = None) -> Tender:
         query = TenderQuery(date=date, supplier_code=supplier_code)
         return self._get_tenders(query)
