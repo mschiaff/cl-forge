@@ -19,18 +19,22 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         query = OrderQuery(order_code=order_code)
         return self._get_details(query)
 
-    def all(self, date: DateLike | None = None) -> Order:
-        query = OrderQuery(
-            status=OrderStatus.others.ALL,
-            allow_others=True,
-            date=date,
-        )
-        return self._get_orders(query)
-
     def by_date(self, date: DateLike) -> Order:
         query = OrderQuery(date=date)
         return self._get_orders(query)
 
+    def all(self, date: DateLike | None = None) -> Order:
+        query = OrderQuery(status=OrderStatus.others.ALL, allow_others=True, date=date)
+        return self._get_orders(query)
+
+    def by_buyer(self, buyer_code: str | int, *, date: DateLike | None = None) -> Order:
+        query = OrderQuery(date=date, buyer_code=buyer_code)
+        return self._get_orders(query)
+
     def by_status(self, status: OrderStatusLike, *, date: DateLike | None = None) -> Order:
         query = OrderQuery(status=status, date=date)
+        return self._get_orders(query)
+
+    def by_supplier(self, supplier_code: str | int, *, date: DateLike | None = None) -> Order:
+        query = OrderQuery(date=date, supplier_code=supplier_code)
         return self._get_orders(query)
