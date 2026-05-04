@@ -5,9 +5,11 @@ from typing import TYPE_CHECKING
 from cl_forge.core.impl.market import BaseMarketClient
 
 from .resources.directory import BuyersResource, SuppliersResource
+from .resources.orders import OrdersResource
 from .resources.raw import RawMarketResource
 from .resources.tenders import TendersResource
 from .specs.directory import BUYER_SPEC, SUPPLIER_SPEC
+from .specs.orders import ORDER_SPEC
 from .specs.tenders import TENDER_SPEC
 
 if TYPE_CHECKING:
@@ -21,6 +23,8 @@ class MarketClient:
     """Resource for accessing raw market API requests."""
     tenders: TendersResource
     """Resource for accessing tender data."""
+    orders: OrdersResource
+    """Resource for accessing purchase orders data."""
     suppliers: SuppliersResource
     """Resource for accessing suppliers directory data."""
     buyers: BuyersResource
@@ -31,6 +35,7 @@ class MarketClient:
 
         self.raw = RawMarketResource(self._transport)
         self.tenders = TendersResource(self._transport, spec=TENDER_SPEC)
+        self.orders = OrdersResource(self._transport, spec=ORDER_SPEC)
         self.suppliers = SuppliersResource(self._transport, spec=SUPPLIER_SPEC)
         self.buyers = BuyersResource(self._transport, spec=BUYER_SPEC)
 
