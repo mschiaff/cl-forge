@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
-from ..types import DateLike  # noqa: TC001
+from ..types import DateLike, OrderStatusLike  # noqa: TC001
 
 
 class OrderQuery(BaseModel):
@@ -25,7 +25,7 @@ class OrderQuery(BaseModel):
         serialization_alias="Codigo",
         description="The code of the order to query.",
     )
-    status: str | None = Field(
+    status: OrderStatusLike | None = Field(
         default=None,
         serialization_alias="Estado",
         description="The status of the order to query.",

@@ -7,7 +7,7 @@ from ..query.orders import OrderQuery
 from .base import BaseOrdersResource
 
 if TYPE_CHECKING:
-    from ..types import DateLike
+    from ..types import DateLike, OrderStatusLike
 
 
 class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
@@ -22,6 +22,6 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         query = OrderQuery(date=date)
         return self._get_orders(query)
 
-    def by_status(self, status: str, *, date: DateLike | None = None) -> Order:
+    def by_status(self, status: OrderStatusLike, *, date: DateLike | None = None) -> Order:
         query = OrderQuery(status=status, date=date)
         return self._get_orders(query)
