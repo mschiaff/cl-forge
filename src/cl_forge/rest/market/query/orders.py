@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from ..types import DateLike  # noqa: TC001
+
 
 class OrderQuery(BaseModel):
     """
@@ -15,6 +17,15 @@ class OrderQuery(BaseModel):
         default=None,
         serialization_alias="Codigo",
         description="The code of the order to query.",
+    )
+    date: DateLike | None = Field(
+        default=None,
+        serialization_alias="Fecha",
+        description=(
+            "The date for which to query orders. Can be "
+            "either `datetime.datetime`, `datetime.date`, "
+            "or ISO format string (yyyy-mm-dd)."
+        ),
     )
 
     @property
