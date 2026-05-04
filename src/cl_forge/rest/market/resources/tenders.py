@@ -8,7 +8,7 @@ from ..types import TenderStatus
 from .base import BaseTendersResource
 
 if TYPE_CHECKING:
-    from ..types import DateLike, StatusLike
+    from ..types import DateLike, TenderStatusLike
 
 
 class TendersResource(BaseTendersResource[Tender, TenderDetails]):
@@ -39,7 +39,7 @@ class TendersResource(BaseTendersResource[Tender, TenderDetails]):
         return self._get_tenders(query)
 
     def by_status(self,
-            status: StatusLike,
+            status: TenderStatusLike,
             *,
             date: DateLike | None = None
     ) -> Tender:

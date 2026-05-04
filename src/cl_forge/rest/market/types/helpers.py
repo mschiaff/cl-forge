@@ -17,7 +17,7 @@ __all__ = (
     "serialize_date",
     "string_rut_validator",
     "to_date",
-    "validate_status",
+    "validate_tender_status",
 )
 
 
@@ -32,7 +32,7 @@ def serialize_date(date: datetime.date) -> str:
     return date.strftime(DATE_FORMAT)
 
 
-def validate_status(
+def validate_tender_status(
         value: TenderStatus | TenderStatus.others | str,
         info: ValidationInfo
 ) -> TenderStatus | TenderStatus.others:

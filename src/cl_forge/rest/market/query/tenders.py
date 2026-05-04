@@ -4,7 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from ..types import DateLike, StatusLike  # noqa: TC001
+from ..types import DateLike, TenderStatusLike  # noqa: TC001
 
 
 class TenderQuery(BaseModel):
@@ -39,7 +39,7 @@ class TenderQuery(BaseModel):
         serialization_alias="CodigoProveedor",
         description="The code of the supplier to query.",
     )
-    status: StatusLike | None = Field(
+    status: TenderStatusLike | None = Field(
         default=None,
         serialization_alias="Estado",
         description="The status of the tender to query.",

@@ -12,10 +12,10 @@ from .helpers import (
     serialize_date,
     string_rut_validator,
     to_date,
-    validate_status,
+    validate_tender_status,
 )
 
-__all__ = ("DateLike", "RutLike", "StatusLike",)
+__all__ = ("DateLike", "RutLike", "TenderStatusLike",)
 
 
 type DateObject = Annotated[
@@ -40,18 +40,18 @@ type DateLike = Annotated[
     )
 ]
 
-type StatusString = Annotated[
+type TenderStatusString = Annotated[
     str,
     StringConstraints(
         to_lower=True,
         strip_whitespace=True
     ),
     AfterValidator(
-        validate_status
+        validate_tender_status
     ),
 ]
-type StatusLike = Annotated[
-    TenderStatus | StatusString,
+type TenderStatusLike = Annotated[
+    TenderStatus | TenderStatusString,
     PlainSerializer(
         lambda s: s.value,
         return_type=str
