@@ -10,7 +10,7 @@ class BaseStrEnum(enum.StrEnum):
     @classmethod
     def from_str(cls, status: str) -> Self:
         for member in cls:
-            if member == status.strip().lower():
+            if member.lower() == status.strip().lower():
                 return member
         raise ValueError(f"Unknown status: {status!r}")
 
