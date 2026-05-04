@@ -18,6 +18,11 @@ class OrderQuery(BaseModel):
         serialization_alias="Codigo",
         description="The code of the order to query.",
     )
+    status: str | None = Field(
+        default=None,
+        serialization_alias="Estado",
+        description="The status of the order to query.",
+    )
     date: DateLike | None = Field(
         default=None,
         serialization_alias="Fecha",

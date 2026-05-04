@@ -21,3 +21,7 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
     def by_date(self, date: DateLike) -> Order:
         query = OrderQuery(date=date)
         return self._get_orders(query)
+
+    def by_status(self, status: str, *, date: DateLike | None = None) -> Order:
+        query = OrderQuery(status=status, date=date)
+        return self._get_orders(query)
