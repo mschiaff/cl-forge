@@ -2,11 +2,17 @@ from __future__ import annotations
 
 from pydantic.type_adapter import TypeAdapter
 
-from .annotate import DateLike, RutLike, StatusLike
+from .annotate import DateLike, OrderStatusLike, RutLike, TenderStatusLike
 
-__all__ = ("DateLikeAdapter", "RutLikeAdapter", "StatusLikeAdapter",)
+__all__ = (
+    "DateLikeAdapter",
+    "OrderStatusLikeAdapter",
+    "RutLikeAdapter",
+    "TenderStatusLikeAdapter",
+)
 
 
 DateLikeAdapter: TypeAdapter[str] = TypeAdapter(DateLike)
 RutLikeAdapter: TypeAdapter[str] = TypeAdapter(RutLike)
-StatusLikeAdapter: TypeAdapter[str] = TypeAdapter(StatusLike)
+OrderStatusLikeAdapter: TypeAdapter[str] = TypeAdapter(OrderStatusLike)
+TenderStatusLikeAdapter: TypeAdapter[str] = TypeAdapter(TenderStatusLike)

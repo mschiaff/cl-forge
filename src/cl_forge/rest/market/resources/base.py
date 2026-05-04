@@ -11,8 +11,10 @@ if TYPE_CHECKING:
 
     from ..models.directory import DirectoryResult
     from ..query.directory import DirectoryQuery
+    from ..query.orders import OrderQuery
     from ..query.tenders import TenderQuery
     from ..specs.directory import DirectorySpec
+    from ..specs.orders import OrderSpec
     from ..specs.tenders import TenderSpec
 
 
@@ -93,6 +95,36 @@ class BaseTendersResource[
         return self._spec.record_model.model_validate(data)
 
     async def _aget_details(self, query: TenderQuery) -> DetailsT:
+        data = await self._aget(path=self._spec.path_name, params=query.params)
+        return self._spec.details_model.model_validate(data)
+
+
+class BaseOrdersResource[
+    RecordsT: BaseModel,
+    DetailsT: BaseModel
+](BaseMarketResource):
+    def __init__(
+            self,
+            transport: MarketTransport,
+            *,
+            spec: OrderSpec[RecordsT, DetailsT]
+    ) -> None:
+        super().__init__(transport)
+        self._spec = spec
+
+    def _get_orders(self, query: OrderQuery | None = None) -> RecordsT:
+        data = self._get(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.record_model.model_validate(data)
+
+    def _get_details(self, query: OrderQuery) -> DetailsT:
+        data = self._get(path=self._spec.path_name, params=query.params)
+        return self._spec.details_model.model_validate(data)
+    
+    async def _aget_orders(self, query: OrderQuery | None = None) -> RecordsT:
+        data = await self._aget(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.record_model.model_validate(data)
+
+    async def _aget_details(self, query: OrderQuery) -> DetailsT:
         data = await self._aget(path=self._spec.path_name, params=query.params)
         return self._spec.details_model.model_validate(data)
 

@@ -3,14 +3,14 @@ from __future__ import annotations
 import enum
 from typing import Self
 
-__all__ = ("TenderStatus", "TenderStatusCode")
+__all__ = ("OrderStatus", "OrderStatusCode", "TenderStatus", "TenderStatusCode")
 
 
 class BaseStrEnum(enum.StrEnum):
     @classmethod
     def from_str(cls, status: str) -> Self:
         for member in cls:
-            if member == status.strip().lower():
+            if member.lower() == status.strip().lower():
                 return member
         raise ValueError(f"Unknown status: {status!r}")
 
@@ -36,3 +36,25 @@ class TenderStatusCode(enum.IntEnum):
     AWARDED = 8
     REVOKED = 15
     SUSPENDED = 16
+
+
+class OrderStatus(BaseStrEnum):
+    ACCEPTED = "Aceptada"
+    CANCELED = "Cancelada"
+    SENT = "EnviadaProveedor"
+    RECEIVED = "RecepcionConforme"
+    PENDING = "PendienteRecepcion"
+    PARTIAL = "RecepcionadaParcialmente"
+    INCOMPLETE = "RecepcionConformeIncompleta"
+
+    @enum.nonmember
+    class others(BaseStrEnum):  # noqa: N801
+        ALL = "Todos"
+
+
+class OrderStatusCode(enum.IntEnum):
+    SENT = 4
+    IN_PROCESS = 5
+    ACCEPTED = 6
+    CANCELED = 9
+    RECEIVED = 12

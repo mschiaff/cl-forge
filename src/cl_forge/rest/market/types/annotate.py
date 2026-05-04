@@ -6,16 +6,17 @@ from typing import Annotated
 from pydantic import AfterValidator, PlainSerializer, PositiveInt, StringConstraints
 
 from .constants import DATE_PATTERN
-from .enums import TenderStatus
+from .enums import OrderStatus, TenderStatus
 from .helpers import (
     int_rut_validator,
     serialize_date,
     string_rut_validator,
     to_date,
-    validate_status,
+    validate_order_status,
+    validate_tender_status,
 )
 
-__all__ = ("DateLike", "RutLike", "StatusLike",)
+__all__ = ("DateLike", "OrderStatusLike", "RutLike", "TenderStatusLike")
 
 
 type DateObject = Annotated[
@@ -40,18 +41,36 @@ type DateLike = Annotated[
     )
 ]
 
-type StatusString = Annotated[
+type TenderStatusString = Annotated[
     str,
     StringConstraints(
         to_lower=True,
         strip_whitespace=True
     ),
     AfterValidator(
-        validate_status
+        validate_tender_status
     ),
 ]
-type StatusLike = Annotated[
-    TenderStatus | StatusString,
+type TenderStatusLike = Annotated[
+    TenderStatus | TenderStatusString,
+    PlainSerializer(
+        lambda s: s.value,
+        return_type=str
+    ),
+]
+
+type OrderStatusString = Annotated[
+    str,
+    StringConstraints(
+        to_lower=True,
+        strip_whitespace=True
+    ),
+    AfterValidator(
+        validate_order_status
+    ),
+]
+type OrderStatusLike = Annotated[
+    OrderStatus | OrderStatusString,
     PlainSerializer(
         lambda s: s.value,
         return_type=str
