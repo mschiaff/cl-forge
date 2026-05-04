@@ -63,6 +63,13 @@ class BaseMarketClient:
             fmt: Literal["xml"],
             params: dict[str, Any] | None = ...
     ) -> str: ...
+    @overload
+    def get(
+            self,
+            path: str,
+            fmt: Literal["json", "xml"] = ...,
+            params: dict[str, Any] | None = ...
+    ) -> dict[str, Any] | str: ...
 
     def get(
             self,
@@ -115,7 +122,14 @@ class BaseMarketClient:
             fmt: Literal["xml"],
             params: dict[str, Any] | None = ...
     ) -> str: ...
-
+    @overload
+    async def aget(
+            self,
+            path: str,
+            fmt: Literal["json", "xml"] = ...,
+            params: dict[str, Any] | None = ...
+    ) -> dict[str, Any] | str: ...
+    
     async def aget(
             self,
             path: str,
