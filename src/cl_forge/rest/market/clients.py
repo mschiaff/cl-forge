@@ -29,7 +29,7 @@ class MarketClient:
     """Resource for accessing suppliers directory data."""
     buyers: BuyersResource
     """Resource for accessing buyers directory data."""
-      
+
     def __init__(self, api_key: str) -> None:
         self._transport: MarketTransport = BaseMarketClient(api_key)
 

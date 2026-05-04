@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class OrderQuery(BaseModel):
@@ -11,6 +11,11 @@ class OrderQuery(BaseModel):
     parameters as a dict with keys matching the API's expected parameter names,
     which can then be passed to the API request.
     """
+    order_code: str | None = Field(
+        default=None,
+        serialization_alias="Codigo",
+        description="The code of the order to query.",
+    )
 
     @property
     def params(self) -> dict[str, str]:
