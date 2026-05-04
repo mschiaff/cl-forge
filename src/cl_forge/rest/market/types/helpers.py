@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from cl_forge import calculate_verifier, validate_rut
 
 from .constants import DATE_FORMAT
-from .enums import TenderStatus
+from .enums import OrderStatus, TenderStatus
 
 if TYPE_CHECKING:
     from pydantic import ValidationInfo
@@ -17,6 +17,7 @@ __all__ = (
     "serialize_date",
     "string_rut_validator",
     "to_date",
+    "validate_order_status",
     "validate_tender_status",
 )
 
@@ -32,6 +33,10 @@ def serialize_date(date: datetime.date) -> str:
     return date.strftime(DATE_FORMAT)
 
 
+#
+# Helper functions for STATUS related annotated types
+#
+
 def validate_tender_status(
         value: TenderStatus | TenderStatus.others | str,
         info: ValidationInfo
@@ -39,6 +44,15 @@ def validate_tender_status(
     if info.data.get("allow_others", False):
         return TenderStatus.others.from_str(value)
     return TenderStatus.from_str(value)
+
+
+def validate_order_status(
+        value: OrderStatus | OrderStatus.others | str,
+        info: ValidationInfo,
+) -> OrderStatus | OrderStatus.others:
+    if info.data.get("allow_others", False):
+        return OrderStatus.others.from_str(value)
+    return OrderStatus.from_str(value)
 
 
 #
