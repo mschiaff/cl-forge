@@ -10,15 +10,50 @@ if TYPE_CHECKING:
 
 class RawMarketJsonResource(BaseMarketResource):
     def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+        """
+        Make a raw GET request to the market API and return the JSON response.
+
+        Parameters
+        ----------
+        path : str
+            The API endpoint path.
+        params : dict[str, Any] | None, optional
+            Query parameters for the request, by default None
+
+        Returns
+        -------
+        dict[str, Any]
+            The JSON response from the API.
+        """
         return self._get(path=path, params=params)
 
 
 class RawMarketXmlResource(BaseMarketResource):
     def get(self, path: str, params: dict[str, Any] | None = None) -> str:
+        """
+        Make a raw GET request to the market API and return the XML response.
+
+        Parameters
+        ----------
+        path : str
+            The API endpoint path.
+        params : dict[str, Any] | None, optional
+            Query parameters for the request, by default None
+
+        Returns
+        -------
+        str
+            The XML response from the API.
+        """
         return self._get(path=path, fmt="xml", params=params)
 
 
 class RawMarketResource:
+    json: RawMarketJsonResource
+    """Resource for making raw JSON requests to the market API."""
+    xml: RawMarketXmlResource
+    """Resource for making raw XML requests to the market API."""
+
     def __init__(self, transport: MarketTransport) -> None:
         self.json = RawMarketJsonResource(transport)
         self.xml = RawMarketXmlResource(transport)
