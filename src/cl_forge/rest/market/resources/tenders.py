@@ -11,6 +11,9 @@ if TYPE_CHECKING:
     from ..types import DateLike, TenderStatusLike
 
 
+__all__ = ("AsyncTendersResource", "TendersResource")
+
+
 class TendersResource(BaseTendersResource[Tender, TenderDetails]):
     def today(self) -> Tender:
         """
