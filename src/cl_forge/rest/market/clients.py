@@ -6,7 +6,7 @@ from cl_forge.core.impl.market import BaseMarketClient
 
 from .resources.directory import BuyersResource, SuppliersResource
 from .resources.orders import OrdersResource
-from .resources.raw import RawMarketResource
+from .resources.raw import AsyncRawMarketResource, RawMarketResource
 from .resources.tenders import TendersResource
 from .specs.directory import BUYER_SPEC, SUPPLIER_SPEC
 from .specs.orders import ORDER_SPEC
@@ -61,8 +61,11 @@ class MarketClient:
         return self._transport.base_url
 
 
-class AsyncMarketClient(MarketClient):
+class AsyncMarketClient:
     """Asynchronous client for interacting with the Public Market API (ChileCompra)."""
+
+    raw: AsyncRawMarketResource
+    """Resource for accessing raw market API requests."""
 
     def __init__(self, api_key: str) -> None:
         """
@@ -73,8 +76,9 @@ class AsyncMarketClient(MarketClient):
         api_key : str
             The API key to authenticate requests with the Public Market API.
         """
-        super().__init__(api_key)
         self._transport: MarketTransport = BaseMarketClient(api_key)
+
+        self.raw = AsyncRawMarketResource(self._transport)
 
     @property
     def api_key(self) -> str:
