@@ -1,6 +1,14 @@
+import re
 from typing import Literal, overload
 
-from ..models.directory import BuyersResult, SupplierRecord, SuppliersDirectory, SuppliersResult
+from ..models.directory import (
+    BuyerRecord,
+    BuyersDirectory,
+    BuyersResult,
+    SupplierRecord,
+    SuppliersDirectory,
+    SuppliersResult,
+)
 from ..query.directory import BuyerQuery, SupplierQuery
 from ..types import RutLike
 from .base import BaseDirectoryResource
@@ -32,5 +40,25 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
     ) -> SupplierRecord: ...
 
 
+class BuyersSearchResult(BuyersResult):
+    def _in(self, pattern: str) -> list[BuyerRecord]: ...
+
+    def _match(
+            self,
+            pattern: str,
+            flags: int | re.RegexFlag = 0
+    ) -> list[BuyerRecord]: ...
+
+    def contains(
+            self,
+            pattern:str,
+            *,
+            regex: bool = False,
+            flags: int | re.RegexFlag = 0
+    ) -> BuyersDirectory: ...
+
+    def by_code(self, code: int) -> BuyerRecord: ...
+
+
 class BuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
-    def search(self) -> BuyersResult: ...
+    def search(self) -> BuyersSearchResult: ...
