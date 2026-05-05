@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime  # noqa: TC003
 from typing import Any
 
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, Field, HttpUrl, RootModel
 
 __all__ = ("Tender", "TenderDetails",)
 
@@ -59,16 +59,23 @@ class TenderDates(BaseModel):
     antecedents_delivery_at:    datetime | None     = Field(alias="FechaEntregaAntecedentes")
 
 
+class TenderItemAwarded(BaseModel):
+    supplier_rut:   str     = Field(alias="RutProveedor")
+    supplier_name:  str     = Field(alias="NombreProveedor")
+    quantity:       float   = Field(alias="Cantidad")
+    unit_amount:    float   = Field(alias="MontoUnitario")
+
+
 class TenderItemRecord(BaseModel):
-    correlative:    int        = Field(alias="Correlativo")
-    product_code:   int        = Field(alias="CodigoProducto")
-    category_code:  str        = Field(alias="CodigoCategoria")
-    category:       str        = Field(alias="Categoria")
-    product_name:   str        = Field(alias="NombreProducto")
-    description:    str        = Field(alias="Descripcion")
-    measure_unit:   str        = Field(alias="UnidadMedida")
-    quantity:       float      = Field(alias="Cantidad")
-    award:          Any | None = Field(alias="Adjudicacion")
+    correlative:    int                         = Field(alias="Correlativo")
+    product_code:   int                         = Field(alias="CodigoProducto")
+    category_code:  str                         = Field(alias="CodigoCategoria")
+    category:       str                         = Field(alias="Categoria")
+    product_name:   str                         = Field(alias="NombreProducto")
+    description:    str                         = Field(alias="Descripcion")
+    measure_unit:   str                         = Field(alias="UnidadMedida")
+    quantity:       float                       = Field(alias="Cantidad")
+    awarded:        TenderItemAwarded | Any     = Field(alias="Adjudicacion")
 
 
 class TenderItemsCollection(RootModel[list[TenderItemRecord]]): ...
@@ -79,61 +86,68 @@ class TenderItems(BaseModel):
     records:  TenderItemsCollection = Field(alias="Listado")
 
 
+class TenderAwarded(BaseModel):
+    type:   int         = Field(alias="Tipo")
+    date:   datetime    = Field(alias="Fecha")
+    number: str         = Field(alias="Numero")
+    url:    HttpUrl     = Field(alias="UrlActa")
+
+
 class TenderDetailsRecord(BaseModel):
-    code:                           str                 = Field(alias="CodigoExterno")
-    name:                           str                 = Field(alias="Nombre")
-    status_code:                    int                 = Field(alias="CodigoEstado")
-    description:                    str                 = Field(alias="Descripcion")
-    closing_at:                     datetime | None     = Field(alias="FechaCierre")
-    status:                         str                 = Field(alias="Estado")
-    closing_days:                   int                 = Field(alias="DiasCierreLicitacion")
-    informed:                       int                 = Field(alias="Informada")
-    type_code:                      int                 = Field(alias="CodigoTipo")
-    tender_type:                    str                 = Field(alias="Tipo")
-    call_type:                      int                 = Field(alias="TipoConvocatoria")
-    currency:                       str                 = Field(alias="Moneda")
-    stages:                         int                 = Field(alias="Etapas")
-    stages_status:                  int                 = Field(alias="EstadoEtapas")
-    requires_review:                int                 = Field(alias="TomaRazon")
-    offers_visible:                 int                 = Field(alias="EstadoPublicidadOfertas")
-    offers_visible_reason:          str                 = Field(alias="JustificacionPublicidad")
-    contract:                       int                 = Field(alias="Contrato")
-    public_work:                    int                 = Field(alias="Obras")
-    claims_number:                  int                 = Field(alias="CantidadReclamos")
-    evaluation_time_unit:           int                 = Field(alias="UnidadTiempoEvaluacion")
-    visit_address:                  str                 = Field(alias="DireccionVisita")
-    delivery_address:               str                 = Field(alias="DireccionEntrega")
-    estimation:                     int | None          = Field(alias="Estimacion")
-    funding_source:                 str                 = Field(alias="FuenteFinanciamiento")
-    amount_visibility:              int                 = Field(alias="VisibilidadMonto")
-    estimated_amount:               float | None        = Field(alias="MontoEstimado")
-    time:                           int | None          = Field(alias="Tiempo")
-    time_unit:                      int                 = Field(alias="UnidadTiempo")
-    mode:                           int                 = Field(alias="Modalidad")
-    payment_type:                   int                 = Field(alias="TipoPago")
-    payment_responsible_name:       str                 = Field(alias="NombreResponsablePago")
-    payment_responsible_email:      str                 = Field(alias="EmailResponsablePago")
-    contract_responsible_name:      str                 = Field(alias="NombreResponsableContrato")
-    contract_responsible_email:     str                 = Field(alias="EmailResponsableContrato")
-    contract_responsible_phone:     str                 = Field(alias="FonoResponsableContrato")
-    hiring_ban:                     str                 = Field(alias="ProhibicionContratacion")
-    subcontracting:                 int                 = Field(alias="SubContratacion")
-    contract_duration_time_unit:    int                 = Field(alias="UnidadTiempoDuracionContrato")  # noqa: E501
-    contract_duration_time:         int                 = Field(alias="TiempoDuracionContrato")
-    contract_duration_type:         str                 = Field(alias="TipoDuracionContrato")
-    amount_estimate_justification:  str                 = Field(alias="JustificacionMontoEstimado")
-    contract_observation:           str | None          = Field(alias="ObservacionContract")
-    term_extension:                 int                 = Field(alias="ExtensionPlazo")
-    is_base_type:                   int                 = Field(alias="EsBaseTipo")
-    tender_contract_time_unit:      int                 = Field(alias="UnidadTiempoContratoLicitacion")  # noqa: E501
-    renewal_time_value:             int                 = Field(alias="ValorTiempoRenovacion")
-    renewal_time_period:            str                 = Field(alias="PeriodoTiempoRenovacion")
-    is_renewable:                   int                 = Field(alias="EsRenovable")
-    bip_code:                       str | None          = Field(alias="CodigoBIP")
-    award:                          Any | None          = Field(alias="Adjudicacion")
-    dates:                          TenderDates         = Field(alias="Fechas")
-    buyer:                          TenderBuyer         = Field(alias="Comprador")
-    items:                          TenderItems         = Field(alias="Items")
+    code:                           str                     = Field(alias="CodigoExterno")
+    name:                           str                     = Field(alias="Nombre")
+    status_code:                    int                     = Field(alias="CodigoEstado")
+    description:                    str                     = Field(alias="Descripcion")
+    closing_at:                     datetime | None         = Field(alias="FechaCierre")
+    status:                         str                     = Field(alias="Estado")
+    closing_days:                   int                     = Field(alias="DiasCierreLicitacion")
+    informed:                       int                     = Field(alias="Informada")
+    type_code:                      int                     = Field(alias="CodigoTipo")
+    tender_type:                    str                     = Field(alias="Tipo")
+    call_type:                      int                     = Field(alias="TipoConvocatoria")
+    currency:                       str                     = Field(alias="Moneda")
+    stages:                         int                     = Field(alias="Etapas")
+    stages_status:                  int                     = Field(alias="EstadoEtapas")
+    requires_review:                int                     = Field(alias="TomaRazon")
+    offers_visible:                 int                     = Field(alias="EstadoPublicidadOfertas")
+    offers_visible_reason:          str                     = Field(alias="JustificacionPublicidad")
+    contract:                       int                     = Field(alias="Contrato")
+    public_work:                    int                     = Field(alias="Obras")
+    claims_number:                  int                     = Field(alias="CantidadReclamos")
+    evaluation_time_unit:           int                     = Field(alias="UnidadTiempoEvaluacion")
+    visit_address:                  str                     = Field(alias="DireccionVisita")
+    delivery_address:               str                     = Field(alias="DireccionEntrega")
+    estimation:                     int | None              = Field(alias="Estimacion")
+    funding_source:                 str                     = Field(alias="FuenteFinanciamiento")
+    amount_visibility:              int                     = Field(alias="VisibilidadMonto")
+    estimated_amount:               float | None            = Field(alias="MontoEstimado")
+    time:                           int | None              = Field(alias="Tiempo")
+    time_unit:                      int                     = Field(alias="UnidadTiempo")
+    mode:                           int                     = Field(alias="Modalidad")
+    payment_type:                   int                     = Field(alias="TipoPago")
+    payment_responsible_name:       str                     = Field(alias="NombreResponsablePago")
+    payment_responsible_email:      str                     = Field(alias="EmailResponsablePago")
+    contract_responsible_name:      str                     = Field(alias="NombreResponsableContrato")  # noqa: E501
+    contract_responsible_email:     str                     = Field(alias="EmailResponsableContrato")  # noqa: E501
+    contract_responsible_phone:     str                     = Field(alias="FonoResponsableContrato")
+    hiring_ban:                     str                     = Field(alias="ProhibicionContratacion")
+    subcontracting:                 int                     = Field(alias="SubContratacion")
+    contract_duration_time_unit:    int                     = Field(alias="UnidadTiempoDuracionContrato")  # noqa: E501
+    contract_duration_time:         int                     = Field(alias="TiempoDuracionContrato")
+    contract_duration_type:         str                     = Field(alias="TipoDuracionContrato")
+    amount_estimate_justification:  str                     = Field(alias="JustificacionMontoEstimado")  # noqa: E501
+    contract_observation:           str | None              = Field(alias="ObservacionContract")
+    term_extension:                 int                     = Field(alias="ExtensionPlazo")
+    is_base_type:                   int                     = Field(alias="EsBaseTipo")
+    tender_contract_time_unit:      int                     = Field(alias="UnidadTiempoContratoLicitacion")  # noqa: E501
+    renewal_time_value:             int                     = Field(alias="ValorTiempoRenovacion")
+    renewal_time_period:            str                     = Field(alias="PeriodoTiempoRenovacion")
+    is_renewable:                   int                     = Field(alias="EsRenovable")
+    bip_code:                       str | None              = Field(alias="CodigoBIP")
+    awarded:                        TenderAwarded | Any     = Field(alias="Adjudicacion")
+    dates:                          TenderDates             = Field(alias="Fechas")
+    buyer:                          TenderBuyer             = Field(alias="Comprador")
+    items:                          TenderItems             = Field(alias="Items")
 
 
 class TenderDetailsCollection(RootModel[list[TenderDetailsRecord]]): ...
