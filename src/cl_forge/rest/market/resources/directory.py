@@ -230,5 +230,18 @@ class BuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
         - This method retrieves all buyers from the directory and returns them
         wrapped in a :class:`BuyersSearchResult` object, which provides additional
         methods for filtering the results based on the buyer's name.
+
+        Examples
+        --------
+        ```python
+        import re
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        buyers = client.buyers.search()
+        
+        filtered_buyers = buyers.contains("Municipalidad", regex=True, flags=re.IGNORECASE)
+        print(filtered_buyers) # prints buyers with "Municipalidad" in their name
+        ```
         """
         return BuyersSearchResult.model_validate(self._search().model_dump(by_alias=True))
