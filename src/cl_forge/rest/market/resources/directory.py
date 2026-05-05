@@ -245,3 +245,38 @@ class BuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
         ```
         """
         return BuyersSearchResult.model_validate(self._search().model_dump(by_alias=True))
+
+
+class AsyncBuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
+    async def search(self) -> BuyersSearchResult:
+        """
+        Search for all buyers in the directory.
+
+        Returns
+        -------
+        BuyersSearchResult
+            The result of the search, which contains all buyers in the directory.
+
+        Notes
+        -----
+        - This method retrieves all buyers from the directory and returns them
+        wrapped in a :class:`BuyersSearchResult` object, which provides additional
+        methods for filtering the results based on the buyer's name.
+
+        Examples
+        --------
+        ```python
+        import asyncio
+        import re
+        from cl_forge import AsyncMarketClient
+
+        async def main():
+            client = AsyncMarketClient("your_api_key")
+            buyers = await client.buyers.search()
+            filtered_buyers = buyers.contains("Municipalidad", regex=True, flags=re.IGNORECASE)
+            print(filtered_buyers) # prints buyers with "Municipalidad" in their name
+
+        asyncio.run(main())
+        ```
+        """
+        return BuyersSearchResult.model_validate((await self._asearch()).model_dump(by_alias=True))
