@@ -14,6 +14,7 @@ authors = [
 dependencies = [
     "orjson>=3.11.7",
     "pydantic>=2.12.5",
+    "pydantic-settings>=2.14.0",
 ]
 
 classifiers = [
