@@ -61,6 +61,16 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
         before making the request using :func:`cl_forge.validate_rut`.
         - When the RUT's digits are given as an integer, the verifier is
         calculated using :func:`cl_forge.calculate_verifier`.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        supplier = client.suppliers.search("12345678-9", only_record=True)
+        print(supplier.code) # prints the supplier code
+        ```
         """
         rut = RutLikeAdapter.validate_python(rut)
         query = SupplierQuery(rut=rut)
