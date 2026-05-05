@@ -27,6 +27,15 @@ class RawMarketJsonResource(BaseMarketResource):
         -------
         dict[str, Any]
             The JSON response from the API.
+
+        Examples
+        --------
+        ```python
+        from cl_forge.rest.market import MarketClient
+
+        client = MarketClient(api_key="your_api_key")
+        response = client.raw.json.get(path="/licitaciones")
+        ```
         """
         return self._get(path=path, params=params)
 
@@ -47,6 +56,15 @@ class RawMarketXmlResource(BaseMarketResource):
         -------
         str
             The XML response from the API.
+
+        Examples
+        --------
+        ```python
+        from cl_forge.rest.market import MarketClient
+
+        client = MarketClient(api_key="your_api_key")
+        response = client.raw.xml.get(path="/licitaciones")
+        ```
         """
         return self._get(path=path, fmt="xml", params=params)
 
@@ -78,6 +96,19 @@ class AsyncRawMarketJsonResource(BaseMarketResource):
         -------
         dict[str, Any]
             The JSON response from the API.
+
+        Examples
+        --------
+        ```python
+        import asyncio
+        from cl_forge import AsyncMarketClient
+
+        async def main():
+            client = AsyncMarketClient("your_api_key")
+            response = await client.raw.json.get(path="/licitaciones")
+
+        asyncio.run(main())
+        ```
         """
         return await self._aget(path=path, params=params)
 
@@ -98,6 +129,19 @@ class AsyncRawMarketXmlResource(BaseMarketResource):
         -------
         str
             The XML response from the API.
+
+        Examples
+        --------
+        ```python
+        import asyncio
+        from cl_forge import AsyncMarketClient
+
+        async def main():
+            client = AsyncMarketClient("your_api_key")
+            response = await client.raw.xml.get(path="/licitaciones")
+
+        asyncio.run(main())
+        ```
         """
         return await self._aget(path=path, fmt="xml", params=params)
 
