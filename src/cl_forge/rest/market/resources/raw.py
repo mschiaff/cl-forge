@@ -105,9 +105,9 @@ class AsyncRawMarketJsonResource(BaseMarketResource):
 
         async def main():
             client = AsyncMarketClient("your_api_key")
-            response = await client.raw.json.get(path="/licitaciones")
+            return await client.raw.json.get(path="/licitaciones")
 
-        asyncio.run(main())
+        response = asyncio.run(main())
         ```
         """
         return await self._aget(path=path, params=params)
@@ -138,9 +138,9 @@ class AsyncRawMarketXmlResource(BaseMarketResource):
 
         async def main():
             client = AsyncMarketClient("your_api_key")
-            response = await client.raw.xml.get(path="/licitaciones")
+            return await client.raw.xml.get(path="/licitaciones")
 
-        asyncio.run(main())
+        response = asyncio.run(main())
         ```
         """
         return await self._aget(path=path, fmt="xml", params=params)
