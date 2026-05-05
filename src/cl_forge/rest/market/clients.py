@@ -7,7 +7,7 @@ from cl_forge.core.impl.market import BaseMarketClient
 from .resources.directory import BuyersResource, SuppliersResource
 from .resources.orders import OrdersResource
 from .resources.raw import AsyncRawMarketResource, RawMarketResource
-from .resources.tenders import TendersResource
+from .resources.tenders import AsyncTendersResource, TendersResource
 from .specs.directory import BUYER_SPEC, SUPPLIER_SPEC
 from .specs.orders import ORDER_SPEC
 from .specs.tenders import TENDER_SPEC
@@ -66,6 +66,8 @@ class AsyncMarketClient:
 
     raw: AsyncRawMarketResource
     """Resource for accessing raw market API requests."""
+    tenders: AsyncTendersResource
+    """Resource for accessing tender data."""
 
     def __init__(self, api_key: str) -> None:
         """
@@ -79,6 +81,7 @@ class AsyncMarketClient:
         self._transport: MarketTransport = BaseMarketClient(api_key)
 
         self.raw = AsyncRawMarketResource(self._transport)
+        self.tenders = AsyncTendersResource(self._transport, spec=TENDER_SPEC)
 
     @property
     def api_key(self) -> str:
