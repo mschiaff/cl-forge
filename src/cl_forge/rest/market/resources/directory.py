@@ -84,6 +84,75 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
         return response
 
 
+class AsyncSuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
+    async def search(
+            self,
+            rut: RutLike,
+            *,
+            ignore_meta: bool = False,
+            only_record: bool = False,
+    ) -> SupplierRecord | SuppliersDirectory | SuppliersResult:
+        """
+        Search for suppliers based on the provided RUT.
+
+        Parameters
+        ----------
+        rut : RutLike
+            The RUT of the supplier to search for. Exptects a string in format
+            "12345678-9", "12.345.678-9" or an integer like 12345678 only with
+            RUT's digits.
+        ignore_meta : bool, optional
+            Whether to ignore the response metadata object, by default False
+        only_record : bool, optional
+            Whether to return only the record, by default False
+
+        Returns
+        -------
+        SupplierRecord | SuppliersDirectory | SuppliersResult
+            The result of the search, which can be a single supplier record,
+            a directory of suppliers, or the full search result.
+
+        Raises
+        ------
+        BadStatus
+            If the the searched supplier is not found or any other error
+            occurs during the search.
+        ValidationError
+            If the provided RUT is not valid.
+        
+        Notes
+        -----
+        - When the RUT is given as a string, the verifier is validated
+        before making the request using :func:`cl_forge.validate_rut`.
+        - When the RUT's digits are given as an integer, the verifier is
+        calculated using :func:`cl_forge.calculate_verifier`.
+
+        Examples
+        --------
+        ```python
+        import asyncio
+        from cl_forge import AsyncMarketClient
+
+        async def main():
+            client = AsyncMarketClient("your_api_key")
+            supplier = await client.suppliers.search("12345678-9", only_record=True)
+            print(supplier.code) # prints the supplier code
+
+        asyncio.run(main())
+        ```
+        """
+        rut = RutLikeAdapter.validate_python(rut)
+        query = SupplierQuery(rut=rut)
+        response = await self._asearch(query)
+
+        if only_record:
+                return response.records.root[0]
+        if ignore_meta:
+             return response.records
+
+        return response
+
+
 class BuyersSearchResult(BuyersResult):
     def _in(self, pattern: str) -> list[BuyerRecord]:
          return [record for record in self.records.root if pattern in record.name]
