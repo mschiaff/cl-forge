@@ -40,6 +40,33 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
     ) -> SupplierRecord: ...
 
 
+class AsyncSuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
+    @overload
+    async def search(
+            self,
+            rut: RutLike,
+            *,
+            ignore_meta: Literal[False] = ...,
+            only_record: Literal[False] = ...,
+    ) -> SuppliersResult: ...
+    @overload
+    async def search(
+            self,
+            rut: RutLike,
+            *,
+            ignore_meta: Literal[True],
+            only_record: Literal[False] = ...,
+    ) -> SuppliersDirectory: ...
+    @overload
+    async def search(
+            self,
+            rut: RutLike,
+            *,
+            ignore_meta: bool = ...,
+            only_record: Literal[True],
+    ) -> SupplierRecord: ...
+
+
 class BuyersSearchResult(BuyersResult):
     def _in(self, pattern: str) -> list[BuyerRecord]: ...
 
