@@ -89,3 +89,7 @@ class BuyersSearchResult(BuyersResult):
 
 class BuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
     def search(self) -> BuyersSearchResult: ...
+
+
+class AsyncBuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
+    async def search(self) -> BuyersSearchResult: ...
