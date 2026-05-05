@@ -114,7 +114,7 @@ class TenderDetailsRecord(BaseModel):
     contract:                       int                     = Field(alias="Contrato")
     public_work:                    int                     = Field(alias="Obras")
     claims_number:                  int                     = Field(alias="CantidadReclamos")
-    evaluation_time_unit:           int                     = Field(alias="UnidadTiempoEvaluacion")
+    evaluation_time_unit:           int | None              = Field(alias="UnidadTiempoEvaluacion")
     visit_address:                  str                     = Field(alias="DireccionVisita")
     delivery_address:               str                     = Field(alias="DireccionEntrega")
     estimation:                     int | None              = Field(alias="Estimacion")
