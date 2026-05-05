@@ -31,6 +31,14 @@ class MarketClient:
     """Resource for accessing buyers directory data."""
 
     def __init__(self, api_key: str) -> None:
+        """
+        Initialize the MarketClient with the provided API key.
+
+        Parameters
+        ----------
+        api_key : str
+            The API key to authenticate requests with the Public Market API.
+        """
         self._transport: MarketTransport = BaseMarketClient(api_key)
 
         self.raw = RawMarketResource(self._transport)
