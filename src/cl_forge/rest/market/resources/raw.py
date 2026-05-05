@@ -8,6 +8,9 @@ if TYPE_CHECKING:
     from ..types import MarketTransport
 
 
+__all__ = ("AsyncRawMarketResource", "RawMarketResource")
+
+
 class RawMarketJsonResource(BaseMarketResource):
     def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """
@@ -57,3 +60,54 @@ class RawMarketResource:
     def __init__(self, transport: MarketTransport) -> None:
         self.json = RawMarketJsonResource(transport)
         self.xml = RawMarketXmlResource(transport)
+
+
+class AsyncRawMarketJsonResource(BaseMarketResource):
+    async def get(self, path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+        """
+        Make a raw GET request to the market API and return the JSON response.
+
+        Parameters
+        ----------
+        path : str
+            The API endpoint path.
+        params : dict[str, Any] | None, optional
+            Query parameters for the request, by default None
+
+        Returns
+        -------
+        dict[str, Any]
+            The JSON response from the API.
+        """
+        return await self._aget(path=path, params=params)
+
+
+class AsyncRawMarketXmlResource(BaseMarketResource):
+    async def get(self, path: str, params: dict[str, Any] | None = None) -> str:
+        """
+        Make a raw GET request to the market API and return the XML response.
+
+        Parameters
+        ----------
+        path : str
+            The API endpoint path.
+        params : dict[str, Any] | None, optional
+            Query parameters for the request, by default None
+
+        Returns
+        -------
+        str
+            The XML response from the API.
+        """
+        return await self._aget(path=path, fmt="xml", params=params)
+
+
+class AsyncRawMarketResource:
+    json: AsyncRawMarketJsonResource
+    """Resource for making raw JSON requests to the market API."""
+    xml: AsyncRawMarketXmlResource
+    """Resource for making raw XML requests to the market API."""
+
+    def __init__(self, transport: MarketTransport) -> None:
+        self.json = AsyncRawMarketJsonResource(transport)
+        self.xml = AsyncRawMarketXmlResource(transport)
