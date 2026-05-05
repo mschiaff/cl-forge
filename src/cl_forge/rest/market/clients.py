@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from cl_forge.core.impl.market import BaseMarketClient
 
-from .resources.directory import BuyersResource, SuppliersResource
+from .resources.directory import AsyncSuppliersResource, BuyersResource, SuppliersResource
 from .resources.orders import AsyncOrdersResource, OrdersResource
 from .resources.raw import AsyncRawMarketResource, RawMarketResource
 from .resources.tenders import AsyncTendersResource, TendersResource
@@ -70,6 +70,8 @@ class AsyncMarketClient:
     """Resource for accessing tender data."""
     orders: AsyncOrdersResource
     """Resource for accessing purchase orders data."""
+    suppliers: AsyncSuppliersResource
+    """Resource for accessing suppliers directory data."""
 
     def __init__(self, api_key: str) -> None:
         """
@@ -85,6 +87,7 @@ class AsyncMarketClient:
         self.raw = AsyncRawMarketResource(self._transport)
         self.tenders = AsyncTendersResource(self._transport, spec=TENDER_SPEC)
         self.orders = AsyncOrdersResource(self._transport, spec=ORDER_SPEC)
+        self.suppliers = AsyncSuppliersResource(self._transport, spec=SUPPLIER_SPEC)
 
     @property
     def api_key(self) -> str:
