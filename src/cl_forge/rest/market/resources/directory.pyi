@@ -13,6 +13,9 @@ from ..query.directory import BuyerQuery, SupplierQuery
 from ..types import RutLike
 from .base import BaseDirectoryResource
 
+__all__ = ("AsyncBuyersResource", "AsyncSuppliersResource", "BuyersResource", "SuppliersResource",)
+
+
 class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
     @overload
     def search(
