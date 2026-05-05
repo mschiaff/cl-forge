@@ -41,8 +41,10 @@ class MarketClient:
 
     @property
     def api_key(self) -> str:
+        """Get the API key used by the client."""
         return self._transport.api_key
 
     @property
     def base_url(self) -> str:
+        """Get the base URL used by the client."""
         return self._transport.base_url
