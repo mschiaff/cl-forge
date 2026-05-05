@@ -16,6 +16,9 @@ if TYPE_CHECKING:
     from .types import MarketTransport
 
 
+__all__ = ("AsyncMarketClient", "MarketClient")
+
+
 class MarketClient:
     """Client for interacting with the Public Market API (ChileCompra)."""
 
@@ -46,6 +49,32 @@ class MarketClient:
         self.orders = OrdersResource(self._transport, spec=ORDER_SPEC)
         self.suppliers = SuppliersResource(self._transport, spec=SUPPLIER_SPEC)
         self.buyers = BuyersResource(self._transport, spec=BUYER_SPEC)
+
+    @property
+    def api_key(self) -> str:
+        """Get the API key used by the client."""
+        return self._transport.api_key
+
+    @property
+    def base_url(self) -> str:
+        """Get the base URL used by the client."""
+        return self._transport.base_url
+
+
+class AsyncMarketClient(MarketClient):
+    """Asynchronous client for interacting with the Public Market API (ChileCompra)."""
+
+    def __init__(self, api_key: str) -> None:
+        """
+        Initialize the AsyncMarketClient with the provided API key.
+
+        Parameters
+        ----------
+        api_key : str
+            The API key to authenticate requests with the Public Market API.
+        """
+        super().__init__(api_key)
+        self._transport: MarketTransport = BaseMarketClient(api_key)
 
     @property
     def api_key(self) -> str:
