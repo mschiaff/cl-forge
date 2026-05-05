@@ -21,6 +21,15 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         Order
             A collection of all purchase orders for today,
             regardless of their status.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.today()
+        ```
         """
         return self._get_orders()
 
@@ -37,6 +46,15 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         -------
         OrderDetails
             The details of the specified purchase order.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.details("order_code")
+        ```
         """
         query = OrderQuery(order_code=order_code)
         return self._get_details(query)
@@ -55,6 +73,15 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         -------
         Order
             A collection of purchase orders for the specified date.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.by_date("2024-01-01")
+        ```
         """
         query = OrderQuery(date=date)
         return self._get_orders(query)
@@ -73,6 +100,15 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         -------
         Order
             A collection of all purchase orders, optionally filtered by date.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.all(date="2024-01-01")
+        ```
         """
         query = OrderQuery(status=OrderStatus.others.ALL, allow_others=True, date=date)
         return self._get_orders(query)
@@ -94,6 +130,15 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         Order
             A collection of purchase orders for the specified buyer,
             optionally filtered by date.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.by_buyer("buyer_code", date="2024-01-01")
+        ```
         """
         query = OrderQuery(date=date, buyer_code=buyer_code)
         return self._get_orders(query)
@@ -105,7 +150,8 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         Parameters
         ----------
         status : OrderStatusLike
-            The status to filter purchase orders by.
+            The status to filter purchase orders by. Can be a string or
+            an :class:`OrderStatus` enum value.
         date : DateLike, optional
             The date to filter purchase orders by. Can be a `datetime.datetime`,
             `datetime.date`, or an ISO format string (yyyy-mm-dd).
@@ -115,6 +161,26 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         Order
             A collection of purchase orders with the specified status,
             optionally filtered by date.
+
+        Examples
+        --------
+        Using a string status:
+
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.by_status("Aceptada", date="2024-01-01")
+        ```
+
+        Using an enum status:
+        
+        ```python
+        from cl_forge import MarketClient, OrderStatus
+
+        client = MarketClient("your_api_key")
+        response = client.orders.by_status(OrderStatus.ACCEPTED, date="2024-01-01")
+        ```
         """
         query = OrderQuery(status=status, date=date)
         return self._get_orders(query)
@@ -136,6 +202,15 @@ class OrdersResource(BaseOrdersResource[Order, OrderDetails]):
         Order
             A collection of purchase orders for the specified supplier,
             optionally filtered by date.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        response = client.orders.by_supplier("supplier_code", date="2024-01-01")
+        ```
         """
         query = OrderQuery(date=date, supplier_code=supplier_code)
         return self._get_orders(query)
