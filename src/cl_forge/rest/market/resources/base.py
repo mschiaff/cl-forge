@@ -145,3 +145,7 @@ class BaseDirectoryResource[
     def _search(self, query: QueryT | None = None) -> ResultT:
         data = self._get(path=self._spec.path_name, params=query.params if query else query)
         return self._spec.model.model_validate(data)
+
+    async def _asearch(self, query: QueryT | None = None) -> ResultT:
+        data = await self._aget(path=self._spec.path_name, params=query.params if query else query)
+        return self._spec.model.model_validate(data)
