@@ -19,6 +19,9 @@ if TYPE_CHECKING:
      from ..types import RutLike
 
 
+__all__ = ("AsyncBuyersResource", "AsyncSuppliersResource", "BuyersResource", "SuppliersResource",)
+
+
 class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
     def search(
             self,
@@ -61,10 +64,89 @@ class SuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
         before making the request using :func:`cl_forge.validate_rut`.
         - When the RUT's digits are given as an integer, the verifier is
         calculated using :func:`cl_forge.calculate_verifier`.
+
+        Examples
+        --------
+        ```python
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        supplier = client.suppliers.search("12345678-9", only_record=True)
+        print(supplier.code) # prints the supplier code
+        ```
         """
         rut = RutLikeAdapter.validate_python(rut)
         query = SupplierQuery(rut=rut)
         response =  self._search(query)
+
+        if only_record:
+                return response.records.root[0]
+        if ignore_meta:
+             return response.records
+
+        return response
+
+
+class AsyncSuppliersResource(BaseDirectoryResource[SuppliersResult, SupplierQuery]):
+    async def search(
+            self,
+            rut: RutLike,
+            *,
+            ignore_meta: bool = False,
+            only_record: bool = False,
+    ) -> SupplierRecord | SuppliersDirectory | SuppliersResult:
+        """
+        Search for suppliers based on the provided RUT.
+
+        Parameters
+        ----------
+        rut : RutLike
+            The RUT of the supplier to search for. Exptects a string in format
+            "12345678-9", "12.345.678-9" or an integer like 12345678 only with
+            RUT's digits.
+        ignore_meta : bool, optional
+            Whether to ignore the response metadata object, by default False
+        only_record : bool, optional
+            Whether to return only the record, by default False
+
+        Returns
+        -------
+        SupplierRecord | SuppliersDirectory | SuppliersResult
+            The result of the search, which can be a single supplier record,
+            a directory of suppliers, or the full search result.
+
+        Raises
+        ------
+        BadStatus
+            If the the searched supplier is not found or any other error
+            occurs during the search.
+        ValidationError
+            If the provided RUT is not valid.
+        
+        Notes
+        -----
+        - When the RUT is given as a string, the verifier is validated
+        before making the request using :func:`cl_forge.validate_rut`.
+        - When the RUT's digits are given as an integer, the verifier is
+        calculated using :func:`cl_forge.calculate_verifier`.
+
+        Examples
+        --------
+        ```python
+        import asyncio
+        from cl_forge import AsyncMarketClient
+
+        async def main():
+            client = AsyncMarketClient("your_api_key")
+            supplier = await client.suppliers.search("12345678-9", only_record=True)
+            print(supplier.code) # prints the supplier code
+
+        asyncio.run(main())
+        ```
+        """
+        rut = RutLikeAdapter.validate_python(rut)
+        query = SupplierQuery(rut=rut)
+        response = await self._asearch(query)
 
         if only_record:
                 return response.records.root[0]
@@ -151,5 +233,53 @@ class BuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
         - This method retrieves all buyers from the directory and returns them
         wrapped in a :class:`BuyersSearchResult` object, which provides additional
         methods for filtering the results based on the buyer's name.
+
+        Examples
+        --------
+        ```python
+        import re
+        from cl_forge import MarketClient
+
+        client = MarketClient("your_api_key")
+        buyers = client.buyers.search()
+        
+        filtered_buyers = buyers.contains("Municipalidad", regex=True, flags=re.IGNORECASE)
+        print(filtered_buyers) # prints buyers with "Municipalidad" in their name
+        ```
         """
         return BuyersSearchResult.model_validate(self._search().model_dump(by_alias=True))
+
+
+class AsyncBuyersResource(BaseDirectoryResource[BuyersResult, BuyerQuery]):
+    async def search(self) -> BuyersSearchResult:
+        """
+        Search for all buyers in the directory.
+
+        Returns
+        -------
+        BuyersSearchResult
+            The result of the search, which contains all buyers in the directory.
+
+        Notes
+        -----
+        - This method retrieves all buyers from the directory and returns them
+        wrapped in a :class:`BuyersSearchResult` object, which provides additional
+        methods for filtering the results based on the buyer's name.
+
+        Examples
+        --------
+        ```python
+        import asyncio
+        import re
+        from cl_forge import AsyncMarketClient
+
+        async def main():
+            client = AsyncMarketClient("your_api_key")
+            buyers = await client.buyers.search()
+            filtered_buyers = buyers.contains("Municipalidad", regex=True, flags=re.IGNORECASE)
+            print(filtered_buyers) # prints buyers with "Municipalidad" in their name
+
+        asyncio.run(main())
+        ```
+        """
+        return BuyersSearchResult.model_validate((await self._asearch()).model_dump(by_alias=True))
