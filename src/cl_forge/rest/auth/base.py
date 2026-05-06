@@ -101,12 +101,17 @@ class ApiKeySettings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(
-        # Ignore env variables where value is an empty
-        # string. This aren't valid for API keys.
+        # We set `extra="ignore"` to allow for flexibility in the input data
+        # and prevent validation errors due to unexpected fields, which is
+        # especially useful when loading from environment variables or .env
+        # files that may contain other unrelated variables.
+        extra="ignore",
+
+        # Ignore env variables where value is an empty string. This isn't
+        # valid for API keys.
         env_ignore_empty=True,
 
-        # We excplicitly set the encoding because
-        # pydantic's default is `None`.
+        # We excplicitly set the encoding because pydantic's default is `None`.
         env_file_encoding="utf-8",
     )
 
