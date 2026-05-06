@@ -16,6 +16,9 @@ if TYPE_CHECKING:
     from .enums import CredentialScope
 
 
+__all__ = ("ApiKeyCredentials", "ApiKeySettings", "CredentialsProvider",)
+
+
 @dataclass(frozen=True, slots=True)
 class CredentialsProvider(ABC):
     """Abstract base class for credentials providers."""
