@@ -1,16 +1,11 @@
 from __future__ import annotations
 
-# Pydantic requires `Path` to be imported from the top level for it to
-# work properly, so we can't import it within the `TYPE_CHECKING` block, even
-# though it's only used in type annotations. This applies to pydantic's models
-# (`BaseModel` and `BaseSettings`) and dataclasses.
-from pathlib import Path  # noqa: TC003
 from typing import TYPE_CHECKING
 
 from pydantic import SecretStr
 from pydantic.dataclasses import dataclass
 
-from .base import ApiKeyCredentials, ApiKeySettings, CredentialsProvider
+from .base import ApiKeyCredentials, ApiKeySettings, CredentialsProvider, DotenvType
 
 if TYPE_CHECKING:
     from .enums import CredentialScope
@@ -89,12 +84,12 @@ class DotEnvCredentials(CredentialsProvider):
 
     Parameters
     ----------
-    env_file : str | Path, optional
+    env_file : DotenvType, optional
         Path to the .env file from which to load the API key.
         Defaults to '.env'.
     """
 
-    env_file: str | Path = ".env"
+    env_file: DotenvType = ".env"
     """Path to the .env file from which to load the API key."""
 
     def resolve(self, scope: CredentialScope) -> ApiKeyCredentials:
