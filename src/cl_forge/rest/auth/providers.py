@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pydantic import SecretStr
+from pydantic import SecretStr, ValidationError
 from pydantic.dataclasses import dataclass
 
 from .base import ApiKeyCredentials, ApiKeySettings, CredentialsProvider, DotenvType
+from .exceptions import DotEnvCredentialsError, EnvCredentialsError
 
 if TYPE_CHECKING:
     from .enums import CredentialScope
@@ -74,8 +75,12 @@ class EnvCredentials(CredentialsProvider):
             from the environment variable corresponding to the given scope.
         """
         env_prefix = self._env_prefix(scope)
-        settings = ApiKeySettings(env_prefix=env_prefix)
-        return ApiKeyCredentials(api_key=settings.api_key)
+
+        try:
+            settings = ApiKeySettings(env_prefix=env_prefix)
+            return ApiKeyCredentials(api_key=settings.api_key)
+        except ValidationError as error:
+            raise EnvCredentialsError(env_prefix) from error
 
 
 @dataclass(frozen=True, slots=True)
@@ -108,5 +113,8 @@ class DotEnvCredentials(CredentialsProvider):
             from the .env file corresponding to the given scope.
         """
         env_prefix = self._env_prefix(scope)
-        settings = ApiKeySettings(env_file=self.env_file, env_prefix=env_prefix)
-        return ApiKeyCredentials(api_key=settings.api_key)
+        try:
+            settings = ApiKeySettings(env_file=self.env_file, env_prefix=env_prefix)
+            return ApiKeyCredentials(api_key=settings.api_key)
+        except ValidationError as error:
+            raise DotEnvCredentialsError(env_prefix, self.env_file) from error
