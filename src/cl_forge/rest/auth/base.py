@@ -3,6 +3,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, ClassVar
 
+# Pydantic requires `SecretStr` to be imported from the top level for it to
+# work properly, so we can't import it within the `TYPE_CHECKING` block, even
+# though it's only used in type annotations.
 from pydantic import SecretStr  # noqa: TC002
 from pydantic.dataclasses import dataclass
 from pydantic_settings import BaseSettings, SettingsConfigDict
