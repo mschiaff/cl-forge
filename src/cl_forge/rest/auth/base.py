@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Sequence
+from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
 # Pydantic requires `SecretStr` to be imported from the top level for it to
@@ -12,12 +14,13 @@ from pydantic.dataclasses import dataclass
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from .enums import CredentialScope
 
 
-__all__ = ("ApiKeyCredentials", "ApiKeySettings", "CredentialsProvider",)
+__all__ = ("ApiKeyCredentials", "ApiKeySettings", "CredentialsProvider", "DotenvType",)
+
+
+DotenvType = Path | str | Sequence[Path | str]
 
 
 @dataclass(frozen=True, slots=True)
@@ -126,7 +129,7 @@ class ApiKeySettings(BaseSettings):
     # potential issues with unexpected parameters being passed to the constructor
     # (e.g., `ApiKeySettings(_env_ignore_empty=False)` or any other parameter
     # defined in `BaseSettings` or `SettingsConfigDict` won't work).
-    def __init__(self, *, env_prefix: str, env_file: str | Path | None = None) -> None:
+    def __init__(self, *, env_prefix: str, env_file: DotenvType | None = None) -> None:
         """
         Initializes the API key settings with the given environment variable prefix
         and optional .env file path.
@@ -135,7 +138,7 @@ class ApiKeySettings(BaseSettings):
         ----------
         env_prefix : str
             The prefix to be used for environment variables when loading the API key.
-        env_file : str | Path, optional
+        env_file : DotenvType, optional
             The path to the .env file from which to load the API key. If not provided
             or `None` (default), no .env file will be used, and the API key will only
             be loaded from environment variables.
