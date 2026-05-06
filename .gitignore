@@ -29,7 +29,7 @@ htmlcov/
 site/
 
 # Environments
-.env
+*.env
 .venv
 env/
 venv/
