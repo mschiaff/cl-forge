@@ -73,6 +73,12 @@ class EnvCredentials(CredentialsProvider):
         ApiKeyCredentials
             An instance of `ApiKeyCredentials` containing the API key loaded
             from the environment variable corresponding to the given scope.
+
+        Raises
+        ------
+        EnvCredentialsError
+            If there is an error loading the API key from the environment variable,
+            such as the variable not being set or containing an invalid API key.
         """
         env_prefix = self._env_prefix(scope)
 
@@ -116,6 +122,12 @@ class DotEnvCredentials(CredentialsProvider):
         ApiKeyCredentials
             An instance of `ApiKeyCredentials` containing the API key loaded
             from the .env file corresponding to the given scope.
+
+        Raises
+        ------
+        DotEnvCredentialsError
+            If there is an error loading the API key from the .env file, such as
+            the file not existing, being unreadable, or not containing a valid API key.
         """
         env_prefix = self._env_prefix(scope)
         try:
