@@ -90,12 +90,17 @@ class DotEnvCredentials(CredentialsProvider):
     Parameters
     ----------
     env_file : DotenvType, optional
-        Path to the .env file from which to load the API key.
-        Defaults to '.env'.
+        The env file(s) to load the API key values from. Defaults to '.env'.
+
+    Notes
+    -----
+    - When a Sequence of paths is provided for `env_file`, the API key will be
+      loaded from the last file in the sequence that contains a valid value for
+      the API key.
     """
 
     env_file: DotenvType = ".env"
-    """Path to the .env file from which to load the API key."""
+    """Path to the .env file(s) from which to load the API key."""
 
     def resolve(self, scope: CredentialScope) -> ApiKeyCredentials:
         """
