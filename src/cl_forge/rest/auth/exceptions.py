@@ -6,6 +6,14 @@ if TYPE_CHECKING:
     from .base import DotenvType
 
 
+__all__ = (
+    "CredentialsError",
+    "DotEnvCredentialsError",
+    "EnvCredentialsError",
+    "MissingCredentialsError",
+)
+
+
 class CredentialsError(Exception):
     """Base exception for credential resolution errors."""
 
