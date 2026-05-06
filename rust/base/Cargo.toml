@@ -7,9 +7,6 @@ edition.workspace = true
 name = "base"
 crate-type = ["rlib"]
 
-[dependencies.dotenv]
-workspace = true
-
 [dependencies.reqwest]
 workspace = true
 
