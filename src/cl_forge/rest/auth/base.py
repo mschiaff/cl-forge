@@ -139,8 +139,14 @@ class ApiKeySettings(BaseSettings):
         env_prefix : str
             The prefix to be used for environment variables when loading the API key.
         env_file : DotenvType, optional
-            The path to the .env file from which to load the API key. If not provided
-            or `None` (default), no .env file will be used, and the API key will only
-            be loaded from environment variables.
+            The env file(s) to load the API key values from. If not provided or `None`
+            (default), no .env file will be used, and the API key will only be loaded
+            from environment variables.
+
+        Notes
+        -----
+        - When a Sequence of paths is provided for `env_file`, the API key will be
+          loaded from the last file in the sequence that contains a valid value for
+          the API key.
         """
         super().__init__(_env_prefix=env_prefix, _env_file=env_file)
