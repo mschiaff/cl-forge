@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING, ClassVar
 
 # Pydantic requires `SecretStr` to be imported from the top level for it to
 # work properly, so we can't import it within the `TYPE_CHECKING` block, even
-# though it's only used in type annotations.
+# though it's only used in type annotations. This applies to pydantic's models
+# (`BaseModel` and `BaseSettings`) and dataclasses.
 from pydantic import SecretStr  # noqa: TC002
 from pydantic.dataclasses import dataclass
 from pydantic_settings import BaseSettings, SettingsConfigDict
