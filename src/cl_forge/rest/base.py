@@ -4,6 +4,7 @@ from typing import Any, Self
 
 from pydantic import SecretStr
 
+from cl_forge.core.impl.cmf import CoreCmfClient
 from cl_forge.core.impl.market import CoreMarketClient
 
 from .auth import (
@@ -14,7 +15,7 @@ from .auth import (
     StaticCredentials,
 )
 
-__all__ = ("BaseMarketClient",)
+__all__ = ("BaseCmfClient", "BaseMarketClient",)
 
 
 def as_credentials_provider(credentials: CredentialType) -> CredentialsProvider:
@@ -56,6 +57,23 @@ class CoreClientMixin(metaclass=CoreClientMeta):
 
 class BaseMarketClient(CoreClientMixin, CoreMarketClient):
     _scope: CredentialScope = CredentialScope.MARKET
+    """Client scope for credential resolution."""
+    credentials: ApiKeyCredentials
+    """The resolved credentials used by the client."""
+
+    def __new__(cls, credentials: CredentialType) -> Self:
+        provider = as_credentials_provider(credentials)
+        resolved = provider.resolve(cls._scope)
+
+        self = super().__new__(cls, api_key=resolved.value)
+        self.credentials = resolved
+        return self
+
+    def __init__(self, credentials: CredentialType) -> None: ...
+
+
+class BaseCmfClient(CoreClientMixin, CoreCmfClient):
+    _scope: CredentialScope = CredentialScope.CMF
     """Client scope for credential resolution."""
     credentials: ApiKeyCredentials
     """The resolved credentials used by the client."""
