@@ -5,8 +5,9 @@ from typing import TYPE_CHECKING
 from pydantic import SecretStr, ValidationError
 from pydantic.dataclasses import dataclass
 
-from .base import ApiKeyCredentials, ApiKeySettings, CredentialsProvider, DotenvType
+from .base import ApiKeyCredentials, ApiKeySettings, CredentialsProvider
 from .exceptions import DotEnvCredentialsError, EnvCredentialsError
+from .types import DotenvType  # noqa: TC001
 
 if TYPE_CHECKING:
     from .enums import CredentialScope

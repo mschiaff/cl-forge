@@ -22,12 +22,12 @@ fn build_response<'py>(
 #[pyclass(subclass, module = "cl_forge.core.impl.cmf")]
 /// Base client for CMF API. Not intended to be used directly,
 /// but can be subclassed for specific APIs.
-struct BaseCmfClient {
+struct CoreCmfClient {
     inner: client::BaseCmfClient,
 }
 
 #[pymethods]
-impl BaseCmfClient {
+impl CoreCmfClient {
     #[new]
     fn new(api_key: &str) -> PyResult<Self> {
         let inner = client::BaseCmfClient::new(api_key)?;
@@ -98,6 +98,6 @@ impl BaseCmfClient {
 
 #[pymodule]
 pub fn rs_cmf(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<BaseCmfClient>()?;
+    m.add_class::<CoreCmfClient>()?;
     Ok(())
 }

@@ -1,3 +1,3 @@
-from .rs_cl_forge.rs_cmf import BaseCmfClient
+from .rs_cl_forge.rs_cmf import CoreCmfClient
 
-__all__ = ("BaseCmfClient",)
+__all__ = ("CoreCmfClient",)

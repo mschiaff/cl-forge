@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from cl_forge.core.impl.market import BaseMarketClient
-
+from ..base import BaseMarketClient
 from .resources.directory import (
     AsyncBuyersResource,
     AsyncSuppliersResource,
@@ -18,6 +17,7 @@ from .specs.orders import ORDER_SPEC
 from .specs.tenders import TENDER_SPEC
 
 if TYPE_CHECKING:
+    from ..auth import ApiKeyCredentials, CredentialType
     from .types import MarketTransport
 
 
@@ -38,16 +38,17 @@ class MarketClient:
     buyers: BuyersResource
     """Resource for accessing buyers directory data."""
 
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, credentials: CredentialType) -> None:
         """
-        Initialize the MarketClient with the provided API key.
+        Initialize the MarketClient with the provided credentials.
 
         Parameters
         ----------
-        api_key : str
-            The API key to authenticate requests with the Public Market API.
+        credentials : CredentialType
+            The credentials to use for the client, which can be a `str`,
+            `SecretStr`, or `CredentialsProvider`.
         """
-        self._transport: MarketTransport = BaseMarketClient(api_key)
+        self._transport: MarketTransport = BaseMarketClient(credentials)
 
         self.raw = RawMarketResource(self._transport)
         self.tenders = TendersResource(self._transport, spec=TENDER_SPEC)
@@ -56,14 +57,21 @@ class MarketClient:
         self.buyers = BuyersResource(self._transport, spec=BUYER_SPEC)
 
     @property
-    def api_key(self) -> str:
-        """Get the API key used by the client."""
-        return self._transport.api_key
+    def base_url(self) -> str:
+        """Get the base URL for the Market API."""
+        return self._transport.base_url
 
     @property
-    def base_url(self) -> str:
-        """Get the base URL used by the client."""
-        return self._transport.base_url
+    def credentials(self) -> ApiKeyCredentials:
+        """Get the credentials used by the MarketClient."""
+        return self._transport.credentials
+
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}"
+            f"(base_url={self.base_url!r}, "
+            f"credentials={self.credentials})"
+        )
 
 
 class AsyncMarketClient:
@@ -80,16 +88,17 @@ class AsyncMarketClient:
     buyers: AsyncBuyersResource
     """Resource for accessing buyers directory data."""
 
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, credentials: CredentialType) -> None:
         """
-        Initialize the AsyncMarketClient with the provided API key.
+        Initialize the AsyncMarketClient with the provided credentials.
 
         Parameters
         ----------
-        api_key : str
-            The API key to authenticate requests with the Public Market API.
+        credentials : CredentialType
+            The credentials to use for the client, which can be a `str`,
+            `SecretStr`, or `CredentialsProvider`.
         """
-        self._transport: MarketTransport = BaseMarketClient(api_key)
+        self._transport: MarketTransport = BaseMarketClient(credentials)
 
         self.raw = AsyncRawMarketResource(self._transport)
         self.tenders = AsyncTendersResource(self._transport, spec=TENDER_SPEC)
@@ -98,11 +107,18 @@ class AsyncMarketClient:
         self.buyers = AsyncBuyersResource(self._transport, spec=BUYER_SPEC)
 
     @property
-    def api_key(self) -> str:
-        """Get the API key used by the client."""
-        return self._transport.api_key
+    def base_url(self) -> str:
+        """Get the base URL for the Market API."""
+        return self._transport.base_url
 
     @property
-    def base_url(self) -> str:
-        """Get the base URL used by the client."""
-        return self._transport.base_url
+    def credentials(self) -> ApiKeyCredentials:
+        """Get the credentials used by the MarketClient."""
+        return self._transport.credentials
+
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}"
+            f"(base_url={self.base_url!r}, "
+            f"credentials={self.credentials})"
+        )

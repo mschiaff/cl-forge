@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from cl_forge.core.impl.cmf import BaseCmfClient
-
+from ..base import BaseCmfClient
 from .resources.daily import AsyncDailyIndicatorResource, DailyIndicatorResource
 from .resources.monthly import AsyncMonthlyIndicatorResource, MonthlyIndicatorResource
 from .resources.rates import AsyncRateResource, RateResource
@@ -27,16 +26,18 @@ if TYPE_CHECKING:
     from cl_forge.rest.cmf.models.rates import TipCollection, TipRecord, TmcCollection, TmcRecord
     from cl_forge.rest.cmf.types import CmfTransport
 
+    from ..auth import ApiKeyCredentials, CredentialType
+
 
 __all__ = ("AsyncCmfClient", "CmfClient",)
 
 
 class CmfClient:
     """Client for interacting with the CMF API."""
-    
+
     raw: RawResource
     """Resource for accessing raw CMF API requests."""
-    
+
     ipc: MonthlyIndicatorResource[IpcRecord, IpcCollection]
     """Resource for accessing IPC indicator data."""
     uf: DailyIndicatorResource[UfRecord, UfCollection]
@@ -52,16 +53,16 @@ class CmfClient:
     tmc: RateResource[TmcRecord, TmcCollection]
     """Resource for accessing TMC data."""
 
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, credentials: CredentialType) -> None:
         """
         Initialize the CMF client.
 
         Parameters
         ----------
-        api_key : str
-            The API key for authenticating with the CMF API.
+        credentials : CredentialType
+            The credentials for authenticating with the CMF API.
         """
-        self._transport: CmfTransport = BaseCmfClient(api_key)
+        self._transport: CmfTransport = BaseCmfClient(credentials)
 
         self.raw = RawResource(self._transport)
 
@@ -74,36 +75,29 @@ class CmfClient:
         self.tmc = RateResource(transport=self._transport, spec=TMC_SPEC)
 
     @property
-    def api_key(self) -> str:
-        """
-        Get the API key used for authentication.
-
-        Returns
-        -------
-        str
-            The API key.
-        """
-        return self._transport.api_key
+    def base_url(self) -> str:
+        """Get the base URL for the Market API."""
+        return self._transport.base_url
 
     @property
-    def base_url(self) -> str:
-        """
-        Get the base URL for the CMF API.
+    def credentials(self) -> ApiKeyCredentials:
+        """Get the credentials used by the MarketClient."""
+        return self._transport.credentials
 
-        Returns
-        -------
-        str
-            The base URL.
-        """
-        return self._transport.base_url
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}"
+            f"(base_url={self.base_url!r}, "
+            f"credentials={self.credentials})"
+        )
 
 
 class AsyncCmfClient:
     """Asynchronous client for interacting with the CMF API."""
-    
+
     raw: AsyncRawResource
     """Resource for accessing raw CMF API requests."""
-    
+
     ipc: AsyncMonthlyIndicatorResource[IpcRecord, IpcCollection]
     """Resource for accessing IPC indicator data."""
     uf: AsyncDailyIndicatorResource[UfRecord, UfCollection]
@@ -119,16 +113,16 @@ class AsyncCmfClient:
     tmc: AsyncRateResource[TmcRecord, TmcCollection]
     """Resource for accessing TMC data."""
 
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, credentials: CredentialType) -> None:
         """
         Initialize the asynchronous CMF client.
 
         Parameters
         ----------
-        api_key : str
-            The API key for authenticating with the CMF API.
+        credentials : CredentialType
+            The credentials for authenticating with the CMF API.
         """
-        self._transport: CmfTransport = BaseCmfClient(api_key)
+        self._transport: CmfTransport = BaseCmfClient(credentials)
 
         self.raw = AsyncRawResource(self._transport)
 
@@ -141,25 +135,18 @@ class AsyncCmfClient:
         self.tmc = AsyncRateResource(transport=self._transport, spec=TMC_SPEC)
 
     @property
-    def api_key(self) -> str:
-        """
-        Get the API key used for authentication.
-
-        Returns
-        -------
-        str
-            The API key.
-        """
-        return self._transport.api_key
+    def base_url(self) -> str:
+        """Get the base URL for the Market API."""
+        return self._transport.base_url
 
     @property
-    def base_url(self) -> str:
-        """
-        Get the base URL for the CMF API.
+    def credentials(self) -> ApiKeyCredentials:
+        """Get the credentials used by the MarketClient."""
+        return self._transport.credentials
 
-        Returns
-        -------
-        str
-            The base URL.
-        """
-        return self._transport.base_url
+    def __repr__(self) -> str:
+        return (
+            f"{type(self).__name__}"
+            f"(base_url={self.base_url!r}, "
+            f"credentials={self.credentials})"
+        )

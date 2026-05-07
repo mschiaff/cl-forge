@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Literal, Protocol, overload
+from typing import TYPE_CHECKING, Any, Literal, Protocol, overload
+
+if TYPE_CHECKING:
+    from ...auth import ApiKeyCredentials
+
 
 __all__ = ("MarketTransport", "ResponseFormat",)
 
@@ -13,7 +17,7 @@ class MarketTransport(Protocol):
     def base_url(self) -> str: ...
 
     @property
-    def api_key(self) -> str: ...
+    def credentials(self) -> ApiKeyCredentials: ...
 
     @overload
     def get(
