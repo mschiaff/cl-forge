@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections.abc import Sequence
-from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
 # Pydantic requires `SecretStr` to be imported from the top level for it to
@@ -15,12 +13,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 if TYPE_CHECKING:
     from .enums import CredentialScope
+    from .types import DotenvType
 
 
-__all__ = ("ApiKeyCredentials", "ApiKeySettings", "CredentialsProvider", "DotenvType",)
+__all__ = ("ApiKeyCredentials", "ApiKeySettings", "CredentialsProvider",)
 
-
-DotenvType = Path | str | Sequence[Path | str]
 
 
 @dataclass(frozen=True, slots=True)
