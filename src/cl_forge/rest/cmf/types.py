@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Annotated, Any, Literal, Protocol, overload
+from typing import TYPE_CHECKING, Annotated, Any, Literal, Protocol, overload
 
 from pydantic import Field
+
+if TYPE_CHECKING:
+    from ..auth import ApiKeyCredentials
 
 type RawFormat = Literal["json", "xml"]
 
@@ -19,7 +22,7 @@ class CmfTransport(Protocol):
     def base_url(self) -> str: ...
 
     @property
-    def api_key(self) -> str: ...
+    def credentials(self) -> ApiKeyCredentials: ...
 
     @overload
     def get(self, path: str, fmt: Literal["json"] = ... ) -> dict[str, Any]: ...
