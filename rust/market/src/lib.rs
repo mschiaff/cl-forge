@@ -45,12 +45,12 @@ fn build_response<'py>(
 #[pyclass(subclass, module = "cl_forge.core.impl.market")]
 /// Base client for Market API. Not intended to be used directly,
 /// but can be subclassed for specific APIs.
-struct BaseMarketClient {
+struct CoreMarketClient {
     inner: client::BaseMarketClient,
 }
 
 #[pymethods]
-impl BaseMarketClient {
+impl CoreMarketClient {
     #[new]
     fn new(api_key: &str) -> PyResult<Self> {
         let inner = client::BaseMarketClient::new(api_key)?;
@@ -126,6 +126,6 @@ impl BaseMarketClient {
 
 #[pymodule]
 pub fn rs_market(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_class::<BaseMarketClient>()?;
+    m.add_class::<CoreMarketClient>()?;
     Ok(())
 }

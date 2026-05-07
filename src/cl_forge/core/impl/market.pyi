@@ -1,6 +1,6 @@
-from typing import Any, Literal, overload
+from typing import Any, Literal, Self, overload
 
-class BaseMarketClient:
+class CoreMarketClient:
     """
     Represents a client for interacting with the Chilean Public Market API.
 
@@ -17,6 +17,8 @@ class BaseMarketClient:
     base_url : str
         The base URL of the market API endpoint.
     """
+    def __new__(cls, api_key: str) -> Self: ...
+
     def __init__(self, api_key: str) -> None:
         """
         Initializes the MarketClient with the provided API ticket.
