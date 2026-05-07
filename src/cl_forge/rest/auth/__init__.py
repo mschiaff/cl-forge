@@ -1,4 +1,5 @@
-from .base import CredentialScope, CredentialsProvider
+from .base import CredentialsProvider
+from .enums import CredentialScope
 from .providers import DotEnvCredentials, EnvCredentials, StaticCredentials
 
 __all__ = (
