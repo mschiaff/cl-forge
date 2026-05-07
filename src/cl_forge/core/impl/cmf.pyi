@@ -1,8 +1,8 @@
-from typing import Any, Literal, overload
+from typing import Any, Literal, Self, overload
 
 from cl_forge.rest.cmf.types import RawFormat
 
-class BaseCmfClient:
+class CoreCmfClient:
     """
     Base client for interacting with the CMF API.
 
@@ -16,7 +16,7 @@ class BaseCmfClient:
     Attributes
     ----------
     api_key : str
-        The API ticket used for authenticating requests to the CMF API.
+        The API key used for authenticating requests to the CMF API.
     base_url : str
         The base URL of the CMF API.
 
@@ -25,6 +25,7 @@ class BaseCmfClient:
     EmptyApiKey
         If no API key is provided or it's empty.
     """
+    def __new__(cls, api_key: str) -> Self: ...
 
     def __init__(self, api_key: str) -> None:
         """
@@ -41,12 +42,12 @@ class BaseCmfClient:
     @property
     def api_key(self) -> str:
         """
-        Gets the API Key used for authenticating requests.
+        Gets the API key used for authenticating requests.
 
         Returns
         -------
         str
-            The API Key.
+            The API key.
         """
 
     @property
