@@ -45,7 +45,8 @@ class MarketClient:
         Parameters
         ----------
         credentials : CredentialType
-            The credentials to authenticate requests with the Public Market API.
+            The credentials to use for the client, which can be a `str`,
+            `SecretStr`, or `CredentialsProvider`.
         """
         self._transport: MarketTransport = BaseMarketClient(credentials)
 
@@ -94,7 +95,8 @@ class AsyncMarketClient:
         Parameters
         ----------
         credentials : CredentialType
-            The credentials to authenticate requests with the Public Market API.
+            The credentials to use for the client, which can be a `str`,
+            `SecretStr`, or `CredentialsProvider`.
         """
         self._transport: MarketTransport = BaseMarketClient(credentials)
 
