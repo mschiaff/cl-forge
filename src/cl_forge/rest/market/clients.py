@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from cl_forge.core.impl.market import BaseMarketClient
+from cl_forge.core.impl.market import CoreMarketClient
 
 from .resources.directory import (
     AsyncBuyersResource,
@@ -47,7 +47,7 @@ class MarketClient:
         api_key : str
             The API key to authenticate requests with the Public Market API.
         """
-        self._transport: MarketTransport = BaseMarketClient(api_key)
+        self._transport: MarketTransport = CoreMarketClient(api_key)
 
         self.raw = RawMarketResource(self._transport)
         self.tenders = TendersResource(self._transport, spec=TENDER_SPEC)
@@ -89,7 +89,7 @@ class AsyncMarketClient:
         api_key : str
             The API key to authenticate requests with the Public Market API.
         """
-        self._transport: MarketTransport = BaseMarketClient(api_key)
+        self._transport: MarketTransport = CoreMarketClient(api_key)
 
         self.raw = AsyncRawMarketResource(self._transport)
         self.tenders = AsyncTendersResource(self._transport, spec=TENDER_SPEC)
