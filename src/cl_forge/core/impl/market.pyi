@@ -1,6 +1,6 @@
 from typing import Any, Literal, overload
 
-class BaseMarketClient:
+class CoreMarketClient:
     """
     Represents a client for interacting with the Chilean Public Market API.
 
