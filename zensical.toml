@@ -57,7 +57,7 @@ Copyright &copy; 2026 The authors
 #
 # Read more: https://zensical.org/docs/customization/#additional-css
 #
-#extra_css = ["stylesheets/extra.css"]
+extra_css = ["stylesheets/extra.css"]
 
 # With the `extra_javascript` option you can add your own JavaScript to your
 # project to customize the behavior according to your needs.
@@ -347,6 +347,18 @@ combine_header_slug = true
 [project.markdown_extensions.pymdownx.tasklist]
 custom_checkbox = true
 [project.markdown_extensions.pymdownx.tilde]
+
+# ----------------------------------------------------------------------------
+# Tags section
+# ----------------------------------------------------------------------------
+[project.theme.icon.tag]
+default = "lucide/hash"
+
+[project.extra.tags]
+CMF = "cmf"
+API = "api"
+Client = "client"
+Resources = "resources"
 
 # ----------------------------------------------------------------------------
 # Plugins section
