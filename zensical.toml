@@ -11,7 +11,7 @@
 # The site_name is shown in the page header and the browser window title
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_name
-site_name = "Documentation"
+site_name = "CL Forge Documentation"
 
 # The site_description is included in the HTML head and should contain a
 # meaningful description of the site content for use by search engines.
@@ -347,3 +347,59 @@ combine_header_slug = true
 [project.markdown_extensions.pymdownx.tasklist]
 custom_checkbox = true
 [project.markdown_extensions.pymdownx.tilde]
+
+# ----------------------------------------------------------------------------
+# Plugins section
+# ----------------------------------------------------------------------------
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+# Set the docstring style from wich to parse
+docstring_style = "numpy"
+
+# Show the inherited members of a class
+inherited_members = true
+
+# Don't show the source code
+show_source = false
+
+# Show signatures separately from title
+separate_signature = true
+
+# Merge the __init__ method into the class docstring
+merge_init_into_class = true
+
+# Show the root heading of the generated page,
+# which is the name of the object being documented
+show_root_heading = true
+
+show_root_full_path = false
+
+# Show the signature annotations (e.g., types)
+# in the signatures
+show_signature_annotations = true
+
+# Show the symbol type heading (e.g., "Methods",
+# "Attributes") above the members of a class
+show_symbol_type_heading = true
+
+# Show the symbol type in the table of contents
+show_symbol_type_toc = true
+
+# Show labels for the members of a class
+# (e.g., "method", "attribute")
+show_labels = true
+
+# Show cross-references in the signature
+# (e.g., for types)
+signature_crossrefs = true
+
+# Ignore the summary of the __init__ method
+# when merging it into the class docstring
+docstring_options = { ignore_init_summary = true }
+
+# Don't show the values of attributes, which
+# can be distracting
+show_attribute_values = false
