@@ -375,6 +375,8 @@ merge_init_into_class = true
 # which is the name of the object being documented
 show_root_heading = true
 
+# Don't show the full path to the root
+# object in the title of the page
 show_root_full_path = false
 
 # Show the signature annotations (e.g., types)
