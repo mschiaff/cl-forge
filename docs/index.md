@@ -1,141 +1,173 @@
-# Welcome to CL Forge!
+---
+icon: lucide/rocket
+---
 
-<img src="https://github.com/mschiaff/cl-forge/blob/main/docs/assets/banner.png?raw=true" align="center" style="border-radius: 25px;" alt="banner"/>
+# Get started
 
-<h2 align="center">Simple yet powerful Chilean tools written in Rust and Python.</h2>
+For full documentation visit [zensical.org](https://zensical.org/docs/).
 
-<figure markdown="1">
+## Commands
 
-[![PyPI - Version](https://img.shields.io/pypi/v/cl-forge)](https://pypi.org/project/cl-forge/)
-[![GitHub Release](https://img.shields.io/github/v/release/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/releases/latest)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cl-forge)](https://pypi.org/project/cl-forge/)
-[![GH Pages - Docs](https://img.shields.io/badge/Pages-Docs-blue?logo=github)](https://mschiaff.github.io/cl-forge/)
+* [`zensical new`][new] - Create a new project
+* [`zensical serve`][serve] - Start local web server
+* [`zensical build`][build] - Build your site
 
-</figure>
-
-<figure markdown="1">
-
-![PyPI - Status](https://img.shields.io/pypi/status/cl-forge)
-![PyPI - Types](https://img.shields.io/pypi/types/cl-forge)
-[![GitHub License](https://img.shields.io/github/license/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/blob/main/LICENSE)
-
-</figure>
-
-<figure markdown="1">
-
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/python-package.yml?logo=github&label=Tests)](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/release-python.yml?logo=github&label=Release)](https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml)
-[![pages-build-deployment](https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment)
-
-</figure>
-
-
-`cl-forge` provides a collection of high-performance utilities for common Chilean data formats and API integrations. The core logic is implemented in Rust for maximum speed, with a clean and easy-to-use Python interface.
-
-## Features
-
-- **High Performance**: Core logic written in Rust.
-- **Verify**: Efficiently validate Chilean RUT/RUN and PPU (License Plates).
-- **API Integrations**: Simple clients to interact with the [CMF](https://api.cmfchile.cl) and [Public Market](https://api.mercadopublico.cl) APIs.
-- **Type Safety**: Full type hints and `.pyi` stubs for excellent IDE support.
+  [new]: https://zensical.org/docs/usage/new/
+  [serve]: https://zensical.org/docs/usage/preview/
+  [build]: https://zensical.org/docs/usage/build/
 
 ## Examples
 
-### Validate
+### Admonitions
 
-You can validate if a verifier digit is correct for a given numeric part of a RUT/RUN.
+> Go to [documentation](https://zensical.org/docs/authoring/admonitions/)
 
-```python
-from cl_forge import verify
+!!! note
 
-is_valid = verify.validate_rut(8750720, "3")
+    This is a **note** admonition. Use it to provide helpful information.
 
-print(f"RUT is valid: {is_valid}")
-# RUT is valid: True
+!!! warning
+
+    This is a **warning** admonition. Be careful!
+
+### Details
+
+> Go to [documentation](https://zensical.org/docs/authoring/admonitions/#collapsible-blocks)
+
+??? info "Click to expand for more info"
+
+    This content is hidden until you click to expand it.
+    Great for FAQs or long explanations.
+
+## Code Blocks
+
+> Go to [documentation](https://zensical.org/docs/authoring/code-blocks/)
+
+``` python hl_lines="2" title="Code blocks"
+def greet(name):
+    print(f"Hello, {name}!") # (1)!
+
+greet("Python")
 ```
 
-... Or you can calculate the verifier digit yourself.
+1.  > Go to [documentation](https://zensical.org/docs/authoring/code-blocks/#code-annotations)
 
-```python
-from cl_forge import verify
+    Code annotations allow to attach notes to lines of code.
 
-dv = verify.calculate_verifier(8750720)
+Code can also be highlighted inline: `#!python print("Hello, Python!")`.
 
-print(f"Verifier digit: {dv}")
-# Verifier digit: 3
+## Content tabs
+
+> Go to [documentation](https://zensical.org/docs/authoring/content-tabs/)
+
+=== "Python"
+
+    ``` python
+    print("Hello from Python!")
+    ```
+
+=== "Rust"
+
+    ``` rs
+    println!("Hello from Rust!");
+    ```
+
+## Diagrams
+
+> Go to [documentation](https://zensical.org/docs/authoring/diagrams/)
+
+``` mermaid
+graph LR
+  A[Start] --> B{Error?};
+  B -->|Yes| C[Hmm...];
+  C --> D[Debug];
+  D --> B;
+  B ---->|No| E[Yay!];
 ```
 
-### Generate
+## Footnotes
 
-Need to generate a bunch of random, unique and valid RUTs? No problem! And you can even specify a random seed, so you can reproduce the same results every time.
+> Go to [documentation](https://zensical.org/docs/authoring/footnotes/)
 
-```python
-from cl_forge import verify
+Here's a sentence with a footnote.[^1]
 
-ruts = verify.generate(
-   n=100,
-   min=1_000_000,
-   max=20_000_000,
-   seed=42
-)
+Hover it, to see a tooltip.
 
-print(ruts)
-# [{'correlative': 8750720, 'verifier': '3'}, ...]
-```
+[^1]: This is the footnote.
 
-### API Clients
 
-The CMF API client allows you to easily interact with the [CMF](https://api.cmfchile.cl) API.
+## Formatting
 
-```python
-from cl_forge.cmf import CmfClient
+> Go to [documentation](https://zensical.org/docs/authoring/formatting/)
 
-client = CmfClient(api_key="your-api-key")
+- ==This was marked (highlight)==
+- ^^This was inserted (underline)^^
+- ~~This was deleted (strikethrough)~~
+- H~2~O
+- A^T^A
+- ++ctrl+alt+del++
 
-# Get latest IPC data
-ipc_data = client.get(path="/ipc")
+## Icons, Emojis
 
-print(ipc_data)
-# {'IPCs': [{'Valor': '-0,2', 'Fecha': '2025-12-01'}]}
-```
+> Go to [documentation](https://zensical.org/docs/authoring/icons-emojis/)
 
-!!! important
-   
-    To use the CMF API, you need an API key. You can request one at [Contact CMF](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
+* :sparkles: `:sparkles:`
+* :rocket: `:rocket:`
+* :tada: `:tada:`
+* :memo: `:memo:`
+* :eyes: `:eyes:`
 
-See the [API Reference](https://mschiaff.github.io/cl-forge/api/cmf/base_client/) for endpoint-specific clients, and the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html) for details about all the available endpoints.
+## Maths
 
-The Public Market API client also allows you to easily interact with the [Mercado Público](https://api.mercadopublico.cl) API.
+> Go to [documentation](https://zensical.org/docs/authoring/math/)
 
-```python
-from cl_forge.market import MarketClient
+$$
+\cos x=\sum_{k=0}^{\infty}\frac{(-1)^k}{(2k)!}x^{2k}
+$$
 
-client = MarketClient(ticket='your-api-ticket')
+!!! warning "Needs configuration"
+    Note that MathJax is included via a `script` tag on this page and is not
+    configured in the generated default configuration to avoid including it
+    in a pages that do not need it. See the documentation for details on how
+    to configure it on all your pages if they are more Maths-heavy than these
+    simple starter pages.
 
-tenders_data = client.get(path="/licitaciones")
+<script id="MathJax-script" src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [["\\(", "\\)"]],
+      displayMath: [["\\[", "\\]"]],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      ignoreHtmlClass: ".*|",
+      processHtmlClass: "arithmatex"
+    }
+  };
 
-print(tenders_data)
-#{'Cantidad': 463,
-# 'FechaCreacion': '2026-02-12T16:07:58.813315Z',
-# 'Version': 'v1',
-# 'Listado': [{'CodigoExterno': '1057049-30-B226',
-#   'Nombre': 'CSP- SERVICIO DE INMUNOHISTOQUÍMICA Y CISH',
-#   'CodigoEstado': 5,
-#   'FechaCierre': '2026-02-23T15:30:00'},
-#  {'CodigoExterno': '1057374-8-L126',
-# ...}
-```
+  document$.subscribe(() => {
+    MathJax.startup.output.clearCache()
+    MathJax.typesetClear()
+    MathJax.texReset()
+    MathJax.typesetPromise()
+  })
+</script>
 
-!!! important
+## Task Lists
 
-    To use the Mercado Público API, you need an API ticket. You can request one at [Contact Mercado Público](https://api.mercadopublico.cl/modules/IniciarSesion.aspx). To request this API ticket, you will also have to request and activate your [ClaveÚnica](https://claveunica.gob.cl).
+> Go to [documentation](https://zensical.org/docs/authoring/lists/#using-task-lists)
 
-See the [Mercado Público API documentation](https://api.mercadopublico.cl/modules/api.aspx) for details about all the available endpoints. **Endpoint-specific clients coming soon in future updates.**
+* [x] Install Zensical
+* [x] Configure `zensical.toml`
+* [x] Write amazing documentation
+* [ ] Deploy anywhere
 
-## Contributing
+## Tooltips
 
-Pull requests are welcome. For changes and reporting bugs, please open an issue first to discuss it. Read our [Contributing Guide](contributing.md) for more details.
+> Go to [documentation](https://zensical.org/docs/authoring/tooltips/)
 
-## License
+[Hover me][example]
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/mschiaff/cl-forge/blob/main/LICENSE) file for details.
+  [example]: https://example.com "I'm a tooltip!"

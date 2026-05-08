@@ -48,3 +48,7 @@ notebooks/
 
 #macOS
 .DS_Store
+
+# Legacy
+_docs/
+_mkdocs.yml

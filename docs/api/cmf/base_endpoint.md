@@ -1,1 +1,0 @@
-::: cl_forge.core.endpoints.CmfEndpoint
