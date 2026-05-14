@@ -1,12 +1,13 @@
 ---
 tags:
+    - Sync
     - CMF
     - API
     - Client
     - Resources
 ---
 
-# CMF Client
+# CmfClient
 
 ::: cl_forge.CmfClient
 
