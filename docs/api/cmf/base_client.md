@@ -1,1 +1,1 @@
-::: cl_forge.cmf.CmfClient
+::: cl_forge.CmfClient
