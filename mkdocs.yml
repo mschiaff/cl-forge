@@ -12,8 +12,11 @@ nav:
     - Installation: install.md
     - Contributing: contributing.md
   - API Reference:
-      - CMF:
+      - Clients:
           - CmfClient: api/cmf/base_client.md
+      - Resources:
+          - api/DailyIndicatorResource.md
+          - api/MonthlyIndicatorResource.md
       - Exceptions: api/exceptions.md
 
 extra_css:
