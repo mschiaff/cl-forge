@@ -26,7 +26,6 @@ class CoreCmfClient:
         If no API key is provided or it's empty.
     """
     def __new__(cls, api_key: str) -> Self: ...
-
     def __init__(self, api_key: str) -> None:
         """
         Initializes the CMF client with the provided API key.
@@ -38,7 +37,6 @@ class CoreCmfClient:
         """
 
     def __repr__(self) -> str: ...
-
     @property
     def api_key(self) -> str:
         """
@@ -62,29 +60,12 @@ class CoreCmfClient:
         """
 
     @overload
-    def get(
-            self,
-            path: str,
-            fmt: Literal["json"] = ...
-    ) -> dict[str, Any]: ...
+    def get(self, path: str, fmt: Literal["json"] = ...) -> dict[str, Any]: ...
     @overload
-    def get(
-            self,
-            path: str,
-            fmt: Literal["xml"]
-    ) -> str: ...
+    def get(self, path: str, fmt: Literal["xml"]) -> str: ...
     @overload
-    def get(
-            self,
-            path: str,
-            fmt: RawFormat = ...
-    ) -> dict[str, Any] | str: ...
-
-    def get(
-            self,
-            path: str,
-            fmt: RawFormat = "json"
-    ) -> dict[str, Any] | str:
+    def get(self, path: str, fmt: RawFormat = ...) -> dict[str, Any] | str: ...
+    def get(self, path: str, fmt: RawFormat = "json") -> dict[str, Any] | str:
         """
         Sends a GET request to the specified CMF API endpoint.
 
@@ -106,34 +87,17 @@ class CoreCmfClient:
             The response from the CMF API. Returns a ``dict`` if format is
             ``'json'`` and a ``str`` if format is ``'xml'``.
         """
-    
-    @overload
-    async def aget(
-            self,
-            path: str,
-            fmt: Literal["json"] = ...
-    ) -> dict[str, Any]: ...
-    @overload
-    async def aget(
-            self,
-            path: str,
-            fmt: Literal["xml"]
-    ) -> str: ...
-    @overload
-    async def aget(
-            self,
-            path: str,
-            fmt: RawFormat = ...
-    ) -> dict[str, Any] | str: ...
 
-    async def aget(
-            self,
-            path: str,
-            fmt: RawFormat = "json"
-    ) -> dict[str, Any] | str:
+    @overload
+    async def aget(self, path: str, fmt: Literal["json"] = ...) -> dict[str, Any]: ...
+    @overload
+    async def aget(self, path: str, fmt: Literal["xml"]) -> str: ...
+    @overload
+    async def aget(self, path: str, fmt: RawFormat = ...) -> dict[str, Any] | str: ...
+    async def aget(self, path: str, fmt: RawFormat = "json") -> dict[str, Any] | str:
         """
         Async implementation of :meth:`get`.
-        
+
         Sends a GET request to the specified CMF API endpoint.
 
         Notes

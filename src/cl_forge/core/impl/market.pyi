@@ -18,7 +18,6 @@ class CoreMarketClient:
         The base URL of the market API endpoint.
     """
     def __new__(cls, api_key: str) -> Self: ...
-
     def __init__(self, api_key: str) -> None:
         """
         Initializes the MarketClient with the provided API ticket.
@@ -53,31 +52,16 @@ class CoreMarketClient:
 
     @overload
     def get(
-            self,
-            path: str,
-            fmt: Literal["json"] = ...,
-            params: dict[str, Any] | None = ...
+        self, path: str, fmt: Literal["json"] = ..., params: dict[str, Any] | None = ...
     ) -> dict[str, Any]: ...
     @overload
-    def get(
-            self,
-            path: str,
-            fmt: Literal["xml"],
-            params: dict[str, Any] | None = ...
-    ) -> str: ...
+    def get(self, path: str, fmt: Literal["xml"], params: dict[str, Any] | None = ...) -> str: ...
     @overload
     def get(
-            self,
-            path: str,
-            fmt: Literal["json", "xml"] = ...,
-            params: dict[str, Any] | None = ...
+        self, path: str, fmt: Literal["json", "xml"] = ..., params: dict[str, Any] | None = ...
     ) -> dict[str, Any] | str: ...
-
     def get(
-            self,
-            path: str,
-            fmt: Literal["json", "xml"] = "json",
-            params: dict[str, Any] | None = None
+        self, path: str, fmt: Literal["json", "xml"] = "json", params: dict[str, Any] | None = None
     ) -> dict[str, Any] | str:
         """
         Sends a GET request to the specified path of the market API.
@@ -109,38 +93,25 @@ class CoreMarketClient:
         ValueError
             If the API key is included in `params`.
         """
-    
+
     @overload
     async def aget(
-            self,
-            path: str,
-            fmt: Literal["json"] = ...,
-            params: dict[str, Any] | None = ...
+        self, path: str, fmt: Literal["json"] = ..., params: dict[str, Any] | None = ...
     ) -> dict[str, Any]: ...
     @overload
     async def aget(
-            self,
-            path: str,
-            fmt: Literal["xml"],
-            params: dict[str, Any] | None = ...
+        self, path: str, fmt: Literal["xml"], params: dict[str, Any] | None = ...
     ) -> str: ...
     @overload
     async def aget(
-            self,
-            path: str,
-            fmt: Literal["json", "xml"] = ...,
-            params: dict[str, Any] | None = ...
+        self, path: str, fmt: Literal["json", "xml"] = ..., params: dict[str, Any] | None = ...
     ) -> dict[str, Any] | str: ...
-    
     async def aget(
-            self,
-            path: str,
-            fmt: Literal["json", "xml"] = "json",
-            params: dict[str, Any] | None = None
+        self, path: str, fmt: Literal["json", "xml"] = "json", params: dict[str, Any] | None = None
     ) -> dict[str, Any] | str:
         """
         Async implementation of :meth:`get`.
-        
+
         Sends a GET request to the specified path of the market API.
 
         Notes
