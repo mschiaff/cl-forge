@@ -14,9 +14,14 @@ nav:
   - API Reference:
       - Clients:
           - CmfClient: api/cmf/base_client.md
+      - Auth: api/auth.md
       - Resources:
           - api/DailyIndicatorResource.md
           - api/MonthlyIndicatorResource.md
+          - api/RateResource.md
+          - api/RawResource.md
+      - Schemas: api/schemas.md
+      - Types: api/types.md
       - Exceptions: api/exceptions.md
 
 extra_css:
@@ -107,7 +112,7 @@ plugins:
             #scoped_crossrefs: true
             #relative_crossrefs: true
             signature_crossrefs: true
-            #show_source: false
+            show_source: false
             #show_root_full_path: false
             inherited_members: true
             show_if_no_docstring: true
