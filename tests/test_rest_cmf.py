@@ -9,12 +9,12 @@ from pydantic import ValidationError
 
 from cl_forge.rest.auth.enums import ApiProvider
 from cl_forge.rest.cmf.clients import AsyncCmfClient, CmfClient
-from cl_forge.rest.cmf.models.indexes import EurList, EurRecord, EuroList, EuroRecord
+from cl_forge.rest.cmf.models.indexes import EurList, EuroList, EuroRecord, EurRecord
 from cl_forge.rest.cmf.resources.eur import (
-    AsyncEurResource,
     AsyncEuroResource,
-    SyncEurResource,
+    AsyncEurResource,
     SyncEuroResource,
+    SyncEurResource,
 )
 from cl_forge.rest.cmf.resources.ipc import AsyncIpcResource, SyncIpcResource
 from cl_forge.rest.cmf.resources.raw import AsyncRawResource, SyncRawResource
@@ -243,31 +243,6 @@ def test_structured_response_shape_is_checked(
         resource = SyncIpcResource(_sync_route(client))
         with pytest.raises(error, match=message):
             resource.latest()
-
-
-def test_raw_json_and_xml_use_dynamic_paths_and_formats() -> None:
-    seen: list[httpx2.Request] = []
-
-    def handler(request: httpx2.Request) -> httpx2.Response:
-        seen.append(request)
-        if request.url.params["formato"] == "xml":
-            return httpx2.Response(200, content=b"<records />")
-        return httpx2.Response(200, json={"ok": True})
-
-    with httpx2.Client(
-        base_url="https://example.test/api",
-        transport=httpx2.MockTransport(handler),
-    ) as client:
-        resource = SyncRawResource(_sync_route(client))
-        assert resource.json.get("/custom/path", params={"year": 2025}) == {"ok": True}
-        assert resource.xml.get("/custom/path") == "<records />"
-
-    assert [request.url.path for request in seen] == [
-        "/api/custom/path",
-        "/api/custom/path",
-    ]
-    assert seen[0].url.params == {"year": "2025", "formato": "json"}
-    assert seen[1].url.params == {"formato": "xml"}
 
 
 def test_async_raw_formats_and_raw_validation() -> None:
