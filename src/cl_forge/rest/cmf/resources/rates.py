@@ -1,26 +1,26 @@
 from typing import Any
 
-from cl_forge.rest.cmf.models.base import IndexList, IndexRecord
+from cl_forge.rest.cmf.models.base import RateList, RateRecord
 
 from .base import AsyncCmfResource, SyncCmfResource
 from .dates import year_month_segments, year_segment
 from .types import Month, Year
 
 
-class SyncMonthlyIndexResource[RecordT: IndexRecord, ListT: IndexList[Any]](
+class SyncRateResource[RecordT: RateRecord, ListT: RateList[Any]](
     SyncCmfResource[RecordT, ListT]
 ):
-    def latest(self) -> RecordT:
+    def latest(self) -> ListT:
         response = self._get()
-        return self._parse_record(response)
+        return self._parse_list(response)
 
     def year(self, year: Year) -> ListT:
         response = self._get(year_segment(year))
         return self._parse_list(response)
 
-    def month(self, year: Year, month: Month) -> RecordT:
+    def month(self, year: Year, month: Month) -> ListT:
         response = self._get(*year_month_segments(year, month))
-        return self._parse_record(response)
+        return self._parse_list(response)
 
     def after(self, year: Year, month: Month | None = None) -> ListT:
         response = self._get("posteriores", *year_month_segments(year, month))
@@ -49,20 +49,20 @@ class SyncMonthlyIndexResource[RecordT: IndexRecord, ListT: IndexList[Any]](
         return self._parse_list(response)
 
 
-class AsyncMonthlyIndexResource[RecordT: IndexRecord, ListT: IndexList[Any]](
+class AsyncRateResource[RecordT: RateRecord, ListT: RateList[Any]](
     AsyncCmfResource[RecordT, ListT]
 ):
-    async def latest(self) -> RecordT:
+    async def latest(self) -> ListT:
         response = await self._get()
-        return self._parse_record(response)
+        return self._parse_list(response)
 
     async def year(self, year: Year) -> ListT:
         response = await self._get(year_segment(year))
         return self._parse_list(response)
 
-    async def month(self, year: Year, month: Month) -> RecordT:
+    async def month(self, year: Year, month: Month) -> ListT:
         response = await self._get(*year_month_segments(year, month))
-        return self._parse_record(response)
+        return self._parse_list(response)
 
     async def after(self, year: Year, month: Month | None = None) -> ListT:
         response = await self._get("posteriores", *year_month_segments(year, month))

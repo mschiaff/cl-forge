@@ -28,7 +28,11 @@ class FormatPolicy(ABC):
 
     @staticmethod
     def join_path(endpoint: str, segments: tuple[UrlSegment | None, ...]) -> str:
-        return "/".join([endpoint, *(str(segment) for segment in segments if segment is not None)])
+        parts = tuple(str(segment).strip("/") for segment in segments if segment is not None)
+        if not parts:
+            return endpoint
+
+        return "/".join((endpoint.rstrip("/"), *parts))
 
 
 @dataclass(slots=True, frozen=True)
@@ -48,7 +52,7 @@ class PathExtensionFormat(FormatPolicy):
     ) -> RequestTarget:
         selected = fmt or self.default
         path = self.join_path(f"{endpoint}.{selected}", segments)
-        return RequestTarget(path, params or {})
+        return RequestTarget(path, dict(params or {}))
 
 
 @dataclass(frozen=True, slots=True)

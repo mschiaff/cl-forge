@@ -9,6 +9,7 @@ from typing import ClassVar, Self
 from httpx2 import AsyncClient, Client
 from pydantic.dataclasses import dataclass
 
+from cl_forge.rest.auth.base import ApiKeyCredentials
 from cl_forge.rest.client.builder import ClientBuilder
 from cl_forge.rest.client.config import ClientConfig
 from cl_forge.rest.provider import ProviderSpec
@@ -21,8 +22,13 @@ class ClientKey:
     fingerprint: bytes = field(repr=False)
 
     @classmethod
-    def create(cls, provider: ProviderSpec, config: ClientConfig, apikey: str) -> Self:
-        fingerprint = hashlib.sha256(apikey.encode()).digest()
+    def create(
+        cls,
+        provider: ProviderSpec,
+        config: ClientConfig,
+        credentials: ApiKeyCredentials,
+    ) -> Self:
+        fingerprint = hashlib.sha256(credentials.value.encode()).digest()
         return cls(provider, config, fingerprint)
 
 
@@ -63,9 +69,14 @@ class ClientRegistry:
             return client
 
     @classmethod
-    def get_sync(cls, provider: ProviderSpec, config: ClientConfig, apikey: str) -> Client:
+    def get_sync(
+        cls,
+        provider: ProviderSpec,
+        config: ClientConfig,
+        credentials: ApiKeyCredentials,
+    ) -> Client:
         """Get or create a synchronous HTTP client for the specified provider."""
-        _args = (provider, config, apikey)
+        _args = (provider, config, credentials)
         key = SyncClientKey.create(*_args)
         builder = cls.builder(*_args).create_sync
         return cls._get_or_create(
@@ -75,9 +86,14 @@ class ClientRegistry:
         )
 
     @classmethod
-    def get_async(cls, provider: ProviderSpec, config: ClientConfig, apikey: str) -> AsyncClient:
+    def get_async(
+        cls,
+        provider: ProviderSpec,
+        config: ClientConfig,
+        credentials: ApiKeyCredentials,
+    ) -> AsyncClient:
         """Get or create an asynchronous HTTP client for the specified provider."""
-        _args = (provider, config, apikey)
+        _args = (provider, config, credentials)
         key = AsyncClientKey.create(*_args)
         builder = cls.builder(*_args).create_async
         return cls._get_or_create(

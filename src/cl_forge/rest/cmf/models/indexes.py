@@ -19,12 +19,17 @@ class IpcList(IndexList[IpcRecord]):
     """Represents a collection of IPC records."""
 
 
-class EuroRecord(IndexRecord):
-    """Represents a single Euro record."""
+class EurRecord(IndexRecord):
+    """Represents a single EUR record."""
 
 
-class EuroList(IndexList[EuroRecord]):
-    """Represents a collection of Euro records."""
+class EurList(IndexList[EurRecord]):
+    """Represents a collection of EUR records."""
+
+
+# Compatibility aliases for the names exposed by the initial ``rest`` refactor.
+EuroRecord = EurRecord
+EuroList = EurList
 
 
 class UfRecord(IndexRecord):

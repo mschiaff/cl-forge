@@ -1,5 +1,6 @@
-from cl_forge.rest.auth.spec import AuthLocation, AuthSpec
-from cl_forge.rest.provider import ApiProvider, ProviderSpec
+from cl_forge.rest.auth.enums import ApiProvider, AuthLocation
+from cl_forge.rest.auth.spec import AuthSpec
+from cl_forge.rest.provider import ProviderSpec
 
 MARKET_V1 = ProviderSpec(
     family=ApiProvider.MARKET,
@@ -14,3 +15,5 @@ MARKET_V2 = ProviderSpec(
     base_url="https://api2.mercadopublico.cl/v2",
     auth=AuthSpec(label="ticket", location=AuthLocation.HEADER),
 )
+
+__all__ = ("MARKET_V1", "MARKET_V2")

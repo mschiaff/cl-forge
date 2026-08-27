@@ -1,6 +1,18 @@
 import enum
 
 
+class ApiProvider(enum.StrEnum):
+    """API provider families and credential scopes."""
+
+    CMF = enum.auto()
+    MARKET = enum.auto()
+
+
+# There is intentionally only one provider/scope enum. Keep the old name as a
+# compatibility alias for credential-provider implementations.
+CredentialScope = ApiProvider
+
+
 class AuthLocation(enum.StrEnum):
     """Supported API-key locations."""
 

@@ -1,17 +1,9 @@
-import enum
-
 from pydantic import PositiveInt
 from pydantic.dataclasses import dataclass
 
 from cl_forge.rest._types import BaseUrl
+from cl_forge.rest.auth.enums import ApiProvider
 from cl_forge.rest.auth.spec import AuthSpec
-
-
-class ApiProvider(enum.StrEnum):
-    """API provider families."""
-
-    CMF = enum.auto()
-    MARKET = enum.auto()
 
 
 @dataclass(frozen=True, slots=True)

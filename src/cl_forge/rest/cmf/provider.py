@@ -1,5 +1,6 @@
+from cl_forge.rest.auth.enums import ApiProvider
 from cl_forge.rest.auth.spec import AuthLocation, AuthSpec
-from cl_forge.rest.provider import ApiProvider, ProviderSpec
+from cl_forge.rest.provider import ProviderSpec
 
 CMF_V3 = ProviderSpec(
     family=ApiProvider.CMF,

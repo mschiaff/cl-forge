@@ -16,7 +16,6 @@ class CmfDataHandler[RecordT: RecordModel, ListT: ListModel]:
     _spec: CmfResourceSpec[RecordT, ListT]
 
     def _extract_records(self, response: Response) -> list[dict[str, Any]]:
-        response.raise_for_status()
         data = response.json()
 
         try:

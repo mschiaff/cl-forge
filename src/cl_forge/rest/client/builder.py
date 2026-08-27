@@ -3,6 +3,7 @@ import dataclasses
 from httpx2 import AsyncClient, AsyncHTTPTransport, Client, HTTPTransport
 
 from cl_forge.rest.auth.apikey import ApiKeyAuth
+from cl_forge.rest.auth.base import ApiKeyCredentials
 from cl_forge.rest.client.config import ClientConfig
 from cl_forge.rest.provider import ProviderSpec
 
@@ -12,14 +13,13 @@ type TransportType = HTTPTransport | AsyncHTTPTransport
 
 @dataclasses.dataclass(slots=True)
 class ClientBuilder:
-    auth: ApiKeyAuth
-    config: ClientConfig
     provider: ProviderSpec
+    config: ClientConfig
+    credentials: ApiKeyCredentials = dataclasses.field(repr=False)
+    auth: ApiKeyAuth = dataclasses.field(init=False, repr=False)
 
-    def __init__(self, provider: ProviderSpec, config: ClientConfig, apikey: str) -> None:
-        self.config = config
-        self.provider = provider
-        self.auth = ApiKeyAuth(spec=self.provider.auth, apikey=apikey)
+    def __post_init__(self) -> None:
+        self.auth = ApiKeyAuth(spec=self.provider.auth, credentials=self.credentials)
 
     def _create[ClientT: ClientType, TransportT: TransportType](
         self,

@@ -1,18 +1,12 @@
-from typing import TypeVar
-
+from pydantic import BaseModel
 from pydantic.dataclasses import dataclass
 
 from cl_forge.rest._types import NonEmptyStr
 from cl_forge.rest.resources.base import ResourceSpec
 
-from .types import ListModel, RecordModel
-
-RecordT = TypeVar("RecordT", bound=RecordModel)
-ListT = TypeVar("ListT", bound=ListModel)
-
 
 @dataclass(slots=True, frozen=True)
-class CmfResourceSpec[RecordT, ListT](ResourceSpec):
+class CmfResourceSpec[RecordT: BaseModel, ListT: BaseModel](ResourceSpec):
     """
     Configuration for a specific CMF resource endpoint.
 
@@ -20,9 +14,8 @@ class CmfResourceSpec[RecordT, ListT](ResourceSpec):
     ----------
     endpoint: NonEmptyStr
         The relative path of the resource endpoint.
-    root: NonEmptyStr | None
-        The root key in the JSON response that contains
-        the resource data, if applicable.
+    root: NonEmptyStr
+        The root key in the JSON response that contains the resource data.
     """
 
     root: NonEmptyStr
