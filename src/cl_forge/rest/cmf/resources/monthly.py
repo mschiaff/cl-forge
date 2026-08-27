@@ -1,391 +1,57 @@
-from __future__ import annotations
-
 from typing import Any
 
-from cl_forge.rest.cmf.types import MonthInt, TwoTupleDate, YearInt  # noqa: TC001
+from cl_forge.rest.cmf.models.base import IndexList, IndexRecord
 
-from ..models.base import IndicatorCollection, IndicatorRecord
-from ..parsing.shape import ResponseShape
-from ..paths.builder import IndicatorPath
-from ..paths.dates import YearMonth
-from .base import BaseIndicatorResource
+from .base import AsyncCmfResource, SyncCmfResource
 
 
-class MonthlyIndicatorResource[
-    RecordT: IndicatorRecord,
-    CollectionT: IndicatorCollection[Any]
-](BaseIndicatorResource[RecordT, CollectionT]):
-    def current(self) -> RecordT:
-        """
-        Get the latest available record for the indicator.
+class SyncMonthlyIndexResource[RecordT: IndexRecord, ListT: IndexList[Any]](
+    SyncCmfResource[RecordT, ListT]
+):
+    def latest(self) -> RecordT:
+        response = self._get()
+        return self._parse_record(response)
 
-        Returns
-        -------
-        RecordT
-            The latest available record for the indicator.
+    def year(self, year: int) -> ListT:
+        response = self._get(year)
+        return self._parse_list(response)
 
-        Examples
-        --------
-        Get the latest IPC record:
-        ```python
-        from cl_forge import CmfClient
+    def month(self, year: int, month: int) -> RecordT:
+        response = self._get(year, month)
+        return self._parse_record(response)
 
-        client = CmfClient("your_api_key")
-        response = client.ipc.current()
-        ```
-        """
-        path = IndicatorPath.current(self._spec.path_name).build()
-        return self._get(path, shape=ResponseShape.SINGLE)
+    def after(self, year: int, month: int | None = None) -> ListT:
+        response = self._get("posteriores", year, month)
+        return self._parse_list(response)
 
-    def year(self, year: YearInt) -> CollectionT:
-        """
-        Get the collection of records for the specified year.
+    def before(self, year: int, month: int | None = None) -> ListT:
+        response = self._get("anteriores", year, month)
+        return self._parse_list(response)
 
-        Parameters
-        ----------
-        year : YearInt
-            The year for which to retrieve records.
-
-        Returns
-        -------
-        CollectionT
-            The collection of records for the specified year.
-
-        Examples
-        --------
-        Get the IPC records for the year 2023:
-        ```python
-        from cl_forge import CmfClient
-
-        client = CmfClient("your_api_key")
-        response = client.ipc.year(2023)
-        ```
-        """
-        date = YearMonth(year=year)
-        path = IndicatorPath.year_month(self._spec.path_name, date).build()
-        return self._get(path, shape=ResponseShape.COLLECTION)
-
-    def month(self, year: YearInt, month: MonthInt) -> RecordT:
-        """
-        Get the record for the specified year and month.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year for which to retrieve the record.
-        month : MonthInt
-            The month for which to retrieve the record.
-
-        Returns
-        -------
-        RecordT
-            The record for the specified year and month.
-
-        Examples
-        --------
-        Get the IPC record for March 2023:
-        ```python
-        from cl_forge import CmfClient
-
-        client = CmfClient("your_api_key")
-        response = client.ipc.month(2023, 3)
-        ```
-        """
-        date = YearMonth(year=year, month=month)
-        path = IndicatorPath.year_month(self._spec.path_name, date).build()
-        return self._get(path, shape=ResponseShape.SINGLE)
-
-    def after(
-            self,
-            year: YearInt,
-            month: MonthInt | None = None,
-    ) -> CollectionT:
-        """
-        Get the collection of records after the specified year and month.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year after which to retrieve records.
-        month : MonthInt | None, optional
-            The month after which to retrieve records, by default None
-
-        Returns
-        -------
-        CollectionT
-            The collection of records after the specified year and month.
-
-        Examples
-        --------
-        Get the IPC records after March 2023:
-        ```python
-        from cl_forge import CmfClient
-
-        client = CmfClient("your_api_key")
-        response = client.ipc.after(2023, 3)
-        ```
-        """
-        date = YearMonth(year=year, month=month)
-        path = IndicatorPath.after_year_month(self._spec.path_name, date).build()
-        return self._get(path, shape=ResponseShape.COLLECTION)
-
-    def before(
-            self,
-            year: YearInt,
-            month: MonthInt | None = None,
-    ) -> CollectionT:
-        """
-        Get the collection of records before the specified year and month.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year before which to retrieve records.
-        month : MonthInt | None, optional
-            The month before which to retrieve records, by default None
-
-        Returns
-        -------
-        CollectionT
-            The collection of records before the specified year and month.
-
-        Examples
-        --------
-        Get the IPC records before March 2023:
-        ```python
-        from cl_forge import CmfClient
-
-        client = CmfClient("your_api_key")
-        response = client.ipc.before(2023, 3)
-        ```
-        """
-        date = YearMonth(year=year, month=month)
-        path = IndicatorPath.before_year_month(self._spec.path_name, date).build()
-        return self._get(path, shape=ResponseShape.COLLECTION)
-
-    def between(
-            self,
-            start: YearInt | TwoTupleDate,
-            end: YearInt | TwoTupleDate
-    ) -> CollectionT:
-        """
-        Get the collection of records between the specified start and end dates.
-
-        Parameters
-        ----------
-        start : YearInt | TwoTupleDate
-            The start date, which can be specified as a year (YearInt)
-            or a tuple of (year, month) (TwoTupleDate).
-        end : YearInt | TwoTupleDate
-            The end date, which can be specified as a year (YearInt)
-            or a tuple of (year, month) (TwoTupleDate).
-
-        Returns
-        -------
-        CollectionT
-            The collection of records between the specified start and end dates.
-
-        Examples
-        --------
-        Get the IPC records between January 2023 and March 2023:
-        ```python
-        from cl_forge import CmfClient
-
-        client = CmfClient("your_api_key")
-        response = client.ipc.between((2023, 1), (2023, 3))
-        ```
-        """
-        _start = YearMonth.from_value(start)
-        _end = YearMonth.from_value(end)
-        path = IndicatorPath.between_year_month(self._spec.path_name, _start, _end).build()
-        return self._get(path, shape=ResponseShape.COLLECTION)
+    def between(self, start_year: int, start_month: int, end_year: int, end_month: int) -> ListT:
+        response = self._get("periodo", start_year, start_month, end_year, end_month)
+        return self._parse_list(response)
 
 
-class AsyncMonthlyIndicatorResource[
-    RecordT: IndicatorRecord,
-    CollectionT: IndicatorCollection[Any]
-](BaseIndicatorResource[RecordT, CollectionT]):
-    async def current(self) -> RecordT:
-        """
-        Get the latest available record for the indicator.
+class AsyncMonthlyIndexResource[RecordT: IndexRecord, ListT: IndexList[Any]](
+    AsyncCmfResource[RecordT, ListT]
+):
+    async def latest(self) -> RecordT:
+        response = await self._get()
+        return self._parse_record(response)
 
-        Returns
-        -------
-        RecordT
-            The latest available record for the indicator.
+    async def year(self, year: int) -> ListT:
+        response = await self._get(year)
+        return self._parse_list(response)
 
-        Examples
-        --------
-        Get the latest IPC record:
-        ```python
-        from cl_forge import AsyncCmfClient
+    async def month(self, year: int, month: int) -> RecordT:
+        response = await self._get(year, month)
+        return self._parse_record(response)
 
-        client = AsyncCmfClient("your_api_key")
-        response = await client.ipc.current()
-        ```
-        """
-        path = IndicatorPath.current(self._spec.path_name).build()
-        return await self._aget(path, shape=ResponseShape.SINGLE)
+    async def after(self, year: int, month: int | None = None) -> ListT:
+        response = await self._get("posteriores", year, month)
+        return self._parse_list(response)
 
-    async def year(self, year: YearInt) -> CollectionT:
-        """
-        Get the collection of records for the specified year.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year for which to retrieve records.
-
-        Returns
-        -------
-        CollectionT
-            The collection of records for the specified year.
-
-        Examples
-        --------
-        Get the IPC records for the year 2023:
-        ```python
-        from cl_forge import AsyncCmfClient
-
-        client = AsyncCmfClient("your_api_key")
-        response = await client.ipc.year(2023)
-        ```
-        """
-        date = YearMonth(year=year)
-        path = IndicatorPath.year_month(self._spec.path_name, date).build()
-        return await self._aget(path, shape=ResponseShape.COLLECTION)
-
-    async def month(self, year: YearInt, month: MonthInt) -> RecordT:
-        """
-        Get the record for the specified year and month.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year for which to retrieve the record.
-        month : MonthInt
-            The month for which to retrieve the record.
-
-        Returns
-        -------
-        RecordT
-            The record for the specified year and month.
-
-        Examples
-        --------
-        Get the IPC record for March 2023:
-        ```python
-        from cl_forge import AsyncCmfClient
-
-        client = AsyncCmfClient("your_api_key")
-        response = await client.ipc.month(2023, 3)
-        ```
-        """
-        date = YearMonth(year=year, month=month)
-        path = IndicatorPath.year_month(self._spec.path_name, date).build()
-        return await self._aget(path, shape=ResponseShape.SINGLE)
-
-    async def after(
-            self,
-            year: YearInt,
-            month: MonthInt | None = None,
-    ) -> CollectionT:
-        """
-        Get the collection of records after the specified year and month.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year after which to retrieve records.
-        month : MonthInt | None, optional
-            The month after which to retrieve records, by default None
-
-        Returns
-        -------
-        CollectionT
-            The collection of records after the specified year and month.
-
-        Examples
-        --------
-        Get the IPC records after March 2023:
-        ```python
-        from cl_forge import AsyncCmfClient
-
-        client = AsyncCmfClient("your_api_key")
-        response = await client.ipc.after(2023, 3)
-        ```
-        """
-        date = YearMonth(year=year, month=month)
-        path = IndicatorPath.after_year_month(self._spec.path_name, date).build()
-        return await self._aget(path, shape=ResponseShape.COLLECTION)
-
-    async def before(
-            self,
-            year: YearInt,
-            month: MonthInt | None = None,
-    ) -> CollectionT:
-        """
-        Get the collection of records before the specified year and month.
-
-        Parameters
-        ----------
-        year : YearInt
-            The year before which to retrieve records.
-        month : MonthInt | None, optional
-            The month before which to retrieve records, by default None
-
-        Returns
-        -------
-        CollectionT
-            The collection of records before the specified year and month.
-
-        Examples
-        --------
-        Get the IPC records before March 2023:
-        ```python
-        from cl_forge import AsyncCmfClient
-
-        client = AsyncCmfClient("your_api_key")
-        response = await client.ipc.before(2023, 3)
-        ```
-        """
-        date = YearMonth(year=year, month=month)
-        path = IndicatorPath.before_year_month(self._spec.path_name, date).build()
-        return await self._aget(path, shape=ResponseShape.COLLECTION)
-
-    async def between(
-            self,
-            start: YearInt | TwoTupleDate,
-            end: YearInt | TwoTupleDate
-    ) -> CollectionT:
-        """
-        Get the collection of records between the specified start and end dates.
-
-        Parameters
-        ----------
-        start : YearInt | TwoTupleDate
-            The start date, which can be specified as a year (YearInt)
-            or a tuple of (year, month) (TwoTupleDate).
-        end : YearInt | TwoTupleDate
-            The end date, which can be specified as a year (YearInt)
-            or a tuple of (year, month) (TwoTupleDate).
-
-        Returns
-        -------
-        CollectionT
-            The collection of records between the specified start and end dates.
-
-        Examples
-        --------
-        Get the IPC records between January 2023 and March 2023:
-        ```python
-        from cl_forge import AsyncCmfClient
-
-        client = AsyncCmfClient("your_api_key")
-        response = await client.ipc.between((2023, 1), (2023, 3))
-        ```
-        """
-        _start = YearMonth.from_value(start)
-        _end = YearMonth.from_value(end)
-        path = IndicatorPath.between_year_month(self._spec.path_name, _start, _end).build()
-        return await self._aget(path, shape=ResponseShape.COLLECTION)
+    async def before(self, year: int, month: int | None = None) -> ListT:
+        response = await self._get("anteriores", year, month)
+        return self._parse_list(response)

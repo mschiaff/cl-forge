@@ -1,4 +1,6 @@
-from datetime import datetime
+from __future__ import annotations
+
+from datetime import datetime  # noqa: TC003
 
 from pydantic import BaseModel, Field, RootModel, field_validator
 
@@ -7,17 +9,17 @@ def convert_decimal(value: str) -> float:
     return float(value.replace(".", "").replace(",", "."))
 
 
-class IndexRecord(BaseModel):
+class IndicatorRecord(BaseModel):
     value: float = Field(
         validation_alias="Valor",
-        description="The value of the index.",
+        description="The value of the indicator.",
     )
-    """The value of the index."""
+    """The value of the indicator."""
     date: datetime = Field(
         validation_alias="Fecha",
-        description="The date of the index.",
+        description="The date of the indicator.",
     )
-    """The date of the index."""
+    """The date of the indicator."""
 
     @field_validator("value", mode="before")
     @classmethod
@@ -25,7 +27,7 @@ class IndexRecord(BaseModel):
         return convert_decimal(value)
 
 
-class IndexList[T: IndexRecord](RootModel[list[T]]): ...
+class IndicatorCollection[T: IndicatorRecord](RootModel[list[T]]): ...
 
 
 class RateRecord(BaseModel):
@@ -67,4 +69,4 @@ class RateRecord(BaseModel):
         return round(convert_decimal(value) / 100, 5)
 
 
-class RateList[T: RateRecord](RootModel[list[T]]): ...
+class RateCollection[T: RateRecord](RootModel[list[T]]): ...

@@ -1,94 +1,57 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
-from pydantic import BaseModel, RootModel
+from cl_forge.rest.resources.base import AsyncResource, SyncResource
+from cl_forge.rest.resources.formats import QueryParameterFormat
 
-from cl_forge.rest.cmf.specs.base import BaseSpec
-from cl_forge.rest.cmf.types import CmfTransport
-
-from ..models.base import (
-    IndicatorCollection,
-    IndicatorRecord,
-    RateCollection,
-    RateRecord,
-)
-from ..parsing.parser import BaseCmfResponseParser, IndicatorResponseParser, RateResponseParser
+from .config import CmfResourceSpec
+from .types import ListModel, RecordModel
 
 if TYPE_CHECKING:
-    from cl_forge.rest.cmf.types import RawFormat
-
-    from ..parsing.shape import ResponseShape
-    from ..specs.base import BaseSpec, IndicatorSpec, RateSpec
-    from ..types import CmfTransport
+    from httpx2 import Response
 
 
-class BaseRawResource:
-    def __init__(self, transport: CmfTransport) -> None:
-        self._transport = transport
+class CmfDataHandler[RecordT: RecordModel, ListT: ListModel]:
+    _spec: CmfResourceSpec[RecordT, ListT]
 
-    def _get(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
-        return self._transport.get(path, fmt=raw)
+    def _extract_records(self, response: Response) -> list[dict[str, Any]]:
+        response.raise_for_status()
+        data = response.json()
 
-    async def _aget(self, path: str, raw: RawFormat = "json") -> dict[str, Any] | str:
-        return await self._transport.aget(path, fmt=raw)
+        try:
+            records = data[self._spec.root]
+        except KeyError as error:
+            raise ValueError(f"Missing CMF response root {self._spec.root!r}") from error
 
+        if not isinstance(records, list):
+            raise TypeError(f"Expected {self._spec.root!r} to contain a list")
 
-class BaseResource[
-    RecordT: BaseModel,
-    CollectionT: RootModel[list[BaseModel]]
-]:
-    def __init__(
-            self,
-            transport: CmfTransport,
-            *,
-            spec: BaseSpec[RecordT, CollectionT],
-            parser: type[BaseCmfResponseParser[RecordT, CollectionT]]
-    ) -> None:
-        self._transport = transport
-        self._spec = spec
-        self._parser = parser(spec)
+        return cast("list[dict[str, Any]]", records)
 
-    def _get(
-            self,
-            path: str,
-            *,
-            shape: ResponseShape,
-    ) -> RecordT | CollectionT:
-        data = self._transport.get(path)
-        return self._parser.parse(data, shape=shape)
+    def _parse_record(self, response: Response) -> RecordT:
+        records = self._extract_records(response)
 
-    async def _aget(
-            self,
-            path: str,
-            *,
-            shape: ResponseShape,
-    ) -> RecordT | CollectionT:
-        data = await self._transport.aget(path)
-        return self._parser.parse(data, shape=shape)
+        if len(records) != 1:
+            raise ValueError(f"Expected exactly one record, got {len(records)!r}")
+
+        return self._spec.record_type.model_validate(records[0])
+
+    def _parse_list(self, response: Response) -> ListT:
+        records = self._extract_records(response)
+
+        return self._spec.list_type.model_validate(records)
 
 
-class BaseIndicatorResource[
-    RecordT: IndicatorRecord,
-    CollectionT: IndicatorCollection[Any]
-](BaseResource[RecordT, CollectionT]):
-    def __init__(
-            self,
-            transport: CmfTransport,
-            *,
-            spec: IndicatorSpec[RecordT, CollectionT]
-    ) -> None:
-        super().__init__(transport, spec=spec, parser=IndicatorResponseParser)
+class SyncCmfResource[RecordT: RecordModel, ListT: ListModel](
+    CmfDataHandler[RecordT, ListT], SyncResource[CmfResourceSpec[RecordT, ListT]]
+):
+    _reserved_params = frozenset({"apikey"})
+    _format_policy = QueryParameterFormat("formato")
 
 
-class BaseRateResource[
-    RecordT: RateRecord,
-    CollectionT: RateCollection[Any]
-](BaseResource[RecordT, CollectionT]):
-    def __init__(
-            self,
-            transport: CmfTransport,
-            *,
-            spec: RateSpec[RecordT, CollectionT],
-    ) -> None:
-        super().__init__(transport, spec=spec, parser=RateResponseParser)
+class AsyncCmfResource[RecordT: RecordModel, ListT: ListModel](
+    CmfDataHandler[RecordT, ListT], AsyncResource[CmfResourceSpec[RecordT, ListT]]
+):
+    _reserved_params = frozenset({"apikey"})
+    _format_policy = QueryParameterFormat("formato")
