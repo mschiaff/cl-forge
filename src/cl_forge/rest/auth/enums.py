@@ -8,7 +8,7 @@ class ApiProvider(enum.StrEnum):
     MARKET = enum.auto()
 
 
-# There is intentionally only one provider/scope enum. Keep the old name as a
+# There is intentionally only one provider/scope enum. Keeping the old name as a
 # compatibility alias for credential-provider implementations.
 CredentialScope = ApiProvider
 

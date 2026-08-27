@@ -18,12 +18,14 @@ from cl_forge.core.impl.verify import (
 )
 from cl_forge.core.timing import Timing
 from cl_forge.rest.auth import DotEnvCredentials, EnvCredentials
+from cl_forge.rest.client.config import ClientConfig
 from cl_forge.rest.cmf.clients import AsyncCmfClient, CmfClient
 from cl_forge.rest.market.clients import AsyncMarketClient, MarketClient
 
 __all__ = (
     "AsyncCmfClient",
     "AsyncMarketClient",
+    "ClientConfig",
     "CmfClient",
     "DotEnvCredentials",
     "EnvCredentials",
