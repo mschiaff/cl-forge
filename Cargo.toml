@@ -3,33 +3,17 @@ resolver = "3"
 members = [
     "rust/cl_forge",
     "rust/verify",
-    "rust/cmf",
-    "rust/market",
-    "rust/base"
 ]
 
 [workspace.package]
-version = "1.0.2"
+version = "2.0.0"
 edition = "2024"
 
-[workspace.dependencies.dotenv]
-version = "0.15.0"
-
 [workspace.dependencies.pyo3]
-version = "0.27.2"
-features = ["extension-module"]
-
-[workspace.dependencies.reqwest]
-version = "0.13.1"
-features = [
-    "blocking",
-    "rustls",
-    "query",
-    "json",
-]
+version = "0.28.3"
 
 [workspace.dependencies.thiserror]
-version = "2.0.17"
+version = "2.0.18"
 
 [workspace.dependencies.rand]
-version = "0.9.2"
+version = "0.10.1"

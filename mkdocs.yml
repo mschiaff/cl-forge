@@ -11,31 +11,21 @@ nav:
     - Welcome to CL Forge: index.md
     - Installation: install.md
     - Contributing: contributing.md
-  - API Reference:
-      - CMF:
-          - CmfClient: api/cmf/base_client.md
-          - CmfEndpoint: api/cmf/base_endpoint.md
-          - IpcEndpoint: api/cmf/ipc_endpoint.md
-          - UsdEndpoint: api/cmf/usd_endpoint.md
-          - EuroEndpoint: api/cmf/euro_endpoint.md
-          - UfEndpoint: api/cmf/uf_endpoint.md
-          - UtmEndpoint: api/cmf/utm_endpoint.md
-      - Market:
-          - MarketClient: api/market/market_client.md
-      - Verify:
-          - Ppu: api/verify/ppu.md
-          - normalize_ppu: api/verify/normalize_ppu.md
-          - ppu_to_numeric: api/verify/ppu_to_numeric.md
-          - validate_rut: api/verify/validate_rut.md
-          - calculate_verifier: api/verify/calculate_verifier.md
-          - generate: api/verify/generate.md
-      - Utils:
-          - Timing: api/utils/timing.md
-      - Settings:
-          - Config: api/settings/config.md
-          - Token: api/settings/token.md
-      - Schemas: api/schemas.md
-      - Exceptions: api/exceptions.md
+  - Reference:
+      - API Clients:
+          - CmfClient: api/CmfClient.md
+          - MarketClient: api/MarketClient.md
+          - AsyncCmfClient: api/AsyncCmfClient.md
+          - AsyncMarketClient: api/AsyncMarketClient.md
+          - ClientConfig: api/ClientConfig.md
+          - Auth:
+            - DotEnvCredentials: api/DotEnvCredentials.md
+            - EnvCredentials: api/EnvCredentials.md
+      - Validation:
+        - Ppu: api/Ppu.md
+        - validate_rut: api/validate_rut.md
+        - calculate_verifier: api/calculate_verifier.md
+      
 
 extra_css:
   - 'extra/tweaks.css'
@@ -125,7 +115,7 @@ plugins:
             #scoped_crossrefs: true
             #relative_crossrefs: true
             signature_crossrefs: true
-            #show_source: false
+            show_source: false
             #show_root_full_path: false
             inherited_members: true
             show_if_no_docstring: true

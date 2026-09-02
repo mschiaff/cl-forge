@@ -1,141 +1,142 @@
-# Welcome to CL Forge!
+# CL Forge
 
-<img src="https://github.com/mschiaff/cl-forge/blob/main/docs/assets/banner.png?raw=true" align="center" style="border-radius: 25px;" alt="banner"/>
-
-<h2 align="center">Simple yet powerful Chilean tools written in Rust and Python.</h2>
-
-<figure markdown="1">
-
-[![PyPI - Version](https://img.shields.io/pypi/v/cl-forge)](https://pypi.org/project/cl-forge/)
-[![GitHub Release](https://img.shields.io/github/v/release/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/releases/latest)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cl-forge)](https://pypi.org/project/cl-forge/)
-[![GH Pages - Docs](https://img.shields.io/badge/Pages-Docs-blue?logo=github)](https://mschiaff.github.io/cl-forge/)
-
+<figure markdown="span">
+  ![CL Forge banner](assets/banner.png)
 </figure>
 
-<figure markdown="1">
+<p align="center">
+  <strong>Fast, typed Python tools for Chilean data and public APIs.</strong>
+</p>
 
-![PyPI - Status](https://img.shields.io/pypi/status/cl-forge)
-![PyPI - Types](https://img.shields.io/pypi/types/cl-forge)
-[![GitHub License](https://img.shields.io/github/license/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/blob/main/LICENSE)
+<div align="center" markdown="1">
+  [Get started](install.md){ .md-button .md-button--primary }
+  [API reference](api/CmfClient.md){ .md-button }
+</div>
 
-</figure>
+<div align="center" markdown="1">
+  [![PyPI version](https://img.shields.io/pypi/v/cl-forge)](https://pypi.org/project/cl-forge/)
+  [![Supported Python versions](https://img.shields.io/pypi/pyversions/cl-forge)](https://pypi.org/project/cl-forge/)
+  [![Test status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/python-package.yml?logo=github&label=tests)](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml)
+  [![License](https://img.shields.io/github/license/mschiaff/cl-forge)](https://github.com/mschiaff/cl-forge/blob/main/LICENSE)
+</div>
 
-<figure markdown="1">
+CL Forge combines Rust-backed validation utilities with a clean Python interface for the [CMF](https://api.cmfchile.cl/) and [Mercado Público](https://api.mercadopublico.cl/) APIs. It includes synchronous and asynchronous clients, typed responses, configurable HTTP behavior, and flexible credential providers.
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/python-package.yml?logo=github&label=Tests)](https://github.com/mschiaff/cl-forge/actions/workflows/python-package.yml)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mschiaff/cl-forge/release-python.yml?logo=github&label=Release)](https://github.com/mschiaff/cl-forge/actions/workflows/release-python.yml)
-[![pages-build-deployment](https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/mschiaff/cl-forge/actions/workflows/pages/pages-build-deployment)
+## Install
 
-</figure>
+CL Forge supports Python 3.12–3.14.
 
+=== ":simple-python: pip"
 
-`cl-forge` provides a collection of high-performance utilities for common Chilean data formats and API integrations. The core logic is implemented in Rust for maximum speed, with a clean and easy-to-use Python interface.
+    ```bash
+    pip install cl-forge
+    ```
 
-## Features
+=== ":simple-astral: uv"
 
-- **High Performance**: Core logic written in Rust.
-- **Verify**: Efficiently validate Chilean RUT/RUN and PPU (License Plates).
-- **API Integrations**: Simple clients to interact with the [CMF](https://api.cmfchile.cl) and [Public Market](https://api.mercadopublico.cl) APIs.
-- **Type Safety**: Full type hints and `.pyi` stubs for excellent IDE support.
+    ```bash
+    uv add cl-forge
+    ```
 
-## Examples
+See the [installation guide](install.md) for source installs and optional dependencies.
 
-### Validate
+## Quick start
 
-You can validate if a verifier digit is correct for a given numeric part of a RUT/RUN.
+### Validate Chilean identifiers
 
 ```python
-from cl_forge import verify
+from cl_forge import Ppu, calculate_verifier, validate_rut
 
-is_valid = verify.validate_rut(8750720, "3")
+validate_rut(12_345_678, "5")     # True
+calculate_verifier(12_345_678)    # "5"
 
-print(f"RUT is valid: {is_valid}")
-# RUT is valid: True
+plate = Ppu("PHZF55")
+plate.complete                    # "PHZF55-K"
+plate.numeric                     # 69455
 ```
 
-... Or you can calculate the verifier digit yourself.
+### Query CMF indicators
 
 ```python
-from cl_forge import verify
+from cl_forge import CmfClient
 
-dv = verify.calculate_verifier(8750720)
+cmf = CmfClient("your-cmf-api-key")
 
-print(f"Verifier digit: {dv}")
-# Verifier digit: 3
+latest_uf = cmf.uf.latest()
+ipc_2025 = cmf.ipc.year(2025)
+usd_for_day = cmf.usd.day(2025, 12, 1)
 ```
 
-### Generate
+The [CMF client](api/CmfClient.md) provides resources for `ipc`, `uf`, `utm`, `usd`, `eur` (also `euro`), `tip`, and `tmc`, plus `raw` JSON and XML access.
 
-Need to generate a bunch of random, unique and valid RUTs? No problem! And you can even specify a random seed, so you can reproduce the same results every time.
+!!! note "CMF credentials"
+
+    CMF requests require an API key. You can request one through the [CMF API portal](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
+
+### Query Mercado Público
 
 ```python
-from cl_forge import verify
+from cl_forge import MarketClient
 
-ruts = verify.generate(
-   n=100,
-   min=1_000_000,
-   max=20_000_000,
-   seed=42
+market = MarketClient("your-mercado-publico-ticket")
+
+active_tenders = market.tender.active()
+today_orders = market.order.today()
+suppliers = market.supplier.search("70.017.820-K")
+```
+
+The [Mercado Público client](api/MarketClient.md) includes typed resources for tenders, purchase orders, suppliers, and buyers, plus raw v1 and v2 access.
+
+!!! note "Mercado Público credentials"
+
+    Mercado Público requests require an API ticket. See the [Mercado Público API portal](https://api.mercadopublico.cl/modules/api.aspx) for access details.
+
+### Use async clients
+
+The asynchronous clients mirror the synchronous resource interface:
+
+```python
+from cl_forge import AsyncCmfClient
+
+cmf = AsyncCmfClient("your-cmf-api-key")
+latest_uf = await cmf.uf.latest()
+```
+
+## Credentials and configuration
+
+Pass a credential directly, load it from the environment, or read it from a dotenv file:
+
+```bash
+export CLFORGE_CMF_API_KEY="your-cmf-api-key"
+export CLFORGE_MARKET_API_KEY="your-mercado-publico-ticket"
+```
+
+```python
+from cl_forge import ClientConfig, CmfClient, DotEnvCredentials, EnvCredentials
+
+cmf = CmfClient(
+    credentials=EnvCredentials(),
+    config=ClientConfig(timeout=20, http2=True, retries=5),
 )
 
-print(ruts)
-# [{'correlative': 8750720, 'verifier': '3'}, ...]
+cmf_from_dotenv = CmfClient(DotEnvCredentials(".env"))
 ```
 
-### API Clients
+## API at a glance
 
-The CMF API client allows you to easily interact with the [CMF](https://api.cmfchile.cl) API.
-
-```python
-from cl_forge.cmf import CmfClient
-
-client = CmfClient(api_key="your-api-key")
-
-# Get latest IPC data
-ipc_data = client.get(path="/ipc")
-
-print(ipc_data)
-# {'IPCs': [{'Valor': '-0,2', 'Fecha': '2025-12-01'}]}
-```
-
-!!! important
-   
-    To use the CMF API, you need an API key. You can request one at [Contact CMF](https://api.cmfchile.cl/api_cmf/contactanos.jsp).
-
-See the [API Reference](https://mschiaff.github.io/cl-forge/api/cmf/base_client/) for endpoint-specific clients, and the [CMF API documentation](https://api.cmfchile.cl/documentacion/index.html) for details about all the available endpoints.
-
-The Public Market API client also allows you to easily interact with the [Mercado Público](https://api.mercadopublico.cl) API.
-
-```python
-from cl_forge.market import MarketClient
-
-client = MarketClient(ticket='your-api-ticket')
-
-tenders_data = client.get(path="/licitaciones")
-
-print(tenders_data)
-#{'Cantidad': 463,
-# 'FechaCreacion': '2026-02-12T16:07:58.813315Z',
-# 'Version': 'v1',
-# 'Listado': [{'CodigoExterno': '1057049-30-B226',
-#   'Nombre': 'CSP- SERVICIO DE INMUNOHISTOQUÍMICA Y CISH',
-#   'CodigoEstado': 5,
-#   'FechaCierre': '2026-02-23T15:30:00'},
-#  {'CodigoExterno': '1057374-8-L126',
-# ...}
-```
-
-!!! important
-
-    To use the Mercado Público API, you need an API ticket. You can request one at [Contact Mercado Público](https://api.mercadopublico.cl/modules/IniciarSesion.aspx). To request this API ticket, you will also have to request and activate your [ClaveÚnica](https://claveunica.gob.cl).
-
-See the [Mercado Público API documentation](https://api.mercadopublico.cl/modules/api.aspx) for details about all the available endpoints. **Endpoint-specific clients coming soon in future updates.**
+| Area | Public API |
+| --- | --- |
+| CMF | [`CmfClient`](api/CmfClient.md) · [`AsyncCmfClient`](api/AsyncCmfClient.md) |
+| Mercado Público | [`MarketClient`](api/MarketClient.md) · [`AsyncMarketClient`](api/AsyncMarketClient.md) |
+| Credentials | [`EnvCredentials`](api/EnvCredentials.md) · [`DotEnvCredentials`](api/DotEnvCredentials.md) |
+| HTTP configuration | [`ClientConfig`](api/ClientConfig.md) |
+| RUT/RUN | [`validate_rut`](api/validate_rut.md) · [`calculate_verifier`](api/calculate_verifier.md) |
+| License plates | [`Ppu`](api/Ppu.md) |
 
 ## Contributing
 
-Pull requests are welcome. For changes and reporting bugs, please open an issue first to discuss it. Read our [Contributing Guide](contributing.md) for more details.
+Contributions are welcome. Please read the [contributing guide](contributing.md) before opening a pull request.
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/mschiaff/cl-forge/blob/main/LICENSE) file for details.
+CL Forge is available under the [Apache License 2.0](https://github.com/mschiaff/cl-forge/blob/main/LICENSE).

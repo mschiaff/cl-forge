@@ -54,10 +54,11 @@ Including optional dependencies:
 
 CL Forge requires the following dependencies:
 
-| Package    | Version    |
-|------------|------------|
-| `orjson`   | `>=3.11.7` |
-| `pydantic` | `>=2.12.5` |
+| Package             | Version    |
+|---------------------|------------|
+| `pydantic`          | `>=2.12.5` |
+| `httpx2[http2]`     | `>=2.12.0` |
+| `pydantic-settings` | `>=2.14.0` |
 
 ### Optional Dependencies
 

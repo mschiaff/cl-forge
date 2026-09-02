@@ -29,19 +29,19 @@ htmlcov/
 site/
 
 # Environments
-.env
+*.env
 .venv
 env/
 venv/
 ENV/
 
 # Jupyter
-.ipynb_checkpoints
 *.ipynb
+notebooks/
+.ipynb_checkpoints
 
 # IDEs
 .idea/
-.vscode/
 
 # Rust
 /target
@@ -49,8 +49,5 @@ ENV/
 #macOS
 .DS_Store
 
-# Shell scripts
-*.sh
-
-# Codex
-skills/
+# Ruff
+.ruff_cache/
