@@ -82,5 +82,5 @@ def test_is_running_states():
 
 def test_invalid_call():
     timer = Timing()
-    with pytest.raises(TypeError, match="Timing doesn't support arguments."):
+    with pytest.raises(TypeError, match="Timing doesn't support arguments."):  # noqa: RUF043
         timer(1, 2, 3)

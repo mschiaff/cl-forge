@@ -293,9 +293,8 @@ def test_raw_json_rejects_non_object_payloads() -> None:
     with httpx2.Client(
         base_url="https://example.test",
         transport=httpx2.MockTransport(handler),
-    ) as client:
-        with pytest.raises(TypeError, match="JSON object"):
-            SyncRawResource(_sync_route(client)).json.get("/raw")
+    ) as client, pytest.raises(TypeError, match="JSON object"):
+        SyncRawResource(_sync_route(client)).json.get("/raw")
 
 
 @pytest.mark.parametrize("client_type", [CmfClient, AsyncCmfClient])
