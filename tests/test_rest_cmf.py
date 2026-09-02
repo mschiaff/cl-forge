@@ -85,6 +85,14 @@ def test_monthly_paths_and_parsing() -> None:
         resource.before(2025)
         resource.before(2025, 3)
         resource.between(2024, 1, 2025, 2)
+        resource.between(2024, 2025)
+        resource.between(
+            start_year=2024,
+            start_month=1,
+            end_year=2025,
+            end_month=2,
+        )
+        resource.between(start_year=2024, end_year=2025)
         resource.between_years(2024, 2025)
 
     assert [request.url.path for request in seen] == [
@@ -96,6 +104,9 @@ def test_monthly_paths_and_parsing() -> None:
         "/api/ipc/anteriores/2025",
         "/api/ipc/anteriores/2025/03",
         "/api/ipc/periodo/2024/01/2025/02",
+        "/api/ipc/periodo/2024/2025",
+        "/api/ipc/periodo/2024/01/2025/02",
+        "/api/ipc/periodo/2024/2025",
         "/api/ipc/periodo/2024/2025",
     ]
     assert all(request.url.params["formato"] == "json" for request in seen)
@@ -181,6 +192,7 @@ def test_async_resources_have_and_execute_between_methods() -> None:
         ) as client:
             route = _async_route(client)
             await AsyncIpcResource(route).between(2024, 1, 2025, 2)
+            await AsyncIpcResource(route).between(2024, 2025)
             await AsyncUfResource(route).between(2024, 1, 2025, 2)
             await AsyncUfResource(route).between_days(2024, 1, 2, 2025, 3, 4)
             await AsyncTipResource(route).between(2024, 1, 2025, 2)
@@ -188,6 +200,7 @@ def test_async_resources_have_and_execute_between_methods() -> None:
     asyncio.run(run())
     assert [request.url.path for request in seen] == [
         "/api/ipc/periodo/2024/01/2025/02",
+        "/api/ipc/periodo/2024/2025",
         "/api/uf/periodo/2024/01/2025/02",
         "/api/uf/periodo/2024/01/dias_i/02/2025/03/dias_f/04",
         "/api/tip/periodo/2024/01/2025/02",
