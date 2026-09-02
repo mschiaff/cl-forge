@@ -1,12 +1,3 @@
-from cl_forge.core.impl.base import (
-    BadStatus,
-    ClientException,
-    EmptyApiKey,
-    EmptyPath,
-    HttpError,
-    InvalidPath,
-    UnsupportedFormat,
-)
 from cl_forge.core.impl.verify import (
     EmptyDigraph,
     EmptyLetter,
@@ -28,19 +19,13 @@ from cl_forge.core.impl.verify import (
 )
 
 __all__ = (
-    "BadStatus",
-    "ClientException",
-    "EmptyApiKey",
     "EmptyDigraph",
     "EmptyLetter",
-    "EmptyPath",
     "EmptyVerifier",
     "GenerateException",
-    "HttpError",
     "InsufficientRange",
     "InvalidInput",
     "InvalidLength",
-    "InvalidPath",
     "InvalidRange",
     "InvalidVerifier",
     "ParsingError",
@@ -50,6 +35,5 @@ __all__ = (
     "UnknownDigraph",
     "UnknownFormat",
     "UnknownLetter",
-    "UnsupportedFormat",
     "VerifierException",
 )
