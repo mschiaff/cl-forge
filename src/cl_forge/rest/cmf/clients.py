@@ -38,7 +38,7 @@ class CmfClient(ApiClient):
 
     def __init__(self, credentials: CredentialType, config: ClientConfig | None = None) -> None:
         super().__init__(credentials, config)
-        self._v3 = self.route(CMF_V3)
+        self._v3 = self._route(CMF_V3)
 
         self.raw = SyncRawResource(self._v3)
         self.ipc = SyncIpcResource(self._v3)
@@ -79,7 +79,7 @@ class AsyncCmfClient(ApiClient):
 
     def __init__(self, credentials: CredentialType, config: ClientConfig | None = None) -> None:
         super().__init__(credentials, config)
-        self._v3 = self.route(CMF_V3)
+        self._v3 = self._route(CMF_V3)
 
         self.raw = AsyncRawResource(self._v3)
         self.ipc = AsyncIpcResource(self._v3)

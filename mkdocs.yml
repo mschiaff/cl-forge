@@ -11,18 +11,21 @@ nav:
     - Welcome to CL Forge: index.md
     - Installation: install.md
     - Contributing: contributing.md
-  - API Reference:
-      - Clients:
-          - CmfClient: api/cmf/base_client.md
-      - Auth: api/auth.md
-      - Resources:
-          - api/DailyIndicatorResource.md
-          - api/MonthlyIndicatorResource.md
-          - api/RateResource.md
-          - api/RawResource.md
-      - Schemas: api/schemas.md
-      - Types: api/types.md
-      - Exceptions: api/exceptions.md
+  - Reference:
+      - API Clients:
+          - CmfClient: api/CmfClient.md
+          - MarketClient: api/MarketClient.md
+          - AsyncCmfClient: api/AsyncCmfClient.md
+          - AsyncMarketClient: api/AsyncMarketClient.md
+          - ClientConfig: api/ClientConfig.md
+          - Auth:
+            - DotEnvCredentials: api/DotEnvCredentials.md
+            - EnvCredentials: api/EnvCredentials.md
+      - Validation:
+        - Ppu: api/Ppu.md
+        - validate_rut: api/validate_rut.md
+        - calculate_verifier: api/calculate_verifier.md
+      
 
 extra_css:
   - 'extra/tweaks.css'

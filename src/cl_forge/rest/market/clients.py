@@ -37,8 +37,8 @@ class MarketClient(ApiClient):
         config: ClientConfig | None = None,
     ) -> None:
         super().__init__(credentials, config)
-        self._v1 = self.route(MARKET_V1)
-        self._v2 = self.route(MARKET_V2)
+        self._v1 = self._route(MARKET_V1)
+        self._v2 = self._route(MARKET_V2)
 
         self.tender = TenderResource(self._v1)
         self.order = OrderResource(self._v1)
@@ -74,8 +74,8 @@ class AsyncMarketClient(ApiClient):
         config: ClientConfig | None = None,
     ) -> None:
         super().__init__(credentials, config)
-        self._v1 = self.route(MARKET_V1)
-        self._v2 = self.route(MARKET_V2)
+        self._v1 = self._route(MARKET_V1)
+        self._v2 = self._route(MARKET_V2)
 
         self.tender = AsyncTenderResource(self._v1)
         self.order = AsyncOrderResource(self._v1)

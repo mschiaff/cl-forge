@@ -53,9 +53,9 @@ def test_facade_resolves_credentials_once_for_same_provider_family():
     )
     client = IsolatedApiClient(CountingProvider())
 
-    first = client.route(CMF_V3)
-    assert client.route(CMF_V3) is first
-    client.route(cmf_v4)
+    first = client._route(CMF_V3)
+    assert client._route(CMF_V3) is first
+    client._route(cmf_v4)
 
     assert calls == [ApiProvider.CMF]
     assert client.credentials.value == "secret"
@@ -63,18 +63,18 @@ def test_facade_resolves_credentials_once_for_same_provider_family():
 
 def test_facade_rejects_mixed_provider_families():
     client = IsolatedApiClient("secret")
-    client.route(CMF_V3)
+    client._route(CMF_V3)
 
     with pytest.raises(ValueError, match="cannot mix"):
-        client.route(MARKET_V1)
+        client._route(MARKET_V1)
 
 
 def test_registry_reuses_clients_by_resolved_credential_fingerprint():
     first_facade = IsolatedApiClient("same-secret")
     second_facade = IsolatedApiClient(SecretStr("same-secret"))
 
-    first = first_facade.route(CMF_V3).client
-    second = second_facade.route(CMF_V3).client
+    first = first_facade._route(CMF_V3).client
+    second = second_facade._route(CMF_V3).client
 
     assert first is second
     key = next(iter(IsolatedRegistry.sync_clients))
@@ -82,8 +82,8 @@ def test_registry_reuses_clients_by_resolved_credential_fingerprint():
 
 
 def test_registry_separates_distinct_credentials():
-    first = IsolatedApiClient("first").route(CMF_V3).client
-    second = IsolatedApiClient("second").route(CMF_V3).client
+    first = IsolatedApiClient("first")._route(CMF_V3).client
+    second = IsolatedApiClient("second")._route(CMF_V3).client
 
     assert first is not second
     assert len(IsolatedRegistry.sync_clients) == 2
@@ -94,8 +94,8 @@ def test_registry_reuses_async_client_in_same_event_loop():
         first_facade = IsolatedApiClient("same-secret")
         second_facade = IsolatedApiClient(SecretStr("same-secret"))
 
-        first = first_facade.route(CMF_V3).aclient
-        second = second_facade.route(CMF_V3).aclient
+        first = first_facade._route(CMF_V3).aclient
+        second = second_facade._route(CMF_V3).aclient
         try:
             assert first is second
             assert len(IsolatedRegistry.async_clients) == 1
