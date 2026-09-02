@@ -25,7 +25,7 @@ class IsolatedRegistry(ClientRegistry):
 
 
 class IsolatedApiClient(ApiClient):
-    registry = IsolatedRegistry
+    _registry = IsolatedRegistry
 
 
 @pytest.fixture(autouse=True)
