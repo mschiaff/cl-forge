@@ -3,9 +3,6 @@ resolver = "3"
 members = [
     "rust/cl_forge",
     "rust/verify",
-    "rust/cmf",
-    "rust/market",
-    "rust/base"
 ]
 
 [workspace.package]
@@ -14,23 +11,6 @@ edition = "2024"
 
 [workspace.dependencies.pyo3]
 version = "0.28.3"
-
-[workspace.dependencies.pyo3-async-runtimes]
-version = "0.28.0"
-features = ["tokio-runtime"]
-
-[workspace.dependencies.tokio]
-version = "1.52.1"
-features = ["rt-multi-thread"]
-
-[workspace.dependencies.reqwest]
-version = "0.13.2"
-features = [
-    "blocking",
-    "rustls",
-    "query",
-    "json",
-]
 
 [workspace.dependencies.thiserror]
 version = "2.0.18"
